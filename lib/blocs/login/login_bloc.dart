@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
+import '../../models/user_model.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial());
@@ -18,8 +19,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await Future.delayed(const Duration(seconds: 2));
 
         // Replace this with your actual authentication logic
-        if (event.username == 'demo' && event.password == 'password') {
-          yield const LoginSuccess(message: 'Login successful');
+        if (event.username == '1' && event.password == '1') {
+          final user = UserModel(
+            username: event.username, /* Add other user data */
+          );
+          yield LoginSuccess(user : user ,message: 'Login successful');
         } else {
           throw Exception('Invalid credentials');
         }
