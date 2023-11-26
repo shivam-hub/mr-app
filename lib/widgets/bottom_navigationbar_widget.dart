@@ -12,27 +12,30 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(80, 0, 80, 18),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(22)),
-            gradient: LinearGradient(colors: [
-              AppColors.appBarColor1,
-              AppColors.appBarColor2,
-              AppColors.appBarColor3
-            ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.schedule_rounded)),
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.home_mini_rounded)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.format_paint))
-          ],
+    return  Stack(
+      children:[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(200,0,200,20),
+          child: Align(
+            alignment: Alignment(1,1),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(30),),
+            child: BottomNavigationBar(items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label:'home'),
+               BottomNavigationBarItem(icon: Icon(Icons.home), label:'home'),
+                BottomNavigationBarItem(icon: Icon(Icons.home), label:'home'),
+            ],
+            selectedItemColor: Colors.yellow,
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
+            backgroundColor: Colors.brown,
+           ),  
+            ),
+            ),
         ),
-      ),
+
+      ],
     );
   }
 }
