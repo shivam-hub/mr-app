@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   bloc: ^7.0.0
+  dropdown_textfield: ^1.0.8
   flutter_bloc: ^7.0.0
   equatable: ^2.0.3
   flutter:

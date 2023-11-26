@@ -15,7 +15,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     return  Stack(
       children:[
         Padding(
-          padding: const EdgeInsets.fromLTRB(200,0,200,20),
+          padding: const EdgeInsets.fromLTRB(80,0,80,10),
           child: Align(
             alignment: Alignment(1,1),
             child: ClipRRect(
