@@ -4,7 +4,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
   final String appBarTitle;
   final Widget? logo;
   final Gradient? gradient;
-  final Icon? prefixIcon;
+  final IconButton? prefixIcon;
 
   const AppBarWidget(
       {super.key,
