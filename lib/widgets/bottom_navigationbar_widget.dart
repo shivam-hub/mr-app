@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nurene_app/themes/app_colors.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});
@@ -30,11 +31,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                   BottomNavigationBarItem(
                       icon: Icon(Icons.home), label: 'home'),
                 ],
-                selectedItemColor: Colors.yellow,
+                selectedItemColor: Color.fromARGB(255, 255, 173, 59),
                 unselectedItemColor: Colors.grey,
                 showSelectedLabels: true,
                 showUnselectedLabels: false,
-                backgroundColor: Colors.brown,
+                backgroundColor: Color.fromARGB(163, 117, 94, 53),
               ),
             ),
           ),

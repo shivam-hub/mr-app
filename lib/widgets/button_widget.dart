@@ -8,6 +8,7 @@ class ButtonWidget extends StatelessWidget {
   final Gradient gradient;
   final VoidCallback? onPressed;
   final String label;
+  final double? labelFontSize;
 
   const ButtonWidget({
     Key? key,
@@ -16,6 +17,7 @@ class ButtonWidget extends StatelessWidget {
     this.borderRadius,
     this.width = 150,
     this.height = 50,
+    this.labelFontSize = 22,
     this.gradient = const LinearGradient(
         colors: [AppColors.buttonGradientStart, AppColors.buttonGradientEnd],
         begin: AlignmentDirectional.bottomCenter,
@@ -29,28 +31,23 @@ class ButtonWidget extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: borderRadius,
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.buttonShadowColor,
-            blurRadius: 5.0
-          )
-        ]
-      ),
+          gradient: gradient,
+          borderRadius: borderRadius,
+          boxShadow: const [
+            BoxShadow(color: AppColors.buttonShadowColor, blurRadius: 5.0)
+          ]),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: borderRadius),
-          elevation: 5
-        ),
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            elevation: 5),
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
               color: Colors.brown,
-              fontSize: 22,
+              fontSize: labelFontSize,
               fontStyle: FontStyle.normal,
               fontWeight: FontWeight.bold),
         ),
