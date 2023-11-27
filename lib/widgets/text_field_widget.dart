@@ -6,13 +6,15 @@ class TextFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final bool isPassword;
   final String? prefixText;
-  
+  final bool readOnly;
 
-  const TextFieldWidget({super.key, 
+  const TextFieldWidget({
+    super.key,
     required this.label,
     required this.controller,
     this.isPassword = false,
-    this.prefixText,
+    this.prefixText, 
+    this.readOnly = false,
   });
 
   @override
@@ -20,15 +22,14 @@ class TextFieldWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: TextField(
+        readOnly: readOnly,
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
           labelText: label,
           prefixText: prefixText,
-          floatingLabelStyle: const TextStyle(
-            color: Colors.brown
-          ),
-          enabledBorder:  OutlineInputBorder(
+          floatingLabelStyle: const TextStyle(color: Colors.brown),
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
           ),

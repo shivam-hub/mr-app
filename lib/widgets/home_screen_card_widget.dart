@@ -4,9 +4,9 @@ import 'package:nurene_app/themes/app_colors.dart';
 class HomeScreenCard extends StatelessWidget {
   final String label;
   final Icon icon;
-  void callBack() {}
 
-  const HomeScreenCard({super.key, required this.label, required this.icon});
+  const HomeScreenCard(
+      {super.key, required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context) {
