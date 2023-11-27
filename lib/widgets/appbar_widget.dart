@@ -16,7 +16,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: logo,
+      leading: logo ?? prefixIcon,
       title: Text(
         appBarTitle,
         style: const TextStyle(
