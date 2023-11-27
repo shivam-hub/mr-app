@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/widgets/button_widget.dart';
 import '../blocs/master/master_bloc.dart';
 import '../blocs/master/master_event.dart';
 import '../blocs/master/master_state.dart';
 import '../models/dropdown_value_model.dart';
 import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
+import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/text_field_widget.dart';
 
@@ -38,10 +40,12 @@ class _MasterScreenState extends State<MasterScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: const AppBarWidget(
+      appBar: AppBarWidget(
         appBarTitle: "Master",
-        prefixIcon:
-            Icon(Icons.arrow_back_outlined, color: Colors.brown, size: 25),
+        prefixIcon: IconButton(
+            icon: const Icon(Icons.arrow_back_outlined,
+                color: Colors.brown, size: 25),
+            onPressed: () => Navigator.of(context).pop()),
         gradient: AppColors.appBarColorGradient,
       ),
       body: BlocProvider(
@@ -130,25 +134,34 @@ class _MasterScreenState extends State<MasterScreen> {
                   ),
                   // Add your photo upload widget here
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<MasterBloc>(context).add(
-                        SaveMasterDataEvent(
-                          doctorId: '12345', // Static Doctor Id for example
-                          doctorName: state is DoctorSelectedState
-                              ? state.doctorName
-                              : '',
-                          addressLine1: _addressLine1Controller.text,
-                          addressLine2: _addressLine2Controller.text,
-                          city: _cityController.text,
-                          pincode: _pincodeController.text,
-                          state: _stateController.text,
-                          region: _regionController.text,
-                          photoPath: '', // Set the photo path here
-                        ),
-                      );
-                    },
-                    child: const Text('Save Data'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: ButtonWidget(
+                        onPressed: () {
+                          BlocProvider.of<MasterBloc>(context).add(
+                            SaveMasterDataEvent(
+                              doctorId: '12345', // Static Doctor Id for example
+                              doctorName: state is DoctorSelectedState
+                                  ? state.doctorName
+                                  : '',
+                              addressLine1: _addressLine1Controller.text,
+                              addressLine2: _addressLine2Controller.text,
+                              city: _cityController.text,
+                              pincode: _pincodeController.text,
+                              state: _stateController.text,
+                              region: _regionController.text,
+                              photoPath: '', // Set the photo path here
+                            ),
+                          );
+                        },
+                        width: 100,
+                        height: 40,
+                        labelFontSize: 18,
+                        label: 'Save',
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -156,6 +169,7 @@ class _MasterScreenState extends State<MasterScreen> {
           },
         ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

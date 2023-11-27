@@ -6,10 +6,12 @@ import 'package:nurene_app/widgets/appbar_widget.dart';
 import 'package:nurene_app/widgets/bottom_navigationbar_widget.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
 import '../models/dropdown_value_model.dart';
+import '../widgets/date_picker_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/text_field_widget.dart';
 import '../blocs/plan_visit/plan_visit_event.dart';
 import '../blocs/plan_visit/plan_visit_state.dart';
+import '../widgets/time_picker_widget.dart';
 
 class PlanVisitScreen extends StatefulWidget {
   const PlanVisitScreen({super.key});
@@ -37,10 +39,12 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
         extendBody: true,
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
-        appBar: const AppBarWidget(
+        appBar: AppBarWidget(
           appBarTitle: "Plan Visit",
-          prefixIcon:
-              Icon(Icons.arrow_back_outlined, color: Colors.brown, size: 25),
+          prefixIcon: IconButton(
+              icon: const Icon(Icons.arrow_back_outlined,
+                  color: Colors.brown, size: 25),
+              onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
         body: Column(
@@ -106,46 +110,13 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               ],
             ),
             const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Theme(
-                data: ThemeData(
-                    colorScheme: const ColorScheme.light()
-                        .copyWith(background: AppColors.backgroundColor),
-                        primaryColor: AppColors.backgroundColor
-                        ),
-                child: DateTimePicker(
-                  use24HourFormat: false,
-                  dateLabelText: "Select Date label",
-                  dateHintText: "date hint text",
-                  timeLabelText: "Select Time",
-                  decoration: InputDecoration(
-                    floatingLabelStyle: const TextStyle(color: Colors.brown),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          color: AppColors.textFieldBorderColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          color: AppColors.textFieldBorderColor),
-                    ),
-                  ),
-                  type: DateTimePickerType.dateTimeSeparate,
-                  icon: const Icon(Icons.event),
-                  fieldLabelText: 'Select Date and Time',
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                  onChanged: (val) => print(val),
-                  onSaved: (val) => print(val),
-                  validator: (val) {
-                    print(val);
-                    return null;
-                  },
-                ),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                DatePickerWidget(),
+                const SizedBox(width: 5),
+                TimePickerWidget(),
+              ],
             ),
           ],
         ),

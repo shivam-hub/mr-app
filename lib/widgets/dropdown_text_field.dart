@@ -16,9 +16,8 @@ class DropdownTextFieldWidget extends StatefulWidget {
       required this.placeholder,
       required this.dropDownOption,
       this.enableSearch = true,
-      this.onChanged, 
-      this.prefixText
-    });
+      this.onChanged,
+      this.prefixText});
 
   @override
   State<DropdownTextFieldWidget> createState() =>
@@ -38,6 +37,7 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
   Widget build(BuildContext context) {
     return DropDownTextField(
       dropDownList: widget.dropDownOption,
+      dropdownColor: const Color.fromARGB(255, 236, 232, 185),
       enableSearch: widget.enableSearch,
       controller: _controller,
       onChanged: widget.onChanged,
