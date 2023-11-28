@@ -59,8 +59,12 @@ class _MasterScreenState extends State<MasterScreen> {
             } else if (state is MasterSuccessState) {
               return const Text('Data saved successfully!');
             } else {
-              return Column(
+              return ListView(
                 children: [
+                  const ListTile(
+                    title:
+                        Text('Basic Details', style: TextStyle(fontSize: 20)),
+                  ),
                   const SizedBox(height: 120),
                   TextFieldWidget(
                     label: "Doctor Id",
@@ -72,6 +76,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: DropdownTextFieldWidget(
+                      prefixText: "Dr. ",
                       placeholder: 'Doctor\'s Name',
                       dropDownOption: const [
                         DropDownOption(
@@ -85,6 +90,32 @@ class _MasterScreenState extends State<MasterScreen> {
                             .add(DoctorSelectedEvent(value));
                       },
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: DropdownTextFieldWidget(
+                      placeholder: 'Doctor Type',
+                      dropDownOption: const [
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value")
+                      ],
+                      onChanged: (value) {
+                        // BlocProvider.of<MasterBloc>(context)
+                        //     .add(DoctorSelectedEvent(value));
+                      },
+                    ),
+                  ),
+                  const ListTile(
+                    title:
+                        Text('Address Details', style: TextStyle(fontSize: 20)),
                   ),
                   const SizedBox(height: 20),
                   TextFieldWidget(
@@ -118,9 +149,26 @@ class _MasterScreenState extends State<MasterScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: TextFieldWidget(
-                          label: 'State',
-                          controller: _stateController,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: DropdownTextFieldWidget(
+                            placeholder: 'State',
+                            dropDownOption: const [
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value")
+                            ],
+                            onChanged: (value) {
+                              BlocProvider.of<MasterBloc>(context)
+                                  .add(DoctorSelectedEvent(value));
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -169,7 +217,9 @@ class _MasterScreenState extends State<MasterScreen> {
           },
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(
+        gradientB: AppColors.bottomNavBarColorGradient,
+      ),
     );
   }
 }

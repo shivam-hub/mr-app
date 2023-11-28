@@ -6,6 +6,7 @@ import 'package:nurene_app/widgets/appbar_widget.dart';
 import 'package:nurene_app/widgets/bottom_navigationbar_widget.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
 import '../models/dropdown_value_model.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/date_picker_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/text_field_widget.dart';
@@ -72,6 +73,28 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                 },
               ),
             ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: DropdownTextFieldWidget(
+                placeholder: 'Doctor Type',
+                dropDownOption: const [
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value"),
+                  DropDownOption(name: "name", value: "value")
+                ],
+                onChanged: (value) {
+                  // BlocProvider.of<MasterBloc>(context)
+                  //     .add(DoctorSelectedEvent(value));
+                },
+              ),
+            ),
             const SizedBox(height: 30),
             TextFieldWidget(
               label: 'Address',
@@ -98,10 +121,32 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                    child: TextFieldWidget(
-                  label: 'State',
-                  controller: _stateController,
-                )),
+                  //     child: TextFieldWidget(
+                  //   label: 'State',
+                  //   controller: _stateController,
+                  // )
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: DropdownTextFieldWidget(
+                      placeholder: 'State',
+                      dropDownOption: const [
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value")
+                      ],
+                      onChanged: (value) {
+                        BlocProvider.of<PlanVisitBloc>(context)
+                            .add(DoctorSelectedEvent(value));
+                      },
+                    ),
+                  ),
+                ),
                 Expanded(
                     child: TextFieldWidget(
                   label: 'Region',
@@ -118,9 +163,31 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                 TimePickerWidget(),
               ],
             ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: ButtonWidget(
+                  onPressed: () {
+                    // BlocProvider.of<PlanVisitBloc>(context).add(
+                    //   SavePlanVisitDataEvent(
+
+                    //   ),
+                    // );
+                  },
+                  width: 100,
+                  height: 40,
+                  labelFontSize: 18,
+                  label: 'Save',
+                ),
+              ),
+            ),
           ],
         ),
-        bottomNavigationBar: const BottomNavigationBarWidget(),
+        bottomNavigationBar: const BottomNavigationBarWidget(
+          gradientB: AppColors.bottomNavBarColorGradient,
+        ),
       ),
     );
   }
