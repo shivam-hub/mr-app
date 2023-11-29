@@ -62,10 +62,21 @@ class _MasterScreenState extends State<MasterScreen> {
               return ListView(
                 children: [
                   const ListTile(
+                    titleAlignment: ListTileTitleAlignment.top,
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
                     title:
                         Text('Basic Details', style: TextStyle(fontSize: 20)),
                   ),
-                  const SizedBox(height: 120),
+                  const SizedBox(height: 5),
                   TextFieldWidget(
                     label: "Doctor Id",
                     controller: _doctorIdController,
@@ -114,10 +125,20 @@ class _MasterScreenState extends State<MasterScreen> {
                     ),
                   ),
                   const ListTile(
-                    title:
-                        Text('Address Details', style: TextStyle(fontSize: 20)),
+                    contentPadding: EdgeInsets.all(20),
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
+                    title: Text('Address', style: TextStyle(fontSize: 20)),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 2),
                   TextFieldWidget(
                     label: 'Address Line 1',
                     controller: _addressLine1Controller,
@@ -179,6 +200,20 @@ class _MasterScreenState extends State<MasterScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const ListTile(
+                    contentPadding: EdgeInsets.all(20),
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
+                    title: Text('Uploads', style: TextStyle(fontSize: 20)),
                   ),
                   // Add your photo upload widget here
                   const SizedBox(height: 20),

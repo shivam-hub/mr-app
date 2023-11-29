@@ -5,30 +5,35 @@ class HomeScreenCard extends StatelessWidget {
   final String label;
   final Icon icon;
 
-  const HomeScreenCard(
-      {super.key, required this.label, required this.icon});
+  const HomeScreenCard({super.key, required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      width: MediaQuery.of(context).size.width * 0.4,
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-        AppColors.appBarColor3.withOpacity(0.8),
-        AppColors.appBarColor4,
-        AppColors.appBarColor5.withOpacity(0.8)
-      ])),
-      child: Row(
-        children: [
-          icon,
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.brown,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold))
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        elevation: 15,
+        child: Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width * 0.4,
+          //margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            AppColors.appBarColor3.withOpacity(0.8),
+            AppColors.appBarColor4,
+            AppColors.appBarColor5.withOpacity(0.8)
+          ])),
+          child: Row(
+            children: [
+              icon,
+              Text(label,
+                  style: const TextStyle(
+                      color: Colors.brown,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold))
+            ],
+          ),
+        ),
       ),
     );
   }
