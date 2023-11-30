@@ -21,57 +21,59 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: AppColors.backgroundColor,
-            extendBody: true,
-            extendBodyBehindAppBar: true,
-            appBar: const AppBarWidget(
-              logo: LogoWidget(
-                height: 8,
-                width: 8,
-              ),
-              appBarTitle: "Nurene",
-              gradient: AppColors.appBarColorGradient,
-            ),
-            body: Column(
-              children: [
-                const SizedBox(height: 80),
-                const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("   Hello User,",
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.brown,
-                            fontWeight: FontWeight.bold))),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PlanVisitScreen()));
-                      },
-                      child: const HomeScreenCard(
-                        label: "label",
-                        icon: Icon(Icons.abc_rounded),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:  () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MasterScreen()));
-                      },
-                      child: const HomeScreenCard(
-                          label: "label", icon: Icon(Icons.abc_rounded)),
-                    )
-                  ],
+      backgroundColor: AppColors.backgroundColor,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      appBar: const AppBarWidget(
+        logo: LogoWidget(
+          height: 8,
+          width: 8,
+        ),
+        appBarTitle: "Nurene",
+        gradient: AppColors.appBarColorGradient,
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 80),
+          const Align(
+              alignment: Alignment.topLeft,
+              child: Text("   Hello User,",
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.brown,
+                      fontWeight: FontWeight.bold))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PlanVisitScreen()));
+                },
+                child: const HomeScreenCard(
+                  label: "label",
+                  icon: Icon(Icons.abc_rounded),
                 ),
-              ],
-            ),
-            bottomNavigationBar:
-                const Stack(children: [BottomNavigationBarWidget()])));
+              ),
+              GestureDetector(
+                onTap: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MasterScreen()));
+                },
+                child: const HomeScreenCard(
+                    label: "label", icon: Icon(Icons.abc_rounded)),
+              )
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: const BottomNavigationBarWidget(
+        gradientB: AppColors.bottomNavBarColorGradient,
+      ),
+    ));
   }
 }

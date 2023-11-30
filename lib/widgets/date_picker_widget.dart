@@ -47,26 +47,30 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _selectDate(context),
-      child: Container(
-        height: 50,
-        width: 230,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.textFieldBorderColor),
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        padding: const EdgeInsets.fromLTRB(15, 0, 20, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '${_selectedDate.toLocal()}'.split(' ')[0],
-              style: const TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.brown,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Icon(Icons.calendar_today),
-          ],
+      child: Material(
+        elevation: 15,
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          height: 50,
+          width: 230,
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.textFieldBorderColor),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          padding: const EdgeInsets.fromLTRB(15, 0, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${_selectedDate.toLocal()}'.split(' ')[0],
+                style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold),
+              ),
+              const Icon(Icons.calendar_today),
+            ],
+          ),
         ),
       ),
     );

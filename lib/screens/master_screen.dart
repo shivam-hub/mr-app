@@ -59,9 +59,24 @@ class _MasterScreenState extends State<MasterScreen> {
             } else if (state is MasterSuccessState) {
               return const Text('Data saved successfully!');
             } else {
-              return Column(
+              return ListView(
                 children: [
-                  const SizedBox(height: 120),
+                  const ListTile(
+                    titleAlignment: ListTileTitleAlignment.top,
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
+                    title:
+                        Text('Basic Details', style: TextStyle(fontSize: 20)),
+                  ),
+                  const SizedBox(height: 5),
                   TextFieldWidget(
                     label: "Doctor Id",
                     controller: _doctorIdController,
@@ -72,6 +87,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: DropdownTextFieldWidget(
+                      prefixText: "Dr. ",
                       placeholder: 'Doctor\'s Name',
                       dropDownOption: const [
                         DropDownOption(
@@ -87,6 +103,42 @@ class _MasterScreenState extends State<MasterScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: DropdownTextFieldWidget(
+                      placeholder: 'Doctor Type',
+                      dropDownOption: const [
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value"),
+                        DropDownOption(name: "name", value: "value")
+                      ],
+                      onChanged: (value) {
+                        // BlocProvider.of<MasterBloc>(context)
+                        //     .add(DoctorSelectedEvent(value));
+                      },
+                    ),
+                  ),
+                  const ListTile(
+                    contentPadding: EdgeInsets.all(20),
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
+                    title: Text('Address', style: TextStyle(fontSize: 20)),
+                  ),
+                  const SizedBox(height: 2),
                   TextFieldWidget(
                     label: 'Address Line 1',
                     controller: _addressLine1Controller,
@@ -118,9 +170,26 @@ class _MasterScreenState extends State<MasterScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: TextFieldWidget(
-                          label: 'State',
-                          controller: _stateController,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: DropdownTextFieldWidget(
+                            placeholder: 'State',
+                            dropDownOption: const [
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value")
+                            ],
+                            onChanged: (value) {
+                              BlocProvider.of<MasterBloc>(context)
+                                  .add(DoctorSelectedEvent(value));
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -131,6 +200,20 @@ class _MasterScreenState extends State<MasterScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const ListTile(
+                    contentPadding: EdgeInsets.all(20),
+                    textColor: Color.fromARGB(255, 65, 81, 90),
+                    titleTextStyle:
+                        TextStyle(fontWeight: FontWeight.w600, shadows: [
+                      Shadow(
+                        color:
+                            Color.fromARGB(255, 201, 195, 195), // shadow color
+                        offset: Offset(5.0, 5.0), // shadow offset
+                        blurRadius: 2.0, // shadow blur radius
+                      ),
+                    ]),
+                    title: Text('Uploads', style: TextStyle(fontSize: 20)),
                   ),
                   // Add your photo upload widget here
                   const SizedBox(height: 20),
@@ -169,7 +252,9 @@ class _MasterScreenState extends State<MasterScreen> {
           },
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(
+        gradientB: AppColors.bottomNavBarColorGradient,
+      ),
     );
   }
 }

@@ -35,23 +35,27 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return DropDownTextField(
-      dropDownList: widget.dropDownOption,
-      dropdownColor: const Color.fromARGB(255, 236, 232, 185),
-      enableSearch: widget.enableSearch,
-      controller: _controller,
-      onChanged: widget.onChanged,
-      textFieldDecoration: InputDecoration(
-        labelText: widget.placeholder,
-        prefixText: widget.prefixText,
-        floatingLabelStyle: const TextStyle(color: Colors.brown),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
+    return Material(
+      elevation: 15,
+      borderRadius: BorderRadius.circular(15),
+      child: DropDownTextField(
+        dropDownList: widget.dropDownOption,
+        dropdownColor: const Color.fromARGB(255, 236, 232, 185),
+        enableSearch: widget.enableSearch,
+        controller: _controller,
+        onChanged: widget.onChanged,
+        textFieldDecoration: InputDecoration(
+          labelText: widget.placeholder,
+          prefixText: widget.prefixText,
+          floatingLabelStyle: const TextStyle(color: Colors.brown),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
+          ),
         ),
       ),
     );

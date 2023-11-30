@@ -14,11 +14,24 @@ class AppColors {
   static const Color appBarColor4 = Color(0xFFFBF5B7);
   static const Color appBarColor5 = Color(0xFFAA771C);
 
+  static const Color bottomNavBarColor1 = Color(0xffbf953f);
+  static const Color bottomNavBarColor2 = Color(0xfffcf6ba);
+  static const Color bottomNavBarColor3 = Color(0xffb38728);
+  static const Color bottomNavBarColor4 = Color(0xffaa771c);
+
   static const Gradient appBarColorGradient = LinearGradient(colors: [
     appBarColor1,
     appBarColor2,
     appBarColor3,
     appBarColor4,
     appBarColor5
+  ], begin: AlignmentDirectional.topStart, end: AlignmentDirectional.topEnd);
+
+  static const Gradient bottomNavBarColorGradient = LinearGradient(colors: [
+    bottomNavBarColor1,
+    bottomNavBarColor2,
+    bottomNavBarColor3,
+    bottomNavBarColor2,
+    bottomNavBarColor4
   ], begin: AlignmentDirectional.topStart, end: AlignmentDirectional.topEnd);
 }
