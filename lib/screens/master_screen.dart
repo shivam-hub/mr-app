@@ -70,12 +70,12 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
                     title:
-                        Text('Basic Details', style: TextStyle(fontSize: 20)),
+                        Text('Basic Details', style: TextStyle(fontSize: 30)),
                   ),
                   const SizedBox(height: 5),
                   Padding(
@@ -136,11 +136,11 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
-                    title: Text('Address', style: TextStyle(fontSize: 20)),
+                    title: Text('Address', style: TextStyle(fontSize: 30)),
                   ),
                   const SizedBox(height: 2),
                   Padding(
@@ -225,15 +225,14 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
-                    title: Text('Uploads', style: TextStyle(fontSize: 20)),
+                    title: Text('Uploads', style: TextStyle(fontSize: 30)),
                   ),
 
                   // Add your photo upload widget here
-                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Material(

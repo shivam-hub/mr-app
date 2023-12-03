@@ -1,20 +1,13 @@
-import 'dart:ui';
-
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:nurene_app/models/user_model.dart';
-import 'package:nurene_app/screens/master_screen.dart';
 import 'package:nurene_app/screens/plan_visit_screen.dart';
 import 'package:nurene_app/themes/app_colors.dart';
-import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/add_button_widget.dart';
 import 'package:nurene_app/widgets/appbar_widget.dart';
 import 'package:nurene_app/widgets/bottom_navigationbar_widget.dart';
-import 'package:nurene_app/widgets/home_screen_card_widget.dart';
 import 'package:nurene_app/widgets/logo_widget.dart';
 import 'package:intl/intl.dart';
-import '../widgets/list_view_widget.dart';
 // import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       extendBody: true,
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: const AppBarWidget(
         logo: LogoWidget(
           height: 8,
@@ -41,52 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
         appBarTitle: "Nurene",
         gradient: AppColors.appBarColorGradient,
       ),
-      // body: Column(
-      //   children: [
-      //     const SizedBox(height: 80),
-      //     const Align(
-      //         alignment: Alignment.topLeft,
-      //         child: Text("   Hello User,",
-      //             style: TextStyle(
-      //                 fontSize: 30,
-      //                 color: Colors.brown,
-      //                 fontWeight: FontWeight.bold))),
-      //     Row(
-      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //       children: [
-      //         GestureDetector(
-      //           onTap: () async {
-      //             await Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                     builder: (context) => const PlanVisitScreen()));
-      // //           },
-      //           child: const HomeScreenCard(
-      //             label: "label",
-      //             icon: Icon(Icons.abc_rounded),
-      //           ),
-      //         ),
-      //         GestureDetector(
-      //           onTap: () async {
-      //             await Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                     builder: (context) => const MasterScreen()));
-      //           },
-      //           child: const HomeScreenCard(
-      //               label: "label", icon: Icon(Icons.abc_rounded)),
-      //         )
-      //       ],
-      //     ),
-      //     Row(
-      //       children: [ListViewWidget(), ListViewWidget()],
-      //     )
-      //   ],
-      // ),
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 70),
+            padding: const EdgeInsets.only(top: 20),
             margin: const EdgeInsets.only(left: 15, right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

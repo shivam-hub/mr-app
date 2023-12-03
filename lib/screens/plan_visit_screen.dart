@@ -68,8 +68,8 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                   DropDownOption(name: "name", value: "value")
                 ],
                 onChanged: (value) {
-                  BlocProvider.of<PlanVisitBloc>(context)
-                      .add(DoctorSelectedEvent(value));
+                  // BlocProvider.of<PlanVisitBloc>(context)
+                  //     .add(DoctorSelectedEvent(value));
                 },
               ),
             ),
@@ -151,8 +151,8 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                           DropDownOption(name: "name", value: "value")
                         ],
                         onChanged: (value) {
-                          BlocProvider.of<PlanVisitBloc>(context)
-                              .add(DoctorSelectedEvent(value));
+                          // BlocProvider.of<PlanVisitBloc>(context)
+                          //     .add(DoctorSelectedEvent(value));
                         },
                       ),
                     ),
