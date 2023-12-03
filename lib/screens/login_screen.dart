@@ -40,15 +40,21 @@ class LoginScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              TextFieldWidget(
-                label: 'Username',
-                controller: usernameController,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: TextFieldWidget(
+                  label: 'Username',
+                  controller: usernameController,
+                ),
               ),
               const SizedBox(height: 20),
-              TextFieldWidget(
-                label: 'Password',
-                controller: passwordController,
-                isPassword: true,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: TextFieldWidget(
+                  label: 'Password',
+                  controller: passwordController,
+                  isPassword: true,
+                ),
               ),
               const SizedBox(height: 20),
               BlocBuilder<LoginBloc, LoginState>(

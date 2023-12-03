@@ -45,6 +45,8 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
         controller: _controller,
         onChanged: widget.onChanged,
         textFieldDecoration: InputDecoration(
+          filled: true,
+          fillColor: const Color.fromARGB(255, 237, 235, 216),
           labelText: widget.placeholder,
           prefixText: widget.prefixText,
           floatingLabelStyle: const TextStyle(color: Colors.brown),
