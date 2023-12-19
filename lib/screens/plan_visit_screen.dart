@@ -68,8 +68,8 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                   DropDownOption(name: "name", value: "value")
                 ],
                 onChanged: (value) {
-                  BlocProvider.of<PlanVisitBloc>(context)
-                      .add(DoctorSelectedEvent(value));
+                  // BlocProvider.of<PlanVisitBloc>(context)
+                  //     .add(DoctorSelectedEvent(value));
                 },
               ),
             ),
@@ -96,72 +96,89 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            TextFieldWidget(
-              label: 'Address',
-              controller: _addressController,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: TextFieldWidget(
+                label: 'Address',
+                controller: _addressController,
+              ),
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                    child: TextFieldWidget(
-                  label: 'City',
-                  controller: _cityController,
-                )),
-                Expanded(
-                    child: TextFieldWidget(
-                  label: 'Pincode',
-                  controller: _pincodeController,
-                ))
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                      child: TextFieldWidget(
+                    label: 'City',
+                    controller: _cityController,
+                  )),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                      child: TextFieldWidget(
+                    label: 'Pincode',
+                    controller: _pincodeController,
+                  ))
+                ],
+              ),
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  //     child: TextFieldWidget(
-                  //   label: 'State',
-                  //   controller: _stateController,
-                  // )
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: DropdownTextFieldWidget(
-                      placeholder: 'State',
-                      dropDownOption: const [
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value"),
-                        DropDownOption(name: "name", value: "value")
-                      ],
-                      onChanged: (value) {
-                        BlocProvider.of<PlanVisitBloc>(context)
-                            .add(DoctorSelectedEvent(value));
-                      },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    //     child: TextFieldWidget(
+                    //   label: 'State',
+                    //   controller: _stateController,
+                    // )
+                    child: Container(
+                      child: DropdownTextFieldWidget(
+                        placeholder: 'State',
+                        dropDownOption: const [
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value")
+                        ],
+                        onChanged: (value) {
+                          // BlocProvider.of<PlanVisitBloc>(context)
+                          //     .add(DoctorSelectedEvent(value));
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                    child: TextFieldWidget(
-                  label: 'Region',
-                  controller: _regionController,
-                ))
-              ],
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                      child: TextFieldWidget(
+                    label: 'Region',
+                    controller: _regionController,
+                  ))
+                ],
+              ),
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                DatePickerWidget(),
-                const SizedBox(width: 5),
-                TimePickerWidget(),
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DatePickerWidget(),
+                  const SizedBox(width: 15),
+                  TimePickerWidget(),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -185,7 +202,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: const BottomNavigationBarWidget(
+        bottomNavigationBar:  BottomNavigationBarWidget(
           gradientB: AppColors.bottomNavBarColorGradient,
         ),
       ),

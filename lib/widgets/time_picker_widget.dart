@@ -24,7 +24,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Colors.red, // button text color
+                foregroundColor: Colors.red, // button text color
               ),
             ),
           ),
@@ -49,7 +49,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           height: 50,
-          width: 230,
+          width: 110,
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.textFieldBorderColor),
             borderRadius: BorderRadius.circular(15.0),

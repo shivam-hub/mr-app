@@ -52,7 +52,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           height: 50,
-          width: 230,
+          width: 150,
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.textFieldBorderColor),
             borderRadius: BorderRadius.circular(15.0),

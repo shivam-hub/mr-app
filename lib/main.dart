@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/login/login_bloc.dart';
-import '../screens/login_screen.dart';
-import '../themes/app_colors.dart';
+import 'blocs/login/login_bloc.dart';
+import 'screens/login_screen.dart';
+import 'themes/app_colors.dart';
 
 void main() => runApp(const MyApp());
 

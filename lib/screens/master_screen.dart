@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/widgets/button_widget.dart';
+import 'package:nurene_app/widgets/image_picker_widget.dart';
 import '../blocs/master/master_bloc.dart';
 import '../blocs/master/master_event.dart';
 import '../blocs/master/master_state.dart';
@@ -69,18 +70,21 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
                     title:
-                        Text('Basic Details', style: TextStyle(fontSize: 20)),
+                        Text('Basic Details', style: TextStyle(fontSize: 30)),
                   ),
                   const SizedBox(height: 5),
-                  TextFieldWidget(
-                    label: "Doctor Id",
-                    controller: _doctorIdController,
-                    readOnly: true,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: TextFieldWidget(
+                      label: "Doctor Id",
+                      controller: _doctorIdController,
+                      readOnly: true,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   // Static Doctor Id for example
@@ -91,14 +95,14 @@ class _MasterScreenState extends State<MasterScreen> {
                       placeholder: 'Doctor\'s Name',
                       dropDownOption: const [
                         DropDownOption(
-                            name: 'Dr. John Doe', value: 'Dr. John Doe'),
+                            name: 'John Doe', value: 'Dr. John Doe'),
                         DropDownOption(
-                            name: 'Dr. Jane Smith', value: 'Dr. Jane Smith'),
+                            name: 'Jane Smith', value: 'Dr. Jane Smith'),
                         // Add more doctor options
                       ],
                       onChanged: (value) {
-                        BlocProvider.of<MasterBloc>(context)
-                            .add(DoctorSelectedEvent(value));
+                        // BlocProvider.of<MasterBloc>(context)
+                        //     .add(DoctorSelectedEvent(value));
                       },
                     ),
                   ),
@@ -132,74 +136,86 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
-                    title: Text('Address', style: TextStyle(fontSize: 20)),
+                    title: Text('Address', style: TextStyle(fontSize: 30)),
                   ),
                   const SizedBox(height: 2),
-                  TextFieldWidget(
-                    label: 'Address Line 1',
-                    controller: _addressLine1Controller,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: TextFieldWidget(
+                      label: 'Address Line 1',
+                      controller: _addressLine1Controller,
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  TextFieldWidget(
-                    label: 'Address Line 2',
-                    controller: _addressLine2Controller,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: TextFieldWidget(
+                      label: 'Address Line 2',
+                      controller: _addressLine2Controller,
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFieldWidget(
-                          label: 'City',
-                          controller: _cityController,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: TextFieldWidget(
-                          label: 'Pincode',
-                          controller: _pincodeController,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: DropdownTextFieldWidget(
-                            placeholder: 'State',
-                            dropDownOption: const [
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value")
-                            ],
-                            onChanged: (value) {
-                              BlocProvider.of<MasterBloc>(context)
-                                  .add(DoctorSelectedEvent(value));
-                            },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFieldWidget(
+                            label: 'City',
+                            controller: _cityController,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: TextFieldWidget(
-                          label: 'Region',
-                          controller: _regionController,
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: TextFieldWidget(
+                            label: 'Pincode',
+                            controller: _pincodeController,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownTextFieldWidget(
+                              placeholder: 'State',
+                              dropDownOption: const [
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value")
+                              ],
+                              onChanged: (value) {
+                                // BlocProvider.of<MasterBloc>(context)
+                                //     .add(DoctorSelectedEvent(value));
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: TextFieldWidget(
+                            label: 'Region',
+                            controller: _regionController,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const ListTile(
                     contentPadding: EdgeInsets.all(20),
@@ -209,13 +225,32 @@ class _MasterScreenState extends State<MasterScreen> {
                       Shadow(
                         color:
                             Color.fromARGB(255, 201, 195, 195), // shadow color
-                        offset: Offset(5.0, 5.0), // shadow offset
-                        blurRadius: 2.0, // shadow blur radius
+                        offset: Offset(5.0, 3.0), // shadow offset
+                        blurRadius: 10, // shadow blur radius
                       ),
                     ]),
-                    title: Text('Uploads', style: TextStyle(fontSize: 20)),
+                    title: Text('Uploads', style: TextStyle(fontSize: 30)),
                   ),
+
                   // Add your photo upload widget here
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Material(
+                      elevation: 15,
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                                color: AppColors.textFieldBorderColor),
+                          ),
+                          height: 100,
+                          width: 60,
+
+                          // width: MediaQuery.of(context).size.width * 0.8,
+                          child: const Center(child: PickImage())),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
@@ -252,7 +287,7 @@ class _MasterScreenState extends State<MasterScreen> {
           },
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(
+      bottomNavigationBar: BottomNavigationBarWidget(
         gradientB: AppColors.bottomNavBarColorGradient,
       ),
     );
