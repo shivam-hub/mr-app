@@ -34,6 +34,7 @@ dependencies:
   intl: ^0.17.0
   google_fonts: ^2.0.0
   date_picker_timeline: ^1.2.3
+  image_picker: ^0.8.6
   get: ^4.6.6
   get_it: ^7.2.2
   flutter_bloc: ^7.0.0
@@ -77,6 +78,9 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - asset/images/nurene_logo.jpeg
+    - asset/images/image.jpg
+    - asset/images/camera.jpg
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

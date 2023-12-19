@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:nurene_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/widgets/button_widget.dart';
@@ -33,6 +35,8 @@ class _MasterScreenState extends State<MasterScreen> {
   final TextEditingController _regionController = TextEditingController();
 
   final TextEditingController _doctorIdController = TextEditingController();
+
+  String selectedImagePath = '';
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +98,7 @@ class _MasterScreenState extends State<MasterScreen> {
                       prefixText: "Dr. ",
                       placeholder: 'Doctor\'s Name',
                       dropDownOption: const [
-                        DropDownOption(
-                            name: 'John Doe', value: 'Dr. John Doe'),
+                        DropDownOption(name: 'John Doe', value: 'Dr. John Doe'),
                         DropDownOption(
                             name: 'Jane Smith', value: 'Dr. Jane Smith'),
                         // Add more doctor options
@@ -233,23 +236,41 @@ class _MasterScreenState extends State<MasterScreen> {
                   ),
 
                   // Add your photo upload widget here
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Material(
-                      elevation: 15,
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: AppColors.textFieldBorderColor),
-                          ),
-                          height: 100,
-                          width: 60,
-
-                          // width: MediaQuery.of(context).size.width * 0.8,
-                          child: const Center(child: PickImage())),
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      selectedImagePath == ''
+                          ? Image.asset(
+                              'asset/images/image.jpg',
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(selectedImagePath),
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.fill,
+                            ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.green),
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(20)),
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(
+                                      fontSize: 14, color: Colors.white))),
+                          onPressed: () async {
+                            selectImage(context);
+                            setState(() {});
+                          },
+                          child: const Text('Upload')),
+                      const SizedBox(height: 10),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Padding(
