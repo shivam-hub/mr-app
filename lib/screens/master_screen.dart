@@ -95,14 +95,14 @@ class _MasterScreenState extends State<MasterScreen> {
                       placeholder: 'Doctor\'s Name',
                       dropDownOption: const [
                         DropDownOption(
-                            name: 'Dr. John Doe', value: 'Dr. John Doe'),
+                            name: 'John Doe', value: 'Dr. John Doe'),
                         DropDownOption(
-                            name: 'Dr. Jane Smith', value: 'Dr. Jane Smith'),
+                            name: 'Jane Smith', value: 'Dr. Jane Smith'),
                         // Add more doctor options
                       ],
                       onChanged: (value) {
-                        BlocProvider.of<MasterBloc>(context)
-                            .add(DoctorSelectedEvent(value));
+                        // BlocProvider.of<MasterBloc>(context)
+                        //     .add(DoctorSelectedEvent(value));
                       },
                     ),
                   ),
@@ -201,8 +201,8 @@ class _MasterScreenState extends State<MasterScreen> {
                                 DropDownOption(name: "name", value: "value")
                               ],
                               onChanged: (value) {
-                                BlocProvider.of<MasterBloc>(context)
-                                    .add(DoctorSelectedEvent(value));
+                                // BlocProvider.of<MasterBloc>(context)
+                                //     .add(DoctorSelectedEvent(value));
                               },
                             ),
                           ),
