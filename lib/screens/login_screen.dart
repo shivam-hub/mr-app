@@ -70,7 +70,6 @@ class LoginScreen extends StatelessWidget {
                   } else {
                     return ButtonWidget(
                       onPressed: () {
-                        // Dispatch the LoginButtonPressed event
                         BlocProvider.of<LoginBloc>(context).add(
                           LoginButtonPressed(
                             username: usernameController.text,

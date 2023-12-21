@@ -1,3 +1,4 @@
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/widgets/button_widget.dart';
@@ -8,6 +9,7 @@ import '../blocs/master/master_state.dart';
 import '../models/dropdown_value_model.dart';
 import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
+import '../widgets/autocomplete_widget.dart';
 import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/text_field_widget.dart';
@@ -28,11 +30,17 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final TextEditingController _pincodeController = TextEditingController();
 
-  final TextEditingController _stateController = TextEditingController();
-
   final TextEditingController _regionController = TextEditingController();
 
   final TextEditingController _doctorIdController = TextEditingController();
+
+  final SingleValueDropDownController _doctorTypeController =
+      SingleValueDropDownController();
+
+  final SingleValueDropDownController _stateController =
+      SingleValueDropDownController();
+
+  String selectedDoctorName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +68,28 @@ class _MasterScreenState extends State<MasterScreen> {
             } else if (state is MasterSuccessState) {
               return const Text('Data saved successfully!');
             } else {
+              if (state is DoctorSelectedState) {
+                _doctorIdController.text =
+                    state.doctorDetails['drId'].toString();
+                _addressLine1Controller.text = state
+                    .doctorDetails['addressInfo']['addressline1']
+                    .toString();
+                _addressLine2Controller.text = state
+                    .doctorDetails['addressInfo']['addressline2']
+                    .toString();
+                _cityController.text =
+                    state.doctorDetails['addressInfo']['city'].toString();
+                _pincodeController.text =
+                    state.doctorDetails['addressInfo']['pincode'].toString();
+                _regionController.text =
+                    state.doctorDetails['addressInfo']['region'].toString();
+                _stateController.dropDownValue = DropDownValueModel(
+                    name: state.doctorDetails['addressInfo']['state'],
+                    value: state.doctorDetails['addressInfo']['state']);
+                _doctorTypeController.dropDownValue = DropDownValueModel(
+                    name: state.doctorDetails['speciality'],
+                    value: state.doctorDetails['speciality']);
+              }
               return ListView(
                 children: [
                   const ListTile(
@@ -89,28 +119,22 @@ class _MasterScreenState extends State<MasterScreen> {
                   const SizedBox(height: 20),
                   // Static Doctor Id for example
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: DropdownTextFieldWidget(
-                      prefixText: "Dr. ",
-                      placeholder: 'Doctor\'s Name',
-                      dropDownOption: const [
-                        DropDownOption(
-                            name: 'John Doe', value: 'Dr. John Doe'),
-                        DropDownOption(
-                            name: 'Jane Smith', value: 'Dr. Jane Smith'),
-                        // Add more doctor options
-                      ],
-                      onChanged: (value) {
-                        // BlocProvider.of<MasterBloc>(context)
-                        //     .add(DoctorSelectedEvent(value));
-                      },
-                    ),
-                  ),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: AutoCompleteWidget<Map<String, dynamic>>(
+                        prefixText: 'Dr. ',
+                        placeholder: 'Doctor\'s Name',
+                        onSelected: (Map<String, dynamic> optionNode) {
+                          BlocProvider.of<MasterBloc>(context)
+                              .add(DoctorSelectedEvent(optionNode));
+                        },
+                      readOnly: state is DoctorSelectedState,
+                      )),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: DropdownTextFieldWidget(
                       placeholder: 'Doctor Type',
+                      controller: _doctorTypeController,
                       dropDownOption: const [
                         DropDownOption(name: "name", value: "value"),
                         DropDownOption(name: "name", value: "value"),
@@ -122,10 +146,7 @@ class _MasterScreenState extends State<MasterScreen> {
                         DropDownOption(name: "name", value: "value"),
                         DropDownOption(name: "name", value: "value")
                       ],
-                      onChanged: (value) {
-                        // BlocProvider.of<MasterBloc>(context)
-                        //     .add(DoctorSelectedEvent(value));
-                      },
+                      readonly: state is DoctorSelectedState,
                     ),
                   ),
                   const ListTile(
@@ -148,6 +169,7 @@ class _MasterScreenState extends State<MasterScreen> {
                     child: TextFieldWidget(
                       label: 'Address Line 1',
                       controller: _addressLine1Controller,
+                      readOnly: state is DoctorSelectedState,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -156,6 +178,7 @@ class _MasterScreenState extends State<MasterScreen> {
                     child: TextFieldWidget(
                       label: 'Address Line 2',
                       controller: _addressLine2Controller,
+                      readOnly: state is DoctorSelectedState,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -167,6 +190,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           child: TextFieldWidget(
                             label: 'City',
                             controller: _cityController,
+                            readOnly: state is DoctorSelectedState,
                           ),
                         ),
                         const SizedBox(width: 15),
@@ -174,6 +198,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           child: TextFieldWidget(
                             label: 'Pincode',
                             controller: _pincodeController,
+                            readOnly: state is DoctorSelectedState,
                           ),
                         ),
                       ],
@@ -185,26 +210,21 @@ class _MasterScreenState extends State<MasterScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: DropdownTextFieldWidget(
-                              placeholder: 'State',
-                              dropDownOption: const [
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value")
-                              ],
-                              onChanged: (value) {
-                                // BlocProvider.of<MasterBloc>(context)
-                                //     .add(DoctorSelectedEvent(value));
-                              },
-                            ),
+                          child: DropdownTextFieldWidget(
+                            placeholder: 'State',
+                            controller: _stateController,
+                            dropDownOption: const [
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value"),
+                              DropDownOption(name: "name", value: "value")
+                            ],
+                            readonly: state is DoctorSelectedState,
                           ),
                         ),
                         const SizedBox(width: 15),
@@ -212,6 +232,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           child: TextFieldWidget(
                             label: 'Region',
                             controller: _regionController,
+                            readOnly: state is DoctorSelectedState,
                           ),
                         ),
                       ],
@@ -261,14 +282,12 @@ class _MasterScreenState extends State<MasterScreen> {
                           BlocProvider.of<MasterBloc>(context).add(
                             SaveMasterDataEvent(
                               doctorId: '12345', // Static Doctor Id for example
-                              doctorName: state is DoctorSelectedState
-                                  ? state.doctorName
-                                  : '',
+                              doctorName: "",
                               addressLine1: _addressLine1Controller.text,
                               addressLine2: _addressLine2Controller.text,
                               city: _cityController.text,
                               pincode: _pincodeController.text,
-                              state: _stateController.text,
+                              state: _stateController.dropDownValue.toString(),
                               region: _regionController.text,
                               photoPath: '', // Set the photo path here
                             ),

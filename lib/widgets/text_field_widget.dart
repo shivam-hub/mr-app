@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import '../themes/app_colors.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -24,6 +25,7 @@ class TextFieldWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(15),
       child: TextField(
         readOnly: readOnly,
+        enabled: !readOnly,
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(

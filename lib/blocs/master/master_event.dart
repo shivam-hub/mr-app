@@ -1,9 +1,9 @@
 abstract class MasterEvent {}
 
 class DoctorSelectedEvent extends MasterEvent {
-  final String doctorName;
+  final Map<String, dynamic> doctorDetails;
 
-  DoctorSelectedEvent(this.doctorName);
+  DoctorSelectedEvent(this.doctorDetails);
 }
 
 class SaveMasterDataEvent extends MasterEvent {
