@@ -3,9 +3,9 @@ abstract class MasterState {}
 class MasterInitialState extends MasterState {}
 
 class DoctorSelectedState extends MasterState {
-  final String doctorName;
+  final Map<String, dynamic> doctorDetails;
 
-  DoctorSelectedState(this.doctorName);
+  DoctorSelectedState(this.doctorDetails);
 }
 
 class MasterLoadingState extends MasterState {}
@@ -14,6 +14,10 @@ class MasterErrorState extends MasterState {
   final String errorMessage;
 
   MasterErrorState(this.errorMessage);
+}
+
+class MasterFormResetState extends MasterState{
+
 }
 
 class MasterSuccessState extends MasterState {}

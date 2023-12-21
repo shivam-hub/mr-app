@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nurene_app/themes/app_colors.dart';
 
 class TimePickerWidget extends StatefulWidget {
+  const TimePickerWidget({super.key});
+
   @override
   _TimePickerWidgetState createState() => _TimePickerWidgetState();
 }
@@ -59,7 +61,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${_selectedTime.format(context)}',
+                _selectedTime.format(context),
                 style: const TextStyle(
                   fontSize: 16.0,
                   color: Colors.brown,

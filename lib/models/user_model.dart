@@ -1,14 +1,44 @@
-import 'package:equatable/equatable.dart';
+class UserModel {
+  String? username;
+  String? password;
+  String? userId;
+  String? createdOn;
+  String? modifiedOn;
+  String? contactNo;
+  String? email;
+  String? name;
 
-class UserModel extends Equatable {
-  final String username;
-  // Add other user-related properties
+  UserModel(
+      {this.username,
+      this.password,
+      this.userId,
+      this.createdOn,
+      this.modifiedOn,
+      this.contactNo,
+      this.email,
+      this.name});
 
-  const UserModel({
-    required this.username,
-    // Add other user-related properties as named parameters
-  });
+  UserModel.fromJson(Map<String, dynamic> json) {
+    username = json['username'];
+    password = json['password'];
+    userId = json['userId'];
+    createdOn = json['createdOn'];
+    modifiedOn = json['modifiedOn'];
+    contactNo = json['contactNo'];
+    email = json['email'];
+    name = json['name'];
+  }
 
-  @override
-  List<Object?> get props => [username]; // Include other properties as needed
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['username'] = username;
+    data['password'] = password;
+    data['userId'] = userId;
+    data['createdOn'] = createdOn;
+    data['modifiedOn'] = modifiedOn;
+    data['contactNo'] = contactNo;
+    data['email'] = email;
+    data['name'] = name;
+    return data;
+  }
 }

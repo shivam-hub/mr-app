@@ -8,6 +8,8 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final String placeholder;
   final List<DropDownOption> dropDownOption;
   final bool enableSearch;
+  final bool readonly;
+  final SingleValueDropDownController controller;
   final void Function(dynamic)? onChanged;
   final String? prefixText;
 
@@ -17,6 +19,8 @@ class DropdownTextFieldWidget extends StatefulWidget {
       required this.dropDownOption,
       this.enableSearch = true,
       this.onChanged,
+      required this.controller,
+      this.readonly = false,
       this.prefixText});
 
   @override
@@ -25,11 +29,8 @@ class DropdownTextFieldWidget extends StatefulWidget {
 }
 
 class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
-  late SingleValueDropDownController _controller;
-
   @override
   void initState() {
-    _controller = SingleValueDropDownController();
     super.initState();
   }
 
@@ -41,8 +42,10 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
       child: DropDownTextField(
         dropDownList: widget.dropDownOption,
         dropdownColor: const Color.fromARGB(255, 236, 232, 185),
-        enableSearch: widget.enableSearch,
-        controller: _controller,
+        enableSearch: widget.readonly ? widget.enableSearch : false,
+        readOnly: widget.readonly,
+        isEnabled: !widget.readonly,
+        controller: widget.controller,
         onChanged: widget.onChanged,
         textFieldDecoration: InputDecoration(
           filled: true,

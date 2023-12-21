@@ -1,17 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   final String baseUrl;
 
   ApiService(this.baseUrl);
 
-  Future<Map<String, dynamic>> login(
-      {required String username, required String password}) async {
+  Future<Map<String, dynamic>> login({
+    required String username,
+    required String password,
+  }) async {
     try {
-      print('$baseUrl/api/auth/login');
+      final pref = await SharedPreferences.getInstance();
       final response = await http.post(
-        Uri.parse('$baseUrl/api/auth/login'),
+        Uri.parse('$baseUrl/api/Auth/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -19,12 +22,76 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final resp = json.decode(response.body);
+        await pref.setString('token', resp['token'].toString());
+        return resp;
       } else {
         throw Exception('Failed to login');
       }
     } catch (e) {
-      print(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getUser() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/auth/user'),
+        headers: <String, String>{'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final result = response.body;
+        await pref.setString('userDetails', result);
+        return json.decode(result);
+      } else {
+        throw Exception('Failed to fetch user details');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<dynamic>> getOptions({required String query}) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/Doctor/search/$query'),
+        headers: <String, String>{'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        return res['doctors'];
+      } else {
+        throw Exception('Unable to fetch options');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> saveMasterDetails(String payload) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+      final response = await http.post(Uri.parse('$baseUrl/api/Visits/add'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          },
+          body: payload);
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
       rethrow;
     }
   }

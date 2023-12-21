@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 237, 232, 185),
+                          color: const Color.fromARGB(255, 237, 232, 185),
                         ),
                         width: 60,
                         height: 90,
