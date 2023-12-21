@@ -1,8 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nurene_app/blocs/master/master_bloc.dart';
-import 'package:nurene_app/blocs/master/master_event.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,50 +58,54 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Autocomplete(
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextFormField(
-          readOnly: widget.readOnly,
-          enabled: !widget.readOnly,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: const Color.fromARGB(255, 237, 235, 216),
-            labelText: widget.placeholder,
-            prefixText: widget.prefixText,
-            floatingLabelStyle: const TextStyle(color: Colors.brown),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide:
-                  const BorderSide(color: AppColors.textFieldBorderColor),
+    return Material(
+      elevation: 15,
+      borderRadius: BorderRadius.circular(15),
+      child: Autocomplete(
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            readOnly: widget.readOnly,
+            enabled: !widget.readOnly,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color.fromARGB(255, 237, 235, 216),
+              labelText: widget.placeholder,
+              prefixText: widget.prefixText,
+              floatingLabelStyle: const TextStyle(color: Colors.brown),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    const BorderSide(color: AppColors.textFieldBorderColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    const BorderSide(color: AppColors.textFieldBorderColor),
+              ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide:
-                  const BorderSide(color: AppColors.textFieldBorderColor),
-            ),
-          ),
-          controller: controller,
-          focusNode: focusNode,
-          onFieldSubmitted: (String value) {
-            onFieldSubmitted();
-          },
-        );
-      },
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        final Iterable<String>? options =
-            await _debouncedSearch(textEditingValue.text);
-        if (options == null) {
-          return _lastOptions;
-        }
-        _lastOptions = options;
-        return options;
-      },
-      onSelected: (String selection) async {
-        final optionNode =
-            await GetOptionsAsync().getSelectedOptionNode(selection);
-        widget.onSelected!(optionNode as T);
-      },
+            controller: controller,
+            focusNode: focusNode,
+            onFieldSubmitted: (String value) {
+              onFieldSubmitted();
+            },
+          );
+        },
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          final Iterable<String>? options =
+              await _debouncedSearch(textEditingValue.text);
+          if (options == null) {
+            return _lastOptions;
+          }
+          _lastOptions = options;
+          return options;
+        },
+        onSelected: (String selection) async {
+          final optionNode =
+              await GetOptionsAsync().getSelectedOptionNode(selection);
+          widget.onSelected!(optionNode as T);
+        },
+      ),
     );
   }
 }

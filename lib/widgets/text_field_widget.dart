@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import '../themes/app_colors.dart';
 
 class TextFieldWidget extends StatelessWidget {

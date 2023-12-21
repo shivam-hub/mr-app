@@ -1,9 +1,9 @@
 abstract class PlanVisitEvent {}
 
 class DoctorSelectedEvent extends PlanVisitEvent {
-  final String selectedDoctor;
+  final Map<String, dynamic> doctorDetails;
 
-  DoctorSelectedEvent(this.selectedDoctor);
+  DoctorSelectedEvent(this.doctorDetails);
 }
 
 class SavePlanVisitDataEvent extends PlanVisitEvent {
@@ -23,6 +23,6 @@ class SavePlanVisitDataEvent extends PlanVisitEvent {
       required this.pincode,
       required this.state,
       required this.region,
-      required this.date, 
+      required this.date,
       required this.time});
 }

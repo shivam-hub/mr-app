@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
+import 'package:nurene_app/models/visit_model.dart';
+import 'package:nurene_app/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'master_event.dart';
 import 'master_state.dart';
 
 class MasterBloc extends Bloc<MasterEvent, MasterState> {
-  MasterBloc() : super(MasterInitialState());
+  final ApiService apiService;
+  MasterBloc(this.apiService) : super(MasterInitialState());
 
   @override
   Stream<MasterState> mapEventToState(MasterEvent event) async* {
@@ -13,12 +18,29 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
       yield DoctorSelectedState(event.doctorDetails);
     } else if (event is SaveMasterDataEvent) {
       try {
-          
+        final pref = await SharedPreferences.getInstance();
+        final userDetailsStr = pref.getString('userDetails') ?? '';
+        final Map<String, dynamic> userDetails = json.decode(userDetailsStr);
+        final doctorDetails = DoctorInfo.fromJson(event.doctorDetails);
+        final longitude = pref.getDouble('longitude') ?? 0;
+        final latitude = pref.getDouble('latitude') ?? 0;
+        final location = <String, dynamic>{};
+        location['type'] = 'Point';
+        location['coordinates'] = <double>[longitude, latitude];
+        final payload = <String, dynamic>{};
+        payload['mrId'] = userDetails['userId'];
+        payload['location'] = location;
+        payload['doctorInfo'] = doctorDetails.toJson();
+        payload['mrInfo'] = userDetails;
+        final c = VisitModel.fromJson(payload);
+        final isSaved = await apiService.saveMasterDetails(json.encode(payload));
         yield MasterSuccessState();
       } catch (e) {
         // If there's an error, yield error state
         yield MasterErrorState('Error saving data: $e');
       }
+    } else if (event is MasterFormReset) {
+      yield MasterFormResetState();
     }
   }
 }

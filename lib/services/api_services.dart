@@ -14,7 +14,7 @@ class ApiService {
     try {
       final pref = await SharedPreferences.getInstance();
       final response = await http.post(
-        Uri.parse('$baseUrl/api/auth/login'),
+        Uri.parse('$baseUrl/api/Auth/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -44,7 +44,9 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final result = response.body;
+        await pref.setString('userDetails', result);
+        return json.decode(result);
       } else {
         throw Exception('Failed to fetch user details');
       }
@@ -69,6 +71,26 @@ class ApiService {
       } else {
         throw Exception('Unable to fetch options');
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> saveMasterDetails(String payload) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+      final response = await http.post(Uri.parse('$baseUrl/api/Visits/add'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          },
+          body: payload);
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
     } catch (e) {
       rethrow;
     }

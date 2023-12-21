@@ -10,6 +10,7 @@ import '../blocs/login/login_state.dart';
 import '../blocs/login/login_bloc.dart';
 import '../widgets/logo_widget.dart';
 import '../widgets/text_field_widget.dart';
+import '../utils/GeolocatorUtil.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -19,6 +20,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GeolocatorUtil.checkLocationServices(context);
     return SafeArea(
       child: Scaffold(
         body: Container(

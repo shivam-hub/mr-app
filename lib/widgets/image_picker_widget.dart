@@ -42,36 +42,6 @@ Future selectImage(BuildContext context) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //     selectedImagePath = await selectImageFromGallery();
-                      //     print('Image_Path:-');
-                      //     print(selectedImagePath);
-                      //     if (selectedImagePath != '') {
-                      //       Navigator.pop(context);
-                      //       setState(() {});
-                      //     } else {
-                      //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      //         content: Text("No Image Selected !"),
-                      //       ));
-                      //     }
-                      //   },
-                      //   child: Card(
-                      //       elevation: 5,
-                      //       child: Padding(
-                      //         padding: const EdgeInsets.all(8.0),
-                      //         child: Column(
-                      //           children: [
-                      //             Image.asset(
-                      //               'assets/images/gallery.png',
-                      //               height: 60,
-                      //               width: 60,
-                      //             ),
-                      //             const Text('Gallery'),
-                      //           ],
-                      //         ),
-                      //       )),
-                      // ),
                       GestureDetector(
                         onTap: () async {
                           selectedImagePath = await selectImageFromCamera();
