@@ -36,7 +36,6 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
         final isSaved = await apiService.saveMasterDetails(json.encode(payload));
         yield MasterSuccessState();
       } catch (e) {
-        // If there's an error, yield error state
         yield MasterErrorState('Error saving data: $e');
       }
     } else if (event is MasterFormReset) {

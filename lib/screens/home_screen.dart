@@ -6,6 +6,7 @@ import 'package:nurene_app/themes/app_colors.dart';
 import 'package:nurene_app/widgets/add_button_widget.dart';
 import 'package:nurene_app/widgets/appbar_widget.dart';
 import 'package:nurene_app/widgets/bottom_navigationbar_widget.dart';
+import 'package:nurene_app/widgets/home_screen_cards.dart';
 import 'package:nurene_app/widgets/logo_widget.dart';
 import 'package:intl/intl.dart';
 // import 'package:get/get.dart';
@@ -84,29 +85,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onDateChange: (date) {
                 _selectedDate = date;
+                debugPrint('$_selectedDate');
               },
             ),
           ),
           Expanded(
             child: ListView.builder(
                 // itemCount: _taskController.tasklist.length,
-                itemCount: 7,
+                itemCount: 10,
                 itemBuilder: (_, context) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Material(
-                      elevation: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromARGB(255, 237, 232, 185),
-                        ),
-                        width: 60,
-                        height: 90,
-                        margin: const EdgeInsets.only(bottom: 10),
-                      ),
-                    ),
-                  );
+                  return const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: CardWidget(
+                        time: "2023-12-22T14:15:00.000+00:00",
+                        doctorName: "Shivam",
+                        clinicName: "Test",
+                      ));
                 }),
           )
         ],

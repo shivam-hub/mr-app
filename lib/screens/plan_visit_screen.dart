@@ -1,13 +1,13 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nurene_app/blocs/master/master_state.dart';
-import 'package:nurene_app/themes/app_colors.dart';
-import 'package:nurene_app/widgets/appbar_widget.dart';
-import 'package:nurene_app/widgets/autocomplete_widget.dart';
-import 'package:nurene_app/widgets/bottom_navigationbar_widget.dart';
+import 'package:nurene_app/services/api_services.dart';
+import 'package:nurene_app/services/locator.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
+import '../themes/app_colors.dart';
+import '../widgets/appbar_widget.dart';
+import '../widgets/autocomplete_widget.dart';
+import '../widgets/bottom_navigationbar_widget.dart';
 import '../models/dropdown_value_model.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/date_picker_widget.dart';
@@ -25,6 +25,10 @@ class PlanVisitScreen extends StatefulWidget {
 }
 
 class _PlanVisitScreenState extends State<PlanVisitScreen> {
+  TimeOfDay? _selectedTime;
+
+  DateTime? _seledtedDate;
+
   final TextEditingController _addressController = TextEditingController();
 
   final TextEditingController _cityController = TextEditingController();
@@ -57,155 +61,205 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
-        body: BlocBuilder<PlanVisitBloc, PlanVisitState>(
-            builder: (context, state) {
-          return Column(
-            children: [
-              const SizedBox(height: 80),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: AutoCompleteWidget(
-                    prefixText: 'Dr. ',
-                    placeholder: 'Doctor\'s Name',
-                    onSelected: (Map<String, dynamic> optionNode) {
-                      doctorDetails = optionNode;
-                      BlocProvider.of<PlanVisitBloc>(context)
-                          .add(DoctorSelectedEvent(optionNode));
-                    },
-                    readOnly: state is DoctorSelectedState,
-                  )),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: DropdownTextFieldWidget(
-                  placeholder: 'Doctor Type',
-                  dropDownOption: const [
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value"),
-                    DropDownOption(name: "name", value: "value")
-                  ],
-                  controller: _doctorTypeController,
-                  onChanged: (value) {
-                    // BlocProvider.of<MasterBloc>(context)
-                    //     .add(DoctorSelectedEvent(value));
-                  },
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: TextFieldWidget(
-                  label: 'Address',
-                  controller: _addressController,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: BlocProvider(
+          create: (context) => PlanVisitBloc(locator<ApiService>()),
+          child: BlocBuilder<PlanVisitBloc, PlanVisitState>(
+              builder: (context, state) {
+            if (state is PlanVisitLoadingState) {
+              return const CircularProgressIndicator();
+            } else {
+              if (state is DoctorSelectedState) {
+                _doctorTypeController.dropDownValue = DropDownValueModel(
+                    name: state.doctorDetails['speciality'],
+                    value: state.doctorDetails['speciality']);
+
+                final addressLine1 =
+                    state.doctorDetails['addressInfo']?['addressline1'] ?? '';
+                final addressLine2 =
+                    state.doctorDetails['addressInfo']?['addressline2'] ?? '';
+                _addressController.text = "$addressLine1 , $addressLine2";
+
+                _cityController.text =
+                    state.doctorDetails['addressInfo']['city'].toString();
+
+                _pincodeController.text =
+                    state.doctorDetails['addressInfo']['pincode'].toString();
+
+                _stateController.dropDownValue = DropDownValueModel(
+                    name: state.doctorDetails['addressInfo']['state'],
+                    value: state.doctorDetails['addressInfo']['state']);
+
+                _regionController.text =
+                    state.doctorDetails['addressInfo']['region'].toString();
+              }
+              return SingleChildScrollView(
+                child: Column(
                   children: [
-                    Expanded(
-                        child: TextFieldWidget(
-                      label: 'City',
-                      controller: _cityController,
-                    )),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                        child: TextFieldWidget(
-                      label: 'Pincode',
-                      controller: _pincodeController,
-                    ))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      //     child: TextFieldWidget(
-                      //   label: 'State',
-                      //   controller: _stateController,
-                      // )
-                      child: Container(
-                        child: DropdownTextFieldWidget(
-                          placeholder: 'State',
-                          dropDownOption: const [
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value"),
-                            DropDownOption(name: "name", value: "value")
-                          ],
-                          controller: _stateController,
-                          onChanged: (value) {
-                            // BlocProvider.of<PlanVisitBloc>(context)
-                            //     .add(DoctorSelectedEvent(value));
+                    const SizedBox(height: 80),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: AutoCompleteWidget(
+                          prefixText: 'Dr. ',
+                          placeholder: 'Doctor\'s Name',
+                          onSelected: (Map<String, dynamic> optionNode) {
+                            doctorDetails = optionNode;
+                            BlocProvider.of<PlanVisitBloc>(context)
+                                .add(DoctorSelectedEvent(optionNode));
                           },
+                          readOnly: state is DoctorSelectedState,
+                        )),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: DropdownTextFieldWidget(
+                        placeholder: 'Doctor Type',
+                        dropDownOption: const [
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value"),
+                          DropDownOption(name: "name", value: "value")
+                        ],
+                        readonly: state is DoctorSelectedState,
+                        controller: _doctorTypeController,
+                        onChanged: (value) {
+                          // BlocProvider.of<MasterBloc>(context)
+                          //     .add(DoctorSelectedEvent(value));
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: TextFieldWidget(
+                        label: 'Address',
+                        controller: _addressController,
+                        readOnly: state is DoctorSelectedState,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                              child: TextFieldWidget(
+                            label: 'City',
+                            controller: _cityController,
+                            readOnly: state is DoctorSelectedState,
+                          )),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                              child: TextFieldWidget(
+                            label: 'Pincode',
+                            controller: _pincodeController,
+                            readOnly: state is DoctorSelectedState,
+                          ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            //     child: TextFieldWidget(
+                            //   label: 'State',
+                            //   controller: _stateController,
+                            // )
+                            child: DropdownTextFieldWidget(
+                              placeholder: 'State',
+                              dropDownOption: const [
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value"),
+                                DropDownOption(name: "name", value: "value")
+                              ],
+                              controller: _stateController,
+                              readonly: state is DoctorSelectedState,
+                              onChanged: (value) {
+                                // BlocProvider.of<PlanVisitBloc>(context)
+                                //     .add(DoctorSelectedEvent(value));
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                              child: TextFieldWidget(
+                            label: 'Region',
+                            controller: _regionController,
+                            readOnly: state is DoctorSelectedState,
+                          ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DatePickerWidget(
+                            onDateSelected: (DateTime selectedDate) {
+                              setState(() {
+                                _seledtedDate = selectedDate;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 10),
+                          TimePickerWidget(
+                              onTimeSelected: (TimeOfDay selectedTime) {
+                            setState(() {
+                              _selectedTime = selectedTime;
+                            });
+                          }),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: ButtonWidget(
+                          onPressed: () {
+                            BlocProvider.of<PlanVisitBloc>(context).add(
+                              SavePlanVisitDataEvent(
+                                doctorDetails: doctorDetails,
+                                time: _selectedTime!.format(context),
+                                date: _seledtedDate.toString()
+                              ),
+                            );
+                          },
+                          width: 100,
+                          height: 40,
+                          labelFontSize: 18,
+                          label: 'Save',
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                        child: TextFieldWidget(
-                      label: 'Region',
-                      controller: _regionController,
-                    ))
                   ],
                 ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    DatePickerWidget(),
-                    const SizedBox(width: 15),
-                    const TimePickerWidget(),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: ButtonWidget(
-                    onPressed: () {
-                      // BlocProvider.of<PlanVisitBloc>(context).add(
-                      //   SavePlanVisitDataEvent(
-
-                      //   ),
-                      // );
-                    },
-                    width: 100,
-                    height: 40,
-                    labelFontSize: 18,
-                    label: 'Save',
-                  ),
-                ),
-              ),
-            ],
-          );
-        }),
+              );
+            }
+          }),
+        ),
         bottomNavigationBar: BottomNavigationBarWidget(
           gradientB: AppColors.bottomNavBarColorGradient,
         ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nurene_app/themes/app_colors.dart';
 
 class TimePickerWidget extends StatefulWidget {
-  const TimePickerWidget({super.key});
+  final Function(TimeOfDay selectedTime) onTimeSelected;
+
+  const TimePickerWidget({super.key, required this.onTimeSelected});
 
   @override
   _TimePickerWidgetState createState() => _TimePickerWidgetState();
@@ -39,6 +41,8 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
       setState(() {
         _selectedTime = picked;
       });
+
+      widget.onTimeSelected(_selectedTime);
     }
   }
 
@@ -51,12 +55,12 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           height: 50,
-          width: 110,
+          width: 125,
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.textFieldBorderColor),
             borderRadius: BorderRadius.circular(15.0),
           ),
-          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
