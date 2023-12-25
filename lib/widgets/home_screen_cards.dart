@@ -29,7 +29,7 @@ class CardWidget extends StatelessWidget {
 
   bool _isVisitMissed() {
     // Parse the scheduled time
-    final scheduledTime = DateTime.parse(time);
+    final scheduledTime = DateTime.parse(time).toLocal();
 
     // Compare with the current time
     return DateTime.now().isAfter(scheduledTime);
@@ -93,7 +93,7 @@ class CardWidget extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(time)),
+                    DateFormat.jm().format(DateTime.parse(time).toLocal()),
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
