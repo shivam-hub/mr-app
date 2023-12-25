@@ -60,6 +60,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           height: 50,
           width: 150,
           decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 237, 235, 216),
             border: Border.all(color: AppColors.textFieldBorderColor),
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -70,9 +71,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               Text(
                 '${_selectedDate.toLocal()}'.split(' ')[0],
                 style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.brown,
-                    fontWeight: FontWeight.bold),
+                  letterSpacing: 2.0,
+                  fontSize: 16.0,
+                  //color: Color.fromARGB(255, 34, 32, 31),
+                  fontWeight: FontWeight.w300,
+                ),
               ),
               const Icon(Icons.calendar_today),
             ],

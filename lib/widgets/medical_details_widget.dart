@@ -134,9 +134,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
             TextField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: const Color.fromARGB(255, 224, 223, 208),
+                fillColor: Color.fromARGB(255, 224, 223, 208),
                 labelText: 'GST Number',
-                floatingLabelStyle: const TextStyle(color: Colors.brown),
+                floatingLabelStyle: TextStyle(color: Colors.brown),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
