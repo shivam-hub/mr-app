@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:nurene_app/themes/app_colors.dart';
-
-import '../screens/master_screen.dart';
+import 'package:nurene_app/screens/home_screen.dart';
+import 'package:nurene_app/screens/master_screen.dart';
+import 'package:nurene_app/screens/plan_visit_screen.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
-  int? selectedIndex;
   final Gradient? gradientB;
-  BottomNavigationBarWidget({super.key, this.gradientB, this.selectedIndex});
+
+  BottomNavigationBarWidget({Key? key, this.gradientB}) : super(key: key);
 
   @override
   State<BottomNavigationBarWidget> createState() =>
@@ -15,6 +14,8 @@ class BottomNavigationBarWidget extends StatefulWidget {
 }
 
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -30,38 +31,67 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               child: Container(
                 decoration: BoxDecoration(gradient: widget.gradientB),
                 child: BottomNavigationBar(
+                  currentIndex: _selectedIndex,
                   onTap: (int selectedIndex) {
+                    setState(() {
+                      _selectedIndex = selectedIndex;
+                    });
                     switch (selectedIndex) {
                       case 0:
-                        // Handle tap on the 'Plan' item
-                        // You can navigate to another screen or perform any other action
-                        print('Plan tapped');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PlanVisitScreen(),
+                          ),
+                        );
                         break;
                       case 1:
-                        // Handle tap on the 'Home' item
-                        print('Home tapped');
+                        print("home");
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => HomeScreen(user: null),
+                        //   ),
+                        // );
                         break;
                       case 2:
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MasterScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MasterScreen(),
+                          ),
+                        );
                         break;
                     }
                   },
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.edit_note_rounded), label: 'Plan'),
+                      icon: Icon(
+                        Icons.calendar_today,
+                        color: _selectedIndex == 0 ? Colors.black : Colors.grey,
+                      ),
+                      label: '',
+                    ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.home), label: 'Home'),
+                      icon: Icon(
+                        Icons.home,
+                        color: _selectedIndex == 1 ? Colors.black : Colors.grey,
+                      ),
+                      label: '',
+                    ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.manage_accounts_rounded),
-                        label: 'Profile'),
+                      icon: Icon(
+                        Icons.person,
+                        color: _selectedIndex == 2 ? Colors.black : Colors.grey,
+                      ),
+                      label: '',
+                    ),
                   ],
-                  
-                  unselectedItemColor: Colors.brown,
-                  
+                  selectedItemColor: Colors.black,
+                  unselectedItemColor: Colors.grey,
                   showUnselectedLabels: false,
+                  selectedIconTheme: IconThemeData(size: 28),
+                  unselectedIconTheme: IconThemeData(size: 28),
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
                 ),
