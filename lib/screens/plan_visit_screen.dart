@@ -37,6 +37,8 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
 
   final TextEditingController _regionController = TextEditingController();
 
+  final TextEditingController _doctorNameController = TextEditingController();
+
   final SingleValueDropDownController _doctorTypeController =
       SingleValueDropDownController();
 
@@ -101,6 +103,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                         child: AutoCompleteWidget(
                           prefixText: 'Dr. ',
                           placeholder: 'Doctor\'s Name',
+                          textEditingController: _doctorNameController,
                           onSelected: (Map<String, dynamic> optionNode) {
                             doctorDetails = optionNode;
                             BlocProvider.of<PlanVisitBloc>(context)
@@ -241,10 +244,9 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                           onPressed: () {
                             BlocProvider.of<PlanVisitBloc>(context).add(
                               SavePlanVisitDataEvent(
-                                doctorDetails: doctorDetails,
-                                time: _selectedTime!.format(context),
-                                date: _seledtedDate.toString()
-                              ),
+                                  doctorDetails: doctorDetails,
+                                  time: _selectedTime!.format(context),
+                                  date: _seledtedDate.toString()),
                             );
                           },
                           width: 100,

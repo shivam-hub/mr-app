@@ -1,6 +1,6 @@
-import 'dart:html';
-
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:nurene_app/models/MedicalStoreModel.dart';
+import 'package:nurene_app/models/plan_visit_model.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,9 @@ import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
+
+GlobalKey<MedicalStoreDetailsWidgetState> medicalStoreDetailsWidgetKey =
+    GlobalKey<MedicalStoreDetailsWidgetState>();
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -40,6 +43,8 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final TextEditingController _doctorIdController = TextEditingController();
 
+  final TextEditingController _doctorNameController = TextEditingController();
+
   final SingleValueDropDownController _doctorTypeController =
       SingleValueDropDownController();
 
@@ -47,7 +52,7 @@ class _MasterScreenState extends State<MasterScreen> {
       SingleValueDropDownController();
 
   String selectedImagePath = '';
-  late final Map<String, dynamic> doctorDetails;
+  DoctorInfo doctorDetails = DoctorInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -77,27 +82,43 @@ class _MasterScreenState extends State<MasterScreen> {
                 return const Text('Data saved successfully!');
               } else {
                 if (state is DoctorSelectedState) {
-                  _doctorIdController.text =
-                      state.doctorDetails['drId'].toString();
-                  _addressLine1Controller.text = state
-                      .doctorDetails['addressInfo']['addressline1']
-                      .toString();
-                  _addressLine2Controller.text = state
-                      .doctorDetails['addressInfo']['addressline2']
-                      .toString();
-                  _cityController.text =
-                      state.doctorDetails['addressInfo']['city'].toString();
-                  _pincodeController.text =
-                      state.doctorDetails['addressInfo']['pincode'].toString();
-                  _regionController.text =
-                      state.doctorDetails['addressInfo']['region'].toString();
+                  final docInfo = DoctorInfo.fromJson(state.doctorDetails);
+                  _doctorIdController.text = docInfo.drId ?? '';
+                  _addressLine1Controller.text =
+                      docInfo.addressInfo?.addressline1 ?? '';
+                  _addressLine2Controller.text =
+                      docInfo.addressInfo?.addressline2 ?? '';
+                  _cityController.text = docInfo.addressInfo?.city ?? '';
+                  _pincodeController.text = docInfo.addressInfo?.pincode ?? '';
+                  _regionController.text = docInfo.addressInfo?.region ?? '';
                   _stateController.dropDownValue = DropDownValueModel(
-                      name: state.doctorDetails['addressInfo']['state'],
-                      value: state.doctorDetails['addressInfo']['state']);
+                      name: docInfo.addressInfo?.state ?? '',
+                      value: docInfo.addressInfo?.state ?? '');
                   _doctorTypeController.dropDownValue = DropDownValueModel(
-                      name: state.doctorDetails['speciality'],
-                      value: state.doctorDetails['speciality']);
+                      name: docInfo.speciality ?? '',
+                      value: docInfo.speciality ?? '');
+                } else if (state is NewDoctorRecordState) {
+                  final AddressInfo addressInfo = AddressInfo();
+                  addressInfo.addressline1 =
+                      _addressLine1Controller.text.toString();
+                  addressInfo.addressline2 =
+                      _addressLine1Controller.text.toString();
+                  addressInfo.city = _cityController.text.toString();
+                  addressInfo.pincode = _pincodeController.text.toString();
+                  addressInfo.region = _regionController.text.toString();
+                  addressInfo.state =
+                      _stateController.dropDownValue?.name.toString();
+
+                  doctorDetails.addressInfo = addressInfo;
+                  List<MedicalStoreModel> medicalStoreDetails =
+                      medicalStoreDetailsWidgetKey.currentState!
+                          .getMedicalStoreDetails();
+                  doctorDetails.speciality =
+                      _doctorTypeController.dropDownValue?.name.toString();
+
+                  // doctorDetails.associatedMedicals = medicalStoreDetails;
                 } else if (state is MasterFormResetState) {
+                  debugPrint(_doctorNameController.text);
                   _doctorIdController.clear();
                   _doctorTypeController.clearDropDown();
                   _addressLine1Controller.clear();
@@ -115,8 +136,8 @@ class _MasterScreenState extends State<MasterScreen> {
                       titleTextStyle:
                           TextStyle(fontWeight: FontWeight.w600, shadows: [
                         Shadow(
-                          color: Color.fromARGB(
-                              255, 201, 195, 195), // shadow color
+                          color:
+                              Color.fromARGB(255, 201, 195, 195), // shadow clor
                           offset: Offset(5.0, 3.0), // shadow offset
                           blurRadius: 10, // shadow blur radius
                         ),
@@ -140,10 +161,17 @@ class _MasterScreenState extends State<MasterScreen> {
                         child: AutoCompleteWidget<Map<String, dynamic>>(
                           prefixText: 'Dr. ',
                           placeholder: 'Doctor\'s Name',
+                          textEditingController: _doctorNameController,
                           onSelected: (Map<String, dynamic> optionNode) {
-                            doctorDetails = optionNode;
+                            doctorDetails = DoctorInfo.fromJson(optionNode);
                             BlocProvider.of<MasterBloc>(context)
                                 .add(DoctorSelectedEvent(optionNode));
+                          },
+                          onEditingComplete: (String value) {
+                            debugPrint(value);
+                            doctorDetails.name = value;
+                            BlocProvider.of<MasterBloc>(context)
+                                .add(NewDoctorRecordEvent(value));
                           },
                           readOnly: state is DoctorSelectedState,
                         )),
@@ -274,7 +302,8 @@ class _MasterScreenState extends State<MasterScreen> {
                     const SizedBox(height: 2),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: MedicalStoreDetailsWidget(),
+                      child: MedicalStoreDetailsWidget(
+                          medicalStoreDetailsWidgetKey),
                     ),
 
                     const ListTile(
@@ -332,7 +361,6 @@ class _MasterScreenState extends State<MasterScreen> {
                       ]),
                       title: Text('Uploads', style: TextStyle(fontSize: 30)),
                     ),
-
                     Container(
                       height: 200,
                       padding: const EdgeInsets.all(15),
@@ -443,7 +471,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                 BlocProvider.of<MasterBloc>(context).add(
                                   SaveMasterDataEvent(
                                     filePath: '',
-                                    doctorDetails: doctorDetails,
+                                    doctorDetails: doctorDetails.toJson(),
                                   ),
                                 );
                               },

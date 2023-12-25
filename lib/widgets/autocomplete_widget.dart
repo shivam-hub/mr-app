@@ -12,13 +12,17 @@ class AutoCompleteWidget<T> extends StatefulWidget {
   final String placeholder;
   final String prefixText;
   final bool readOnly;
+  final TextEditingController textEditingController;
   final void Function(T)? onSelected;
+  final void Function(String)? onEditingComplete;
 
   const AutoCompleteWidget(
       {super.key,
       required this.prefixText,
       required this.placeholder,
       this.onSelected,
+      required this.textEditingController,
+      this.onEditingComplete,
       this.readOnly = false});
 
   @override
@@ -31,6 +35,14 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
   late Iterable<String> _lastOptions = <String>[];
 
   late final _Debounceable<Iterable<String>?, String> _debouncedSearch;
+
+  void _handleEnteredText(String enteredText) {
+    debugPrint('Entered Text: $enteredText');
+
+    if (widget.onSelected != null) {
+      widget.onEditingComplete!(enteredText);
+    }
+  }
 
   Future<Iterable<String>?> _search(String query) async {
     _currentQuery = query;
@@ -62,8 +74,10 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
       elevation: 15,
       borderRadius: BorderRadius.circular(15),
       child: Autocomplete(
-        fieldViewBuilder: (BuildContext context, TextEditingController controller,
-            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController controller,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
           return TextFormField(
             readOnly: widget.readOnly,
             enabled: !widget.readOnly,
@@ -87,7 +101,13 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
             controller: controller,
             focusNode: focusNode,
             onFieldSubmitted: (String value) {
+              debugPrint('Control is inside field submitted');
               onFieldSubmitted();
+            },
+            onChanged: (value) {
+              if (controller.text != '') {
+                _handleEnteredText(value);
+              }
             },
           );
         },
