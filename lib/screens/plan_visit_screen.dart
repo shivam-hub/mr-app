@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
+import 'package:quickalert/quickalert.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
 import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
@@ -28,7 +29,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
   TimeOfDay? _selectedTime;
 
   DateTime? _seledtedDate;
-
+  final TextEditingController _doctorTypeController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
   final TextEditingController _cityController = TextEditingController();
@@ -37,13 +38,20 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
 
   final TextEditingController _regionController = TextEditingController();
 
-  final SingleValueDropDownController _doctorTypeController =
-      SingleValueDropDownController();
+  // final SingleValueDropDownController _doctorTypeController =
+  //     SingleValueDropDownController();
 
-  final SingleValueDropDownController _stateController =
-      SingleValueDropDownController();
+  final TextEditingController _stateController = TextEditingController();
 
   late final Map<String, dynamic> doctorDetails;
+  void showAlert() {
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Done!',
+        text: 'Your visit has been planned successfully',
+        confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +77,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               return const CircularProgressIndicator();
             } else {
               if (state is DoctorSelectedState) {
-                _doctorTypeController.dropDownValue = DropDownValueModel(
-                    name: state.doctorDetails['speciality'],
-                    value: state.doctorDetails['speciality']);
+                _doctorTypeController.text = state.doctorDetails['speciality'];
 
                 final addressLine1 =
                     state.doctorDetails['addressInfo']?['addressline1'] ?? '';
@@ -85,9 +91,8 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                 _pincodeController.text =
                     state.doctorDetails['addressInfo']['pincode'].toString();
 
-                _stateController.dropDownValue = DropDownValueModel(
-                    name: state.doctorDetails['addressInfo']['state'],
-                    value: state.doctorDetails['addressInfo']['state']);
+                _stateController.text =
+                    state.doctorDetails['addressInfo']['state'];
 
                 _regionController.text =
                     state.doctorDetails['addressInfo']['region'].toString();
@@ -108,28 +113,13 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                           },
                           readOnly: state is DoctorSelectedState,
                         )),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: DropdownTextFieldWidget(
-                        placeholder: 'Doctor Type',
-                        dropDownOption: const [
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value"),
-                          DropDownOption(name: "name", value: "value")
-                        ],
-                        readonly: state is DoctorSelectedState,
+                      child: TextFieldWidget(
+                        label: 'Doctor type',
                         controller: _doctorTypeController,
-                        onChanged: (value) {
-                          // BlocProvider.of<MasterBloc>(context)
-                          //     .add(DoctorSelectedEvent(value));
-                        },
+                        readOnly: true,
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -138,7 +128,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                       child: TextFieldWidget(
                         label: 'Address',
                         controller: _addressController,
-                        readOnly: state is DoctorSelectedState,
+                        readOnly: true,
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -151,7 +141,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                               child: TextFieldWidget(
                             label: 'City',
                             controller: _cityController,
-                            readOnly: state is DoctorSelectedState,
+                            readOnly: true,
                           )),
                           const SizedBox(
                             width: 15,
@@ -160,7 +150,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                               child: TextFieldWidget(
                             label: 'Pincode',
                             controller: _pincodeController,
-                            readOnly: state is DoctorSelectedState,
+                            readOnly: true,
                           ))
                         ],
                       ),
@@ -176,25 +166,10 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                             //   label: 'State',
                             //   controller: _stateController,
                             // )
-                            child: DropdownTextFieldWidget(
-                              placeholder: 'State',
-                              dropDownOption: const [
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value")
-                              ],
+                            child: TextFieldWidget(
+                              label: 'State',
                               controller: _stateController,
-                              readonly: state is DoctorSelectedState,
-                              onChanged: (value) {
-                                // BlocProvider.of<PlanVisitBloc>(context)
-                                //     .add(DoctorSelectedEvent(value));
-                              },
+                              readOnly: true,
                             ),
                           ),
                           const SizedBox(
@@ -204,7 +179,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                               child: TextFieldWidget(
                             label: 'Region',
                             controller: _regionController,
-                            readOnly: state is DoctorSelectedState,
+                            readOnly: true,
                           ))
                         ],
                       ),
@@ -215,20 +190,24 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          DatePickerWidget(
-                            onDateSelected: (DateTime selectedDate) {
-                              setState(() {
-                                _seledtedDate = selectedDate;
-                              });
-                            },
+                          Expanded(
+                            child: DatePickerWidget(
+                              onDateSelected: (DateTime selectedDate) {
+                                setState(() {
+                                  _seledtedDate = selectedDate;
+                                });
+                              },
+                            ),
                           ),
-                          const SizedBox(width: 10),
-                          TimePickerWidget(
-                              onTimeSelected: (TimeOfDay selectedTime) {
-                            setState(() {
-                              _selectedTime = selectedTime;
-                            });
-                          }),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: TimePickerWidget(
+                                onTimeSelected: (TimeOfDay selectedTime) {
+                              setState(() {
+                                _selectedTime = selectedTime;
+                              });
+                            }),
+                          ),
                         ],
                       ),
                     ),
@@ -241,11 +220,11 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                           onPressed: () {
                             BlocProvider.of<PlanVisitBloc>(context).add(
                               SavePlanVisitDataEvent(
-                                doctorDetails: doctorDetails,
-                                time: _selectedTime!.format(context),
-                                date: _seledtedDate.toString()
-                              ),
+                                  doctorDetails: doctorDetails,
+                                  time: _selectedTime!.format(context),
+                                  date: _seledtedDate.toString()),
                             );
+                            showAlert();
                           },
                           width: 100,
                           height: 40,
@@ -261,6 +240,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
           }),
         ),
         bottomNavigationBar: BottomNavigationBarWidget(
+          initialIndex: 0,
           gradientB: AppColors.bottomNavBarColorGradient,
         ),
       ),

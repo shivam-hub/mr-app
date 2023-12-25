@@ -57,6 +57,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           height: 50,
           width: 125,
           decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 237, 235, 216),
             border: Border.all(color: AppColors.textFieldBorderColor),
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -67,12 +68,13 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
               Text(
                 _selectedTime.format(context),
                 style: const TextStyle(
+                  letterSpacing: 2.0,
                   fontSize: 16.0,
-                  color: Colors.brown,
-                  fontWeight: FontWeight.bold,
+                  //color: Color.fromARGB(255, 34, 32, 31),
+                  fontWeight: FontWeight.w300,
                 ),
               ),
-              const Icon(Icons.access_time),
+              const Icon(Icons.access_time_rounded),
             ],
           ),
         ),

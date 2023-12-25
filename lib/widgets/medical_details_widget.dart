@@ -128,7 +128,7 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Color.fromARGB(255, 224, 223, 208),
-                labelText: 'GPS Number',
+                labelText: 'GST Number',
                 floatingLabelStyle: TextStyle(color: Colors.brown),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
