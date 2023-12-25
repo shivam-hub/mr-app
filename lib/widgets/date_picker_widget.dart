@@ -3,6 +3,10 @@ import 'package:nurene_app/themes/app_colors.dart';
 import 'package:nurene_app/widgets/text_field_widget.dart';
 
 class DatePickerWidget extends StatefulWidget {
+  final Function(DateTime selectedDate) onDateSelected;
+
+  const DatePickerWidget({super.key, required this.onDateSelected});
+
   @override
   _DatePickerWidgetState createState() => _DatePickerWidgetState();
 }
@@ -40,6 +44,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       setState(() {
         _selectedDate = picked;
       });
+
+      widget.onDateSelected(_selectedDate);
     }
   }
 

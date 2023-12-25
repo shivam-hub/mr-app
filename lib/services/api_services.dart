@@ -95,4 +95,46 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<bool> scheduleVisit(String payload) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+      final response =
+          await http.post(Uri.parse('$baseUrl/api/ScheduleVisit/add'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer $token'
+              },
+              body: payload);
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getSchedules(String mrId) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+      final response = await http.get(
+          Uri.parse('$baseUrl/api/ScheduleVisit/$mrId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          });
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }else{
+        throw Exception('Failed to fetch planned visit');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

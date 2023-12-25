@@ -7,22 +7,12 @@ class DoctorSelectedEvent extends PlanVisitEvent {
 }
 
 class SavePlanVisitDataEvent extends PlanVisitEvent {
-  final String doctorName;
-  final String addressLine1;
-  final String city;
-  final String pincode;
-  final String state;
-  final String region;
+  final Map<String, dynamic> doctorDetails;
   final String date;
   final String time;
 
   SavePlanVisitDataEvent(
-      {required this.doctorName,
-      required this.addressLine1,
-      required this.city,
-      required this.pincode,
-      required this.state,
-      required this.region,
+      {required this.doctorDetails,
       required this.date,
       required this.time});
 }
