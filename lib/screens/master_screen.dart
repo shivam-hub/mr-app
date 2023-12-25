@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:nurene_app/services/api_services.dart';
+import 'package:nurene_app/utils/const.dart';
 import 'package:nurene_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
+import 'package:quickalert/quickalert.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -48,6 +50,15 @@ class _MasterScreenState extends State<MasterScreen> {
 
   String selectedImagePath = '';
   late final Map<String, dynamic> doctorDetails;
+
+  void showAlert() {
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Submitted!',
+        text: 'Your details has been updated successfully',
+        confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +139,9 @@ class _MasterScreenState extends State<MasterScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: TextFieldWidget(
-                        label: "Doctor Id",
+                        label: "Doctor Registration No.",
                         controller: _doctorIdController,
-                        readOnly: true,
+                        readOnly: state is DoctorSelectedState,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -231,17 +242,7 @@ class _MasterScreenState extends State<MasterScreen> {
                             child: DropdownTextFieldWidget(
                               placeholder: 'State',
                               controller: _stateController,
-                              dropDownOption: const [
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value"),
-                                DropDownOption(name: "name", value: "value")
-                              ],
+                              dropDownOption: Constants.states,
                               readonly: state is DoctorSelectedState,
                             ),
                           ),
@@ -446,6 +447,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                     doctorDetails: doctorDetails,
                                   ),
                                 );
+                                showAlert();
                               },
                               width: 100,
                               height: 40,
@@ -464,6 +466,7 @@ class _MasterScreenState extends State<MasterScreen> {
         ),
         bottomNavigationBar: BottomNavigationBarWidget(
           gradientB: AppColors.bottomNavBarColorGradient,
+          initialIndex: 2,
         ),
       ),
     );

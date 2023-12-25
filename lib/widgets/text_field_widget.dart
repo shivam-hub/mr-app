@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isPassword;
   final String? prefixText;
   final bool readOnly;
+  final String? Function(String?)? validator;
 
   const TextFieldWidget({
     super.key,
@@ -15,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
     this.isPassword = false,
     this.prefixText,
     this.readOnly = false,
+    this.validator,
   });
 
   @override
@@ -22,9 +24,10 @@ class TextFieldWidget extends StatelessWidget {
     return Material(
       elevation: 15,
       borderRadius: BorderRadius.circular(15),
-      child: TextField(
+      child: TextFormField(
         readOnly: readOnly,
         enabled: !readOnly,
+        validator: validator,
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(

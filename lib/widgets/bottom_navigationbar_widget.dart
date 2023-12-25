@@ -5,8 +5,13 @@ import 'package:nurene_app/screens/plan_visit_screen.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   final Gradient? gradientB;
+  final int initialIndex;
 
-  BottomNavigationBarWidget({Key? key, this.gradientB}) : super(key: key);
+  BottomNavigationBarWidget({
+    Key? key,
+    this.gradientB,
+    required this.initialIndex,
+  }) : super(key: key);
 
   @override
   State<BottomNavigationBarWidget> createState() =>
@@ -15,6 +20,12 @@ class BottomNavigationBarWidget extends StatefulWidget {
 
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,33 +47,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                     setState(() {
                       _selectedIndex = selectedIndex;
                     });
-                    switch (selectedIndex) {
-                      case 0:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PlanVisitScreen(),
-                          ),
-                        );
-                        break;
-                      case 1:
-                        print("home");
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => HomeScreen(user: null),
-                        //   ),
-                        // );
-                        break;
-                      case 2:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MasterScreen(),
-                          ),
-                        );
-                        break;
-                    }
+                    navigateToScreen(selectedIndex);
                   },
                   items: [
                     BottomNavigationBarItem(
@@ -101,5 +86,39 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         ),
       ],
     );
+  }
+
+  void navigateToScreen(int index) {
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PlanVisitScreen(),
+          ),
+        ).then((_) {
+          // Update _selectedIndex when navigating back from PlanVisitScreen
+          setState(() {
+            _selectedIndex = 0;
+          });
+        });
+        break;
+      case 1:
+        // Handle other cases as needed
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MasterScreen(),
+          ),
+        ).then((_) {
+          // Update _selectedIndex when navigating back from MasterScreen
+          setState(() {
+            _selectedIndex = 2;
+          });
+        });
+        break;
+    }
   }
 }
