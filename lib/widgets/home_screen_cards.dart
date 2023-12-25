@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-enum Priority { low, medium, high }
+import '../utils/Priority.dart';
 
 class CardWidget extends StatelessWidget {
   final String time;

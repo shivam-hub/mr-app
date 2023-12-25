@@ -16,8 +16,6 @@ class MasterErrorState extends MasterState {
   MasterErrorState(this.errorMessage);
 }
 
-class MasterFormResetState extends MasterState{
-
-}
+class MasterFormResetState extends MasterState{}
 
 class MasterSuccessState extends MasterState {}

@@ -1,6 +1,5 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:nurene_app/services/api_services.dart';
-import 'dart:io';
 import 'package:nurene_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -297,7 +296,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                     width: 2,
                                   ),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.camera_alt,
                                   size: 50,
                                   color: Colors.grey,

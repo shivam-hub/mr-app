@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:nurene_app/models/visit_model.dart';
-import 'package:nurene_app/services/api_services.dart';
+import '/models/visit_model.dart';
+import '/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'master_event.dart';
