@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/widgets/image_picker_widget.dart';
@@ -15,6 +17,7 @@ import '../widgets/appbar_widget.dart';
 import '../widgets/autocomplete_widget.dart';
 import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
+import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -265,10 +268,71 @@ class _MasterScreenState extends State<MasterScreen> {
                           blurRadius: 10, // shadow blur radius
                         ),
                       ]),
+                      title: Text('Associated Medical',
+                          style: TextStyle(fontSize: 30)),
+                    ),
+                    const SizedBox(height: 2),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: MedicalStoreDetailsWidget(),
+                    ),
+
+                    const ListTile(
+                      contentPadding: EdgeInsets.all(20),
+                      textColor: Color.fromARGB(255, 65, 81, 90),
+                      titleTextStyle:
+                          TextStyle(fontWeight: FontWeight.w600, shadows: [
+                        Shadow(
+                          color: Color.fromARGB(
+                              255, 201, 195, 195), // shadow color
+                          offset: Offset(5.0, 3.0), // shadow offset
+                          blurRadius: 10, // shadow blur radius
+                        ),
+                      ]),
+                      title: Text('Feedback', style: TextStyle(fontSize: 30)),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: TextFormField(
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color.fromARGB(255, 237, 235, 216),
+                            labelText: 'Enter your feedback',
+                            floatingLabelStyle:
+                                const TextStyle(color: Colors.brown),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: AppColors.textFieldBorderColor),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: AppColors.textFieldBorderColor),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const ListTile(
+                      contentPadding: EdgeInsets.all(20),
+                      textColor: Color.fromARGB(255, 65, 81, 90),
+                      titleTextStyle:
+                          TextStyle(fontWeight: FontWeight.w600, shadows: [
+                        Shadow(
+                          color: Color.fromARGB(
+                              255, 201, 195, 195), // shadow color
+                          offset: Offset(5.0, 3.0), // shadow offset
+                          blurRadius: 10, // shadow blur radius
+                        ),
+                      ]),
                       title: Text('Uploads', style: TextStyle(fontSize: 30)),
                     ),
 
-                    // Add your photo upload widget here
                     Container(
                       height: 200,
                       padding: const EdgeInsets.all(15),
