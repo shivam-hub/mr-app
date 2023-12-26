@@ -38,11 +38,6 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
 
   final TextEditingController _regionController = TextEditingController();
 
-  final TextEditingController _doctorNameController = TextEditingController();
-
-  // final SingleValueDropDownController _doctorTypeController =
-  //     SingleValueDropDownController();
-
   final TextEditingController _stateController = TextEditingController();
 
   late final Map<String, dynamic> doctorDetails;
@@ -108,7 +103,6 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                         child: AutoCompleteWidget(
                           prefixText: 'Dr. ',
                           placeholder: 'Doctor\'s Name',
-                          textEditingController: _doctorNameController,
                           onSelected: (Map<String, dynamic> optionNode) {
                             doctorDetails = optionNode;
                             BlocProvider.of<PlanVisitBloc>(context)
