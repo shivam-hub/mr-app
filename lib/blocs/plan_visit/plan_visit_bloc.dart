@@ -6,6 +6,7 @@ import 'package:nurene_app/blocs/plan_visit/plan_visit_state.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/doctor_model.dart';
 import '../../models/plan_visit_model.dart';
 
 class PlanVisitBloc extends Bloc<PlanVisitEvent, PlanVisitState> {

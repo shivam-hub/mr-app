@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
+import '../../models/doctor_model.dart';
 import '/models/visit_model.dart';
 import '/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
