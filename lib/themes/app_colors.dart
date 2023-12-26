@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color backgroundColor = Color(0xFFF5F5DC);
+  // static const Color backgroundColor = Color(0xFFF5F5DC);
+  static const Color backgroundColor = Color.fromARGB(255, 255, 255, 255);
   static const Color buttonGradientStart = Color(0xFFFCF6BA);
   static const Color buttonGradientEnd = Color(0xFFBF953A);
   static const Color buttonShadowColor = Color(0xFFAF7B1D);
 
+  static const Color newColor = Colors.indigo;
+  static const Color newColorText = Color.fromARGB(221, 36, 35, 35);
+  static const Color newColorText1 = Color.fromARGB(221, 97, 96, 96);
   static const Color textFieldBorderColor = Color(0xFFB38728);
 
   static const Color appBarColor1 = Color(0xFFBF953F);

@@ -1,6 +1,7 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
 import '../models/MedicalStoreModel.dart';
 import '../services/api_services.dart';
@@ -75,7 +76,8 @@ class _MasterScreenState extends State<MasterScreen> {
           prefixIcon: IconButton(
               icon: const Icon(Icons.arrow_back_outlined,
                   color: Colors.brown, size: 25),
-              onPressed: () => Navigator.of(context).pop()),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/home')),
           gradient: AppColors.appBarColorGradient,
         ),
         body: BlocProvider(
@@ -322,7 +324,26 @@ class _MasterScreenState extends State<MasterScreen> {
                           _formKey,
                         ),
                       ),
+                      const ListTile(
+                        contentPadding: EdgeInsets.all(20),
+                        textColor: Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle:
+                            TextStyle(fontWeight: FontWeight.w600, shadows: [
+                          Shadow(
+                            color: Color.fromARGB(
+                                255, 201, 195, 195), // shadow color
+                            offset: Offset(5.0, 3.0), // shadow offset
+                            blurRadius: 10, // shadow blur radius
+                          ),
+                        ]),
+                        title: Text('Products', style: TextStyle(fontSize: 30)),
+                      ),
+                      //*********************************************** */
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: ProductSelectionWidget()),
 
+                      const SizedBox(height: 2),
                       const ListTile(
                         contentPadding: EdgeInsets.all(20),
                         textColor: Color.fromARGB(255, 65, 81, 90),
