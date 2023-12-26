@@ -1,4 +1,3 @@
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:image_picker/image_picker.dart";
 
@@ -28,7 +27,7 @@ Future selectImage(BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0)), //this right here
-          child: Container(
+          child: SizedBox(
             height: 150,
             child: Padding(
               padding: const EdgeInsets.all(12.0),

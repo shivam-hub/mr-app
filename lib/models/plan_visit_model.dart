@@ -1,5 +1,3 @@
-import 'package:nurene_app/models/MedicalStoreModel.dart';
-
 import 'doctor_model.dart';
 
 class PlanVisitModel {
