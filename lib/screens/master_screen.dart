@@ -1,15 +1,17 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:nurene_app/models/MedicalStoreModel.dart';
-import 'package:nurene_app/models/plan_visit_model.dart';
-import 'package:nurene_app/services/api_services.dart';
-import 'package:nurene_app/utils/const.dart';
-import 'package:nurene_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nurene_app/widgets/button_widget.dart';
+import 'package:quickalert/quickalert.dart';
+import '../models/MedicalStoreModel.dart';
+import '../services/api_services.dart';
+import '../utils/const.dart';
+import '../widgets/image_picker_widget.dart';
+import '../widgets/button_widget.dart';
 import '../blocs/master/master_bloc.dart';
 import '../blocs/master/master_event.dart';
 import '../blocs/master/master_state.dart';
+import '../models/address_info_model.dart';
+import '../models/doctor_model.dart';
 import '../models/dropdown_value_model.dart';
 import '../services/locator.dart';
 import '../themes/app_colors.dart';
@@ -20,7 +22,6 @@ import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
-import 'package:quickalert/quickalert.dart';
 
 GlobalKey<MedicalStoreDetailsWidgetState> medicalStoreDetailsWidgetKey =
     GlobalKey<MedicalStoreDetailsWidgetState>();
@@ -44,7 +45,9 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final TextEditingController _regionController = TextEditingController();
 
-  final TextEditingController _doctRegNumber = TextEditingController();
+  final TextEditingController _doctRegNumberController = TextEditingController();
+
+  final TextEditingController _feedBackController = TextEditingController();
 
   final SingleValueDropDownController _doctorTypeController =
       SingleValueDropDownController();
@@ -93,7 +96,7 @@ class _MasterScreenState extends State<MasterScreen> {
               } else {
                 if (state is DoctorSelectedState) {
                   final docInfo = DoctorInfo.fromJson(state.doctorDetails);
-                  _doctRegNumber.text = docInfo.drId ?? '';
+                  _doctRegNumberController.text = docInfo.drId ?? '';
                   _addressLine1Controller.text =
                       docInfo.addressInfo?.addressline1 ?? '';
                   _addressLine2Controller.text =
@@ -108,7 +111,7 @@ class _MasterScreenState extends State<MasterScreen> {
                       name: docInfo.speciality ?? '',
                       value: docInfo.speciality ?? '');
                 } else if (state is MasterFormResetState) {
-                  _doctRegNumber.clear();
+                  _doctRegNumberController.clear();
                   _doctorTypeController.clearDropDown();
                   _addressLine1Controller.clear();
                   _addressLine2Controller.clear();
@@ -142,7 +145,7 @@ class _MasterScreenState extends State<MasterScreen> {
                         child: TextFieldWidget(
                           formKey: _formKey,
                           label: "Doctor Registration No.",
-                          controller: _doctRegNumber,
+                          controller: _doctRegNumberController,
                           readOnly: state is DoctorSelectedState,
                           validator: (value) {
                             debugPrint(
@@ -337,30 +340,12 @@ class _MasterScreenState extends State<MasterScreen> {
                         title: Text('Feedback', style: TextStyle(fontSize: 30)),
                       ),
                       const SizedBox(width: 15),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: TextFormField(
-                            maxLines: 5,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor:
-                                  const Color.fromARGB(255, 237, 235, 216),
-                              labelText: 'Enter your feedback',
-                              floatingLabelStyle:
-                                  const TextStyle(color: Colors.brown),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                    color: AppColors.textFieldBorderColor),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                    color: AppColors.textFieldBorderColor),
-                              ),
-                            ),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: TextFieldWidget(
+                          maxLines: 5,
+                          label: 'Feedback',
+                          controller: _feedBackController,
                         ),
                       ),
 
@@ -520,12 +505,12 @@ class _MasterScreenState extends State<MasterScreen> {
                                       doctorDetails.associatedMedicals =
                                           medicalStoreDetails;
                                     }
-                                    // BlocProvider.of<MasterBloc>(context).add(
-                                    //   SaveMasterDataEvent(
-                                    //     filePath: '',
-                                    //     doctorDetails: doctorDetails.toJson(),
-                                    //   ),
-                                    // );
+                                    BlocProvider.of<MasterBloc>(context).add(
+                                      SaveMasterDataEvent(
+                                        filePath: '',
+                                        doctorDetails: doctorDetails.toJson(),
+                                      ),
+                                    );
                                     showAlert();
                                   }
                                 },

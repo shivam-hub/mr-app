@@ -10,6 +10,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? inputType;
   final GlobalKey<FormState>? formKey;
+  final int? maxLines;
 
   const TextFieldWidget({
     super.key,
@@ -21,6 +22,7 @@ class TextFieldWidget extends StatelessWidget {
     this.readOnly = false,
     this.inputType,
     this.validator,
+    this.maxLines
   });
 
   @override
@@ -35,6 +37,7 @@ class TextFieldWidget extends StatelessWidget {
         controller: controller,
         obscureText: isPassword,
         keyboardType: inputType,
+        maxLines: maxLines,
         onChanged: (value) {
           if (formKey != null && formKey!.currentState != null) {
             formKey!.currentState!.validate();

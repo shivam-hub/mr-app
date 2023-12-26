@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nurene_app/themes/app_colors.dart';
-import 'package:nurene_app/widgets/text_field_widget.dart';
 
 class DatePickerWidget extends StatefulWidget {
   final Function(DateTime selectedDate) onDateSelected;

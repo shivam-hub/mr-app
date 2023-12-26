@@ -1,4 +1,3 @@
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/services/api_services.dart';
@@ -9,10 +8,8 @@ import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
 import '../widgets/autocomplete_widget.dart';
 import '../widgets/bottom_navigationbar_widget.dart';
-import '../models/dropdown_value_model.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/date_picker_widget.dart';
-import '../widgets/dropdown_text_field.dart';
 import '../widgets/text_field_widget.dart';
 import '../blocs/plan_visit/plan_visit_event.dart';
 import '../blocs/plan_visit/plan_visit_state.dart';
