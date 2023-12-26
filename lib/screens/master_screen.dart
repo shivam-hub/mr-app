@@ -36,19 +36,13 @@ class MasterScreen extends StatefulWidget {
 
 class _MasterScreenState extends State<MasterScreen> {
   final TextEditingController _addressLine1Controller = TextEditingController();
-
   final TextEditingController _addressLine2Controller = TextEditingController();
-
   final TextEditingController _cityController = TextEditingController();
-
   final TextEditingController _pincodeController = TextEditingController();
-
   final TextEditingController _regionController = TextEditingController();
-
-  final TextEditingController _doctRegNumberController = TextEditingController();
-
+  final TextEditingController _doctRegNumberController =
+      TextEditingController();
   final TextEditingController _feedBackController = TextEditingController();
-
   final SingleValueDropDownController _doctorTypeController =
       SingleValueDropDownController();
 
@@ -62,6 +56,7 @@ class _MasterScreenState extends State<MasterScreen> {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
+        animType: QuickAlertAnimType.rotate,
         title: 'Submitted!',
         text: 'Your details has been updated successfully',
         confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
@@ -322,7 +317,7 @@ class _MasterScreenState extends State<MasterScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: MedicalStoreDetailsWidget(
-                            medicalStoreDetailsWidgetKey),
+                            medicalStoreDetailsWidgetKey, _formKey),
                       ),
 
                       const ListTile(

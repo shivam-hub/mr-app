@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nurene_app/models/MedicalStoreModel.dart';
-
+import '../models/MedicalStoreModel.dart';
 import '../themes/app_colors.dart';
 
-// ignore: use_key_in_widget_constructors
 class MedicalStoreDetailsWidget extends StatefulWidget {
-  const MedicalStoreDetailsWidget(Key? key) : super(key: key);
+  final GlobalKey<FormState>? formKey;
+  const MedicalStoreDetailsWidget(Key? key, this.formKey) : super(key: key);
   @override
   MedicalStoreDetailsWidgetState createState() =>
       MedicalStoreDetailsWidgetState();
@@ -79,7 +78,13 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter Medical Name";
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color.fromARGB(255, 224, 223, 208),
@@ -99,13 +104,23 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
+                if (widget.formKey != null &&
+                    widget.formKey!.currentState != null) {
+                  widget.formKey!.currentState!.validate();
+                }
                 setState(() {
                   medicalStores[index].name = value;
                 });
               },
             ),
             const SizedBox(height: 15),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter Location";
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color.fromARGB(255, 224, 223, 208),
@@ -125,18 +140,28 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
+                if (widget.formKey != null &&
+                    widget.formKey!.currentState != null) {
+                  widget.formKey!.currentState!.validate();
+                }
                 setState(() {
                   medicalStores[index].location = value;
                 });
               },
             ),
             const SizedBox(height: 15),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter GST Number";
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color.fromARGB(255, 224, 223, 208),
+                fillColor: const Color.fromARGB(255, 224, 223, 208),
                 labelText: 'GST Number',
-                floatingLabelStyle: TextStyle(color: Colors.brown),
+                floatingLabelStyle: const TextStyle(color: Colors.brown),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
@@ -151,6 +176,10 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
+                if (widget.formKey != null &&
+                    widget.formKey!.currentState != null) {
+                  widget.formKey!.currentState!.validate();
+                }
                 setState(() {
                   medicalStores[index].gstNumber = value;
                 });
