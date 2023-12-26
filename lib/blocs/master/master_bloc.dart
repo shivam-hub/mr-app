@@ -33,11 +33,14 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
         payload['doctorInfo'] = doctorDetails.toJson();
         payload['mrInfo'] = userDetails;
         final c = VisitModel.fromJson(payload);
-        final isSaved = await apiService.saveMasterDetails(json.encode(payload));
+        final isSaved =
+            await apiService.saveMasterDetails(json.encode(payload));
         yield MasterSuccessState();
       } catch (e) {
         yield MasterErrorState('Error saving data: $e');
       }
+    } else if (event is NewDoctorRecordEvent) {
+      yield NewDoctorRecordState();
     } else if (event is MasterFormReset) {
       yield MasterFormResetState();
     }

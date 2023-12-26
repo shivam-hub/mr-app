@@ -12,15 +12,19 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final SingleValueDropDownController controller;
   final void Function(dynamic)? onChanged;
   final String? prefixText;
+  final String? Function(String?)? validator;
+  final GlobalKey<FormState>? formKey;
 
   const DropdownTextFieldWidget(
       {super.key,
+      this.formKey,
       required this.placeholder,
       required this.dropDownOption,
       this.enableSearch = true,
       this.onChanged,
       required this.controller,
       this.readonly = false,
+      this.validator,
       this.prefixText});
 
   @override
@@ -46,6 +50,7 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
         readOnly: widget.readonly,
         isEnabled: !widget.readonly,
         controller: widget.controller,
+        validator: widget.validator,
         onChanged: widget.onChanged,
         textFieldDecoration: InputDecoration(
           filled: true,

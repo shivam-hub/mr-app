@@ -38,9 +38,6 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
 
   final TextEditingController _regionController = TextEditingController();
 
-  // final SingleValueDropDownController _doctorTypeController =
-  //     SingleValueDropDownController();
-
   final TextEditingController _stateController = TextEditingController();
 
   late final Map<String, dynamic> doctorDetails;

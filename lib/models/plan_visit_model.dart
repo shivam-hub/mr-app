@@ -1,3 +1,5 @@
+import 'package:nurene_app/models/MedicalStoreModel.dart';
+
 class PlanVisitModel {
   DoctorInfo? doctorInfo;
   String? plannedVisitDate;
@@ -49,7 +51,7 @@ class DoctorInfo {
   AddressInfo? addressInfo;
   String? speciality;
   String? clinicName;
-  List<AssociatedMedicals>? associatedMedicals;
+  List<MedicalStoreModel>? associatedMedicals;
 
   DoctorInfo(
       {this.drId,
@@ -68,9 +70,9 @@ class DoctorInfo {
     speciality = json['speciality'];
     clinicName = json['clinicName'];
     if (json['associatedMedicals'] != null) {
-      associatedMedicals = <AssociatedMedicals>[];
+      associatedMedicals = <MedicalStoreModel>[];
       json['associatedMedicals'].forEach((   v) {
-        associatedMedicals!.add(AssociatedMedicals.fromJson(v));
+        associatedMedicals!.add(MedicalStoreModel.fromJson(v));
       });
     }
   }

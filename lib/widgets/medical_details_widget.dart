@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:nurene_app/models/MedicalStoreModel.dart';
 
 import '../themes/app_colors.dart';
 
+// ignore: use_key_in_widget_constructors
 class MedicalStoreDetailsWidget extends StatefulWidget {
+  const MedicalStoreDetailsWidget(Key? key) : super(key: key);
   @override
-  _MedicalStoreDetailsWidgetState createState() =>
-      _MedicalStoreDetailsWidgetState();
+  MedicalStoreDetailsWidgetState createState() =>
+      MedicalStoreDetailsWidgetState();
 }
 
-class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
-  List<MedicalStoreDetails> medicalStores = [MedicalStoreDetails()];
+class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
+  List<MedicalStoreModel> medicalStores = [MedicalStoreModel()];
+
+  List<MedicalStoreModel> getMedicalStoreDetails() {
+    return medicalStores;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +31,17 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  medicalStores.add(MedicalStoreDetails());
+                  medicalStores.add(MedicalStoreModel());
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 217, 208, 208),
+                backgroundColor: const Color.fromARGB(255, 217, 208, 208),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
                 child: Text(
                   'Add Store',
                   style: TextStyle(color: Colors.white),
@@ -43,7 +50,7 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -56,8 +63,8 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
         setState(() {});
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.all(15),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 237, 235, 216),
           borderRadius: BorderRadius.circular(15),
@@ -71,23 +78,23 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 'Medical Store ${index + 1}',
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color.fromARGB(255, 224, 223, 208),
+                fillColor: const Color.fromARGB(255, 224, 223, 208),
                 labelText: 'Name',
-                floatingLabelStyle: TextStyle(color: Colors.brown),
+                floatingLabelStyle: const TextStyle(color: Colors.brown),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
               ),
@@ -97,23 +104,23 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 });
               },
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 15),
             TextField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color.fromARGB(255, 224, 223, 208),
+                fillColor: const Color.fromARGB(255, 224, 223, 208),
                 labelText: 'Location',
-                floatingLabelStyle: TextStyle(color: Colors.brown),
+                floatingLabelStyle: const TextStyle(color: Colors.brown),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
               ),
@@ -123,7 +130,7 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 });
               },
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 15),
             TextField(
               decoration: InputDecoration(
                 filled: true,
@@ -133,32 +140,26 @@ class _MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: const Color.fromARGB(255, 237, 235, 216),
+                    color: Color.fromARGB(255, 237, 235, 216),
                   ),
                 ),
               ),
               onChanged: (value) {
                 setState(() {
-                  medicalStores[index].gpsNumber = value;
+                  medicalStores[index].gstNumber = value;
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
-}
-
-class MedicalStoreDetails {
-  String name = '';
-  String location = '';
-  String gpsNumber = '';
 }

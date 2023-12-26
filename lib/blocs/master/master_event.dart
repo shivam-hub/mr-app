@@ -6,6 +6,12 @@ class DoctorSelectedEvent extends MasterEvent {
   DoctorSelectedEvent(this.doctorDetails);
 }
 
+class NewDoctorRecordEvent extends MasterEvent {
+  final String doctorName;
+
+  NewDoctorRecordEvent(this.doctorName);
+}
+
 class MasterFormReset extends MasterEvent {
   MasterFormReset();
 }
