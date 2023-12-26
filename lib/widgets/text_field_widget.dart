@@ -11,19 +11,21 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputType? inputType;
   final GlobalKey<FormState>? formKey;
   final int? maxLines;
+  final void Function(dynamic)? onChanged;
 
-  const TextFieldWidget({
-    super.key,
-    this.formKey,
-    required this.label,
-    required this.controller,
-    this.isPassword = false,
-    this.prefixText,
-    this.readOnly = false,
-    this.inputType,
-    this.validator,
-    this.maxLines
-  });
+
+  const TextFieldWidget(
+      {super.key,
+      this.formKey,
+      required this.label,
+      required this.controller,
+      this.isPassword = false,
+      this.prefixText,
+      this.readOnly = false,
+      this.inputType,
+      this.validator,
+      this.onChanged,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class TextFieldWidget extends StatelessWidget {
         controller: controller,
         obscureText: isPassword,
         keyboardType: inputType,
-        maxLines: maxLines,
+        maxLines: isPassword ? 1 : maxLines,
         onChanged: (value) {
           if (formKey != null && formKey!.currentState != null) {
             formKey!.currentState!.validate();

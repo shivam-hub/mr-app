@@ -1,7 +1,6 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:nurene_app/models/dropdown_value_model.dart';
-
 import '../themes/app_colors.dart';
 
 class DropdownTextFieldWidget extends StatefulWidget {
