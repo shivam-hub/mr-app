@@ -114,6 +114,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   _pincodeController.clear();
                   _stateController.clearDropDown();
                   _regionController.clear();
+                  _feedBackController.clear();
                 }
                 return Form(
                   key: _formKey,
@@ -317,7 +318,9 @@ class _MasterScreenState extends State<MasterScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: MedicalStoreDetailsWidget(
-                            medicalStoreDetailsWidgetKey, _formKey),
+                          GlobalKey<MedicalStoreDetailsWidgetState>(),
+                          _formKey,
+                        ),
                       ),
 
                       const ListTile(
@@ -493,6 +496,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                           medicalStoreDetailsWidgetKey
                                               .currentState!
                                               .getMedicalStoreDetails();
+
                                       doctorDetails.speciality =
                                           _doctorTypeController
                                               .dropDownValue?.name
