@@ -9,6 +9,7 @@ class VisitModel {
   Location? location;
   DoctorInfo? doctorInfo;
   UserModel? mrInfo;
+  String? feedback;
 
   VisitModel(
       {this.mrId,
@@ -16,11 +17,13 @@ class VisitModel {
       this.attachment,
       this.location,
       this.doctorInfo,
-      this.mrInfo});
+      this.mrInfo,
+      this.feedback});
 
   VisitModel.fromJson(Map<String, dynamic> json) {
     mrId = json['mrId'];
     visitedOn = json['visitedOn'];
+    feedback = json['feedback'];
     if (json['attachment'] != null) {
       attachment = <Attachment>[];
       json['attachment'].forEach((v) {
@@ -39,6 +42,7 @@ class VisitModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['mrId'] = mrId;
     data['visitedOn'] = visitedOn;
+    data['feedback'] = feedback;
     if (attachment != null) {
       data['attachment'] = attachment!.map((v) => v.toJson()).toList();
     }

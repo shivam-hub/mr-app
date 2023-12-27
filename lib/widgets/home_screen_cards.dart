@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nurene_app/themes/app_colors.dart';
 import '../utils/Priority.dart';
+import 'dashed_divider_widget.dart';
 
 class CardWidget extends StatelessWidget {
   final String time;
@@ -78,77 +80,86 @@ class CardWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => _showOptions(context),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: isMissed ? 0.0 : 5.0,
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        color:
-            isMissed ? Colors.grey : const Color.fromARGB(255, 237, 232, 185),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Left Section - Time
-              Column(
+      child: Column(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15)),
+            elevation: isMissed ? 0.0 : 5.0,
+            margin:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            color:
+                isMissed ? Color.fromARGB(255, 231, 231, 231) : Colors.indigo,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    DateFormat.jm().format(DateTime.parse(time).toLocal()),
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Divider(
-                    color: Colors.black,
-                    height: 20,
-                    thickness: 2,
-                  ),
-                  // Additional time-related information
-                ],
-              ),
-              const SizedBox(width: 16.0),
-              // Middle Section - Doctor's Name and Clinic's Name
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      doctorName,
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      clinicName,
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    if (isMissed)
-                      const Text(
-                        'Missed Visit',
-                        style: TextStyle(
-                          color: Colors.red,
+                  // Left Section - Time
+                  Column(
+                    children: [
+                      Text(
+                        DateFormat.jm()
+                            .format(DateTime.parse(time).toLocal()),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                  ],
-                ),
+                      const Divider(
+                        color: Colors.black,
+                        height: 20,
+                        thickness: 2,
+                      ),
+                      // Additional time-related information
+                    ],
+                  ),
+                  const SizedBox(width: 16.0),
+                  // Middle Section - Doctor's Name and Clinic's Name
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          doctorName,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          clinicName,
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        if (isMissed)
+                          const Text(
+                            'Missed Visit',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  // Right Section - Priority Icon or Image
+                  CircleAvatar(
+                    backgroundColor: _getPriorityColor(),
+                    child: Text(
+                      priority.toString().substring(8).toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 16.0),
-              // Right Section - Priority Icon or Image
-              CircleAvatar(
-                backgroundColor: _getPriorityColor(),
-                child: Text(
-                  priority.toString().substring(8).toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          DashedDivider()
+        ],
       ),
     );
   }

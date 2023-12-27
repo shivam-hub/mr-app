@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/blocs/home/home_bloc.dart';
 import 'package:nurene_app/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/login/login_bloc.dart';
+import 'models/user_model.dart';
+import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'themes/app_colors.dart';
 import 'services/locator.dart';
@@ -29,10 +35,28 @@ class MyApp extends StatelessWidget {
               create: (context) => LoginBloc(locator<ApiService>()),
               child: LoginScreen(),
             ),
-        // '/home': (context) => BlocProvider(
-        //       create: (context) => HomeBloc(),
-        //       child: HomeScreen(),
-        //     ),
+        '/home': (context) => BlocProvider(
+              create: (context) => HomeScreenBloc(locator<ApiService>()),
+              child: FutureBuilder<String?>(
+                future: SharedPreferences.getInstance()
+                    .then((pref) => pref.getString('userDetails')),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final user = snapshot.data;
+                    if (user != null) {
+                      return HomeScreen(
+                          user: UserModel.fromJson(json.decode(user)));
+                    } else {
+                      // Handle the case where user details are null
+                      return const Text('User details not found.');
+                    }
+                  } else {
+                    // You can return a loading indicator or some placeholder widget here
+                    return const CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
       },
     );
   }

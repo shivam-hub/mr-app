@@ -8,7 +8,8 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final List<DropDownOption> dropDownOption;
   final bool enableSearch;
   final bool readonly;
-  final SingleValueDropDownController controller;
+  final SingleValueDropDownController? controller;
+  
   final void Function(dynamic)? onChanged;
   final String? prefixText;
   final String? Function(String?)? validator;
@@ -21,10 +22,11 @@ class DropdownTextFieldWidget extends StatefulWidget {
       required this.dropDownOption,
       this.enableSearch = true,
       this.onChanged,
-      required this.controller,
+      this.controller,
       this.readonly = false,
       this.validator,
-      this.prefixText});
+      this.prefixText,
+      });
 
   @override
   State<DropdownTextFieldWidget> createState() =>
