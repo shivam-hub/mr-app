@@ -12,19 +12,21 @@ import 'screens/login_screen.dart';
 import 'themes/app_colors.dart';
 import 'services/locator.dart';
 
-void main() {
+
+Future main() async {
   setupLocator();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(const Duration(seconds: 2));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Your App',
+      
       theme: ThemeData(
           primarySwatch: Colors.blue,
           colorScheme: const ColorScheme.light()

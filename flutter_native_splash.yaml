@@ -1,0 +1,6 @@
+flutter_native_splash:
+ background_image: "asset/images/background.jpg"
+ image: "asset/images/nurene_logo.png"
+ android: true
+ ios: true
+ web: true

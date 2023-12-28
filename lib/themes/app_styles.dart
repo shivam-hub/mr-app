@@ -18,3 +18,17 @@ TextStyle get headingStyle {
           fontWeight: FontWeight.bold,
           color: AppColors.newColorText));
 }
+
+TextStyle get lisTitleStyle {
+  return GoogleFonts.redHatDisplay(
+      textStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          shadows: [
+            Shadow(
+              color: Color.fromARGB(255, 201, 195, 195), // shadow color
+              offset: Offset(5.0, 3.0), // shadow offset
+              blurRadius: 10, // shadow blur radius
+            ),
+          ],
+          fontSize: 20));
+}

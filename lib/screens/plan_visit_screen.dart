@@ -10,6 +10,7 @@ import '../widgets/autocomplete_widget.dart';
 import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/date_picker_widget.dart';
+import '../widgets/drawer_widget.dart';
 import '../widgets/text_field_widget.dart';
 import '../blocs/plan_visit/plan_visit_event.dart';
 import '../blocs/plan_visit/plan_visit_state.dart';
@@ -63,6 +64,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
+        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
         body: BlocProvider(
           create: (context) => PlanVisitBloc(locator<ApiService>()),
           child: BlocBuilder<PlanVisitBloc, PlanVisitState>(
@@ -91,152 +93,156 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                 _regionController.text =
                     state.doctorDetails['addressInfo']['region'].toString();
               }
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 80),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: AutoCompleteWidget(
-                          prefixText: 'Dr. ',
-                          placeholder: 'Doctor\'s Name',
-                          onSelected: (Map<String, dynamic> optionNode) {
-                            doctorDetails = optionNode;
-                            BlocProvider.of<PlanVisitBloc>(context)
-                                .add(DoctorSelectedEvent(optionNode));
-                          },
-                          readOnly: state is DoctorSelectedState,
-                        )),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: TextFieldWidget(
-                        label: 'Doctor type',
-                        controller: _doctorTypeController,
-                        readOnly: true,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: TextFieldWidget(
-                        label: 'Address',
-                        controller: _addressController,
-                        readOnly: true,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                              child: TextFieldWidget(
-                            label: 'City',
-                            controller: _cityController,
-                            readOnly: true,
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 80),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: AutoCompleteWidget(
+                            prefixText: 'Dr. ',
+                            placeholder: 'Doctor\'s Name',
+                            onSelected: (Map<String, dynamic> optionNode) {
+                              doctorDetails = optionNode;
+                              BlocProvider.of<PlanVisitBloc>(context)
+                                  .add(DoctorSelectedEvent(optionNode));
+                            },
+                            readOnly: state is DoctorSelectedState,
                           )),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                              child: TextFieldWidget(
-                            label: 'Pincode',
-                            controller: _pincodeController,
-                            readOnly: true,
-                          ))
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            //     child: TextFieldWidget(
-                            //   label: 'State',
-                            //   controller: _stateController,
-                            // )
-                            child: TextFieldWidget(
-                              label: 'State',
-                              controller: _stateController,
-                              readOnly: true,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                              child: TextFieldWidget(
-                            label: 'Region',
-                            controller: _regionController,
-                            readOnly: true,
-                          ))
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: DatePickerWidget(
-                              onDateSelected: (DateTime selectedDate) {
-                                setState(() {
-                                  _seledtedDate = selectedDate;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 15),
-                          Expanded(
-                            child: TimePickerWidget(
-                                onTimeSelected: (TimeOfDay selectedTime) {
-                              setState(() {
-                                _selectedTime = selectedTime;
-                              });
-                            }),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: ButtonWidget(
-                          onPressed: () {
-                            BlocProvider.of<PlanVisitBloc>(context).add(
-                              SavePlanVisitDataEvent(
-                                  doctorDetails: doctorDetails,
-                                  time: _selectedTime!.format(context),
-                                  date: _seledtedDate.toString()),
-                            );
-                            showAlert();
-                          },
-                          width: 100,
-                          height: 40,
-                          labelFontSize: 18,
-                          label: 'Save',
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: TextFieldWidget(
+                          label: 'Doctor type',
+                          controller: _doctorTypeController,
+                          readOnly: true,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: TextFieldWidget(
+                          label: 'Address',
+                          controller: _addressController,
+                          readOnly: true,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                child: TextFieldWidget(
+                              label: 'City',
+                              controller: _cityController,
+                              readOnly: true,
+                            )),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                                child: TextFieldWidget(
+                              label: 'Pincode',
+                              controller: _pincodeController,
+                              readOnly: true,
+                            ))
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              //     child: TextFieldWidget(
+                              //   label: 'State',
+                              //   controller: _stateController,
+                              // )
+                              child: TextFieldWidget(
+                                label: 'State',
+                                controller: _stateController,
+                                readOnly: true,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                                child: TextFieldWidget(
+                              label: 'Region',
+                              controller: _regionController,
+                              readOnly: true,
+                            ))
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: DatePickerWidget(
+                                onDateSelected: (DateTime selectedDate) {
+                                  setState(() {
+                                    _seledtedDate = selectedDate;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Expanded(
+                              child: TimePickerWidget(
+                                  onTimeSelected: (TimeOfDay selectedTime) {
+                                setState(() {
+                                  _selectedTime = selectedTime;
+                                });
+                              }),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: ButtonWidget(
+                            onPressed: () {
+                              BlocProvider.of<PlanVisitBloc>(context).add(
+                                SavePlanVisitDataEvent(
+                                    doctorDetails: doctorDetails,
+                                    time: _selectedTime!.format(context),
+                                    date: _seledtedDate.toString()),
+                              );
+                              showAlert();
+                            },
+                            width: 100,
+                            height: 40,
+                            labelFontSize: 18,
+                            label: 'Save',
+                            gradient: AppColors.buttonGradient
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }
           }),
         ),
-        bottomNavigationBar: BottomNavigationBarWidget(
-          initialIndex: 0,
-          gradientB: AppColors.bottomNavBarColorGradient,
-        ),
+        // bottomNavigationBar: BottomNavigationBarWidget(
+        //   initialIndex: 0,
+        //   gradientB: AppColors.bottomNavBarColorGradient,
+        // ),
       ),
     );
   }

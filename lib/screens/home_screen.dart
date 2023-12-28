@@ -15,6 +15,7 @@ import '../themes/app_colors.dart';
 import '../widgets/add_button_widget.dart';
 import '../widgets/appbar_widget.dart';
 import '../widgets/bottom_navigationbar_widget.dart';
+import '../widgets/drawer_widget.dart';
 import '../widgets/home_screen_cards.dart';
 import '../widgets/logo_widget.dart';
 import '../blocs/home/home_bloc.dart';
@@ -82,7 +83,9 @@ class _HomeScreenState extends State<_HomeScreenContent> {
           ),
           appBarTitle: "Nurene",
           gradient: AppColors.appBarColorGradient,
+          
         ),
+        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
         body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (context, state) {
             return Column(
@@ -122,7 +125,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
                         height: 90,
                         width: 80,
                         initialSelectedDate: DateTime.now(),
-                        selectionColor: AppColors.newColor,
+                        selectionColor: Color(0xFF7882A4),
                         selectedTextColor: Colors.white,
                         dateTextStyle: GoogleFonts.lato(
                             textStyle: const TextStyle(
@@ -205,7 +208,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
           },
         ),
         floatingActionButton: AddButtonWidget(
-          label: '+ Plan Visit',
+         
           onTap: () async {
             await Navigator.push(
               context,

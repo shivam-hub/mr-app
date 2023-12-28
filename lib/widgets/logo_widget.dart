@@ -8,7 +8,7 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('asset/images/nurene_logo.jpeg',
+    return Image.asset('asset/images/nurene_logo.png',
         width: width ?? 120, height: height ?? 120);
   }
 }
