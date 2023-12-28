@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:nurene_app/themes/app_colors.dart';
+import 'package:nurene_app/widgets/drawer_widget.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
+import '../screens/master_screen.dart';
+
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String appBarTitle;
   final Widget? logo;
   final Gradient? gradient;
@@ -17,19 +22,22 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       leading: logo ?? prefixIcon,
+
       title: Text(
         appBarTitle,
-        style: const TextStyle(
-            color: Colors.brown, fontSize: 28, fontWeight: FontWeight.bold),
+        style: GoogleFonts.lato(
+          textStyle: const TextStyle(
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 28,
+              fontWeight: FontWeight.bold),
+        ),
       ),
       flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: gradient
-        ),
+        decoration: BoxDecoration(gradient: gradient),
       ),
     );
   }
-  
+
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(80);
 }

@@ -68,58 +68,74 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 15,
-      borderRadius: BorderRadius.circular(15),
-      child: Autocomplete(
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController controller,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-              readOnly: widget.readOnly,
-              enabled: !widget.readOnly,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 237, 235, 216),
-                labelText: widget.placeholder,
-                prefixText: widget.prefixText,
-                floatingLabelStyle: const TextStyle(color: Colors.brown),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide:
-                      const BorderSide(color: AppColors.textFieldBorderColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide:
-                      const BorderSide(color: AppColors.textFieldBorderColor),
+    return Autocomplete(
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextFormField(
+            readOnly: widget.readOnly,
+            enabled: !widget.readOnly,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.transparent, // Transparent to see the shadow
+              labelText: widget.placeholder,
+              prefixText: widget.prefixText,
+              floatingLabelStyle: const TextStyle(
+                  color: Color.fromARGB(
+                      255, 83, 69, 116)), // Change label text color
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(0xFF7882A4), // Change underline color
+                  style: BorderStyle.solid, // Keep the border style constant
                 ),
               ),
-              controller: controller,
-              focusNode: focusNode,
-              onFieldSubmitted: (String value) {
-                onFieldSubmitted();
-              },
-              onChanged: (value) {
-                widget.onEditingComplete!(value);
-              });
-        },
-        optionsBuilder: (TextEditingValue textEditingValue) async {
-          final Iterable<String>? options =
-              await _debouncedSearch(textEditingValue.text);
-          if (options == null) {
-            return _lastOptions;
-          }
-          _lastOptions = options;
-          return options;
-        },
-        onSelected: (String selection) async {
-          final optionNode =
-              await GetOptionsAsync().getSelectedOptionNode(selection);
-          widget.onSelected!(optionNode as T);
-        },
-      ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(0xFF7882A4), // Change focused underline color
+                  style: BorderStyle.solid, // Keep the border style constant
+                ),
+              ),
+            ),
+            
+            // decoration: InputDecoration(
+            //   filled: true,
+            //   fillColor: const Color.fromARGB(255, 237, 235, 216),
+            //   labelText: widget.placeholder,
+            //   prefixText: widget.prefixText,
+            //   floatingLabelStyle: const TextStyle(color: Colors.brown),
+            //   enabledBorder: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(15),
+            //     borderSide:
+            //         const BorderSide(color: AppColors.textFieldBorderColor),
+            //   ),
+            //   focusedBorder: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(15),
+            //     borderSide:
+            //         const BorderSide(color: AppColors.textFieldBorderColor),
+            //   ),
+            // ),
+            controller: controller,
+            focusNode: focusNode,
+            onFieldSubmitted: (String value) {
+              onFieldSubmitted();
+            },
+            onChanged: (value) {
+              widget.onEditingComplete!(value);
+            });
+      },
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        final Iterable<String>? options =
+            await _debouncedSearch(textEditingValue.text);
+        if (options == null) {
+          return _lastOptions;
+        }
+        _lastOptions = options;
+        return options;
+      },
+      onSelected: (String selection) async {
+        final optionNode =
+            await GetOptionsAsync().getSelectedOptionNode(selection);
+        widget.onSelected!(optionNode as T);
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nurene_app/themes/app_colors.dart';
 
 class DatePickerWidget extends StatefulWidget {
@@ -24,9 +25,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary:
-                  Color.fromARGB(255, 236, 232, 185), // header background color
-              onPrimary: Colors.black, // header text color
-              onSurface: Colors.brown, // body text color
+                  AppColors.textFieldBorderColor, // header background color
+              onPrimary:
+                  Color.fromARGB(255, 255, 255, 255), // header text color
+              onSurface: Color.fromARGB(255, 150, 121, 133), // body text color
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -52,33 +54,31 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _selectDate(context),
-      child: Material(
-        elevation: 15,
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          height: 50,
-          width: 150,
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 237, 235, 216),
-            border: Border.all(color: AppColors.textFieldBorderColor),
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          padding: const EdgeInsets.fromLTRB(15, 0, 20, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${_selectedDate.toLocal()}'.split(' ')[0],
-                style: const TextStyle(
+      child: Container(
+        height: 50,
+        width: 150,
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 255, 255, 255),
+          border:
+              Border(bottom: BorderSide(color: AppColors.textFieldBorderColor)),
+        ),
+        padding: const EdgeInsets.fromLTRB(15, 0, 20, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${_selectedDate.toLocal()}'.split(' ')[0],
+              style: GoogleFonts.lato(
+                textStyle: const TextStyle(
                   letterSpacing: 2.0,
                   fontSize: 16.0,
-                  //color: Color.fromARGB(255, 34, 32, 31),
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              const Icon(Icons.calendar_today),
-            ],
-          ),
+            ),
+            const Icon(Icons.calendar_today,
+                color: AppColors.textFieldBorderColor),
+          ],
         ),
       ),
     );

@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:nurene_app/models/user_model.dart';
 import 'package:nurene_app/screens/master_screen.dart';
 import 'package:nurene_app/screens/plan_visit_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../screens/home_screen.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   final Gradient? gradientB;
@@ -74,8 +80,8 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                   selectedItemColor: Colors.black,
                   unselectedItemColor: Colors.grey,
                   showUnselectedLabels: false,
-                  selectedIconTheme: IconThemeData(size: 28),
-                  unselectedIconTheme: IconThemeData(size: 28),
+                  selectedIconTheme: const IconThemeData(size: 28),
+                  unselectedIconTheme: const IconThemeData(size: 28),
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
                 ),
@@ -98,12 +104,43 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         ).then((_) {
           // Update _selectedIndex when navigating back from PlanVisitScreen
           setState(() {
-            _selectedIndex = 0;
+            _selectedIndex = 1;
           });
         });
         break;
       case 1:
-        // Handle other cases as needed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return FutureBuilder<String?>(
+                future: SharedPreferences.getInstance()
+                    .then((pref) => pref.getString('userDetails')),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final user = snapshot.data;
+                    if (user != null) {
+                      return HomeScreen(
+                          user: UserModel.fromJson(json.decode(user)));
+                    } else {
+                      // Handle the case where user details are null
+                      return const Text('User details not found.');
+                    }
+                  } else {
+                    // You can return a loading indicator or some placeholder widget here
+                    return const CircularProgressIndicator();
+                  }
+                },
+              );
+            },
+          ),
+        ).then((_) {
+          // Update _selectedIndex when navigating back from MasterScreen
+          setState(() {
+            _selectedIndex = 1;
+          });
+        });
+
         break;
       case 2:
         Navigator.push(
@@ -114,7 +151,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         ).then((_) {
           // Update _selectedIndex when navigating back from MasterScreen
           setState(() {
-            _selectedIndex = 2;
+            _selectedIndex = 1;
           });
         });
         break;

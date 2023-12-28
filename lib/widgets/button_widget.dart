@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nurene_app/themes/app_colors.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -34,7 +35,8 @@ class ButtonWidget extends StatelessWidget {
           gradient: gradient,
           borderRadius: borderRadius,
           boxShadow: const [
-            BoxShadow(color: AppColors.buttonShadowColor, blurRadius: 5.0)
+            BoxShadow(
+                color: Color.fromARGB(255, 159, 170, 205), blurRadius: 5.0)
           ]),
       child: ElevatedButton(
         onPressed: onPressed,
@@ -45,10 +47,9 @@ class ButtonWidget extends StatelessWidget {
             elevation: 5),
         child: Text(
           label,
-          style: TextStyle(
-              color: Colors.brown,
+          style: GoogleFonts.cormorantGaramond(
+              color: Colors.white,
               fontSize: labelFontSize,
-              fontStyle: FontStyle.normal,
               fontWeight: FontWeight.bold),
         ),
       ),
