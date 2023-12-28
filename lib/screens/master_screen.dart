@@ -1,11 +1,13 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
 import '../models/MedicalStoreModel.dart';
 import '../services/api_services.dart';
 import '../utils/const.dart';
+import '../widgets/drawer_widget.dart';
 import '../widgets/image_picker_widget.dart';
 import '../widgets/button_widget.dart';
 import '../blocs/master/master_bloc.dart';
@@ -80,6 +82,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   Navigator.pushReplacementNamed(context, '/home')),
           gradient: AppColors.appBarColorGradient,
         ),
+        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
         body: BlocProvider(
           create: (context) => MasterBloc(locator<ApiService>()),
           child: BlocBuilder<MasterBloc, MasterState>(
@@ -122,19 +125,11 @@ class _MasterScreenState extends State<MasterScreen> {
                   key: _formKey,
                   child: ListView(
                     children: [
-                      const ListTile(
+                      ListTile(
                         titleAlignment: ListTileTitleAlignment.top,
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow clor
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Basic Details',
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Basic Details',
                             style: TextStyle(fontSize: 30)),
                       ),
                       const SizedBox(height: 5),
@@ -204,19 +199,12 @@ class _MasterScreenState extends State<MasterScreen> {
                           },
                         ),
                       ),
-                      const ListTile(
-                        contentPadding: EdgeInsets.all(20),
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow color
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Address', style: TextStyle(fontSize: 30)),
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(20),
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Address',
+                            style: TextStyle(fontSize: 30)),
                       ),
                       const SizedBox(height: 2),
                       Padding(
@@ -301,19 +289,11 @@ class _MasterScreenState extends State<MasterScreen> {
                           ],
                         ),
                       ),
-                      const ListTile(
-                        contentPadding: EdgeInsets.all(20),
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow color
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Associated Medical',
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(20),
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Associated Medical',
                             style: TextStyle(fontSize: 30)),
                       ),
                       const SizedBox(height: 2),
@@ -324,19 +304,12 @@ class _MasterScreenState extends State<MasterScreen> {
                           _formKey,
                         ),
                       ),
-                      const ListTile(
-                        contentPadding: EdgeInsets.all(20),
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow color
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Products', style: TextStyle(fontSize: 30)),
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(20),
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Products',
+                            style: TextStyle(fontSize: 30)),
                       ),
                       //*********************************************** */
                       Padding(
@@ -344,43 +317,30 @@ class _MasterScreenState extends State<MasterScreen> {
                           child: ProductSelectionWidget()),
 
                       const SizedBox(height: 2),
-                      const ListTile(
-                        contentPadding: EdgeInsets.all(20),
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow color
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Feedback', style: TextStyle(fontSize: 30)),
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(20),
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Feedback',
+                            style: TextStyle(fontSize: 30)),
                       ),
                       const SizedBox(width: 15),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: TextFieldWidget(
+                          minLines: 1,
                           maxLines: 5,
                           label: 'Feedback',
                           controller: _feedBackController,
                         ),
                       ),
 
-                      const ListTile(
-                        contentPadding: EdgeInsets.all(20),
-                        textColor: Color.fromARGB(255, 65, 81, 90),
-                        titleTextStyle:
-                            TextStyle(fontWeight: FontWeight.w600, shadows: [
-                          Shadow(
-                            color: Color.fromARGB(
-                                255, 201, 195, 195), // shadow color
-                            offset: Offset(5.0, 3.0), // shadow offset
-                            blurRadius: 10, // shadow blur radius
-                          ),
-                        ]),
-                        title: Text('Uploads', style: TextStyle(fontSize: 30)),
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(20),
+                        textColor: const Color.fromARGB(255, 65, 81, 90),
+                        titleTextStyle: lisTitleStyle,
+                        title: const Text('Uploads',
+                            style: TextStyle(fontSize: 30)),
                       ),
                       Container(
                         height: 200,
@@ -390,7 +350,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: AppColors.textFieldBorderColor,
+                                color: Color(0xFF7882A4),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(15),
@@ -405,7 +365,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: AppColors.textFieldBorderColor,
+                                      color: Color(0xFF7882A4),
                                       width: 2,
                                     ),
                                   ),
@@ -416,7 +376,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                   ),
                                 ),
                                 const VerticalDivider(
-                                  color: AppColors.textFieldBorderColor,
+                                  color: Color(0xFF7882A4),
                                   thickness: 2,
                                   indent: 10,
                                   endIndent: 10,
@@ -447,7 +407,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                         ),
                                         SizedBox(height: 5),
                                         Text(
-                                          'Tap to select from gallery',
+                                          'Tap to open your camera',
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.grey,
@@ -472,15 +432,15 @@ class _MasterScreenState extends State<MasterScreen> {
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: ButtonWidget(
-                                onPressed: () {
-                                  BlocProvider.of<MasterBloc>(context)
-                                      .add(MasterFormReset());
-                                },
-                                width: 100,
-                                height: 40,
-                                labelFontSize: 18,
-                                label: 'Reset',
-                              ),
+                                  onPressed: () {
+                                    BlocProvider.of<MasterBloc>(context)
+                                        .add(MasterFormReset());
+                                  },
+                                  width: 100,
+                                  height: 40,
+                                  labelFontSize: 18,
+                                  label: 'Reset',
+                                  gradient: AppColors.buttonGradient),
                             ),
                           ),
                           Padding(
@@ -488,57 +448,57 @@ class _MasterScreenState extends State<MasterScreen> {
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: ButtonWidget(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    GeolocatorUtil.checkLocationServices(
-                                        context);
-                                    if (state is NewDoctorRecordState) {
-                                      final AddressInfo addressInfo =
-                                          AddressInfo();
-                                      addressInfo.addressline1 =
-                                          _addressLine1Controller.text
-                                              .toString();
-                                      addressInfo.addressline2 =
-                                          _addressLine1Controller.text
-                                              .toString();
-                                      addressInfo.city =
-                                          _cityController.text.toString();
-                                      addressInfo.pincode =
-                                          _pincodeController.text.toString();
-                                      addressInfo.region =
-                                          _regionController.text.toString();
-                                      addressInfo.state = _stateController
-                                          .dropDownValue?.name
-                                          .toString();
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      GeolocatorUtil.checkLocationServices(
+                                          context);
+                                      if (state is NewDoctorRecordState) {
+                                        final AddressInfo addressInfo =
+                                            AddressInfo();
+                                        addressInfo.addressline1 =
+                                            _addressLine1Controller.text
+                                                .toString();
+                                        addressInfo.addressline2 =
+                                            _addressLine1Controller.text
+                                                .toString();
+                                        addressInfo.city =
+                                            _cityController.text.toString();
+                                        addressInfo.pincode =
+                                            _pincodeController.text.toString();
+                                        addressInfo.region =
+                                            _regionController.text.toString();
+                                        addressInfo.state = _stateController
+                                            .dropDownValue?.name
+                                            .toString();
 
-                                      doctorDetails.addressInfo = addressInfo;
-                                      List<MedicalStoreModel>
-                                          medicalStoreDetails =
-                                          medicalStoreDetailsWidgetKey
-                                              .currentState!
-                                              .getMedicalStoreDetails();
+                                        doctorDetails.addressInfo = addressInfo;
+                                        List<MedicalStoreModel>
+                                            medicalStoreDetails =
+                                            medicalStoreDetailsWidgetKey
+                                                .currentState!
+                                                .getMedicalStoreDetails();
 
-                                      doctorDetails.speciality =
-                                          _doctorTypeController
-                                              .dropDownValue?.name
-                                              .toString();
-                                      doctorDetails.associatedMedicals =
-                                          medicalStoreDetails;
+                                        doctorDetails.speciality =
+                                            _doctorTypeController
+                                                .dropDownValue?.name
+                                                .toString();
+                                        doctorDetails.associatedMedicals =
+                                            medicalStoreDetails;
+                                      }
+                                      BlocProvider.of<MasterBloc>(context).add(
+                                        SaveMasterDataEvent(
+                                          filePath: '',
+                                          doctorDetails: doctorDetails.toJson(),
+                                        ),
+                                      );
+                                      showAlert();
                                     }
-                                    BlocProvider.of<MasterBloc>(context).add(
-                                      SaveMasterDataEvent(
-                                        filePath: '',
-                                        doctorDetails: doctorDetails.toJson(),
-                                      ),
-                                    );
-                                    showAlert();
-                                  }
-                                },
-                                width: 100,
-                                height: 40,
-                                labelFontSize: 18,
-                                label: 'Save',
-                              ),
+                                  },
+                                  width: 100,
+                                  height: 40,
+                                  labelFontSize: 18,
+                                  label: 'Save',
+                                  gradient: AppColors.buttonGradient),
                             ),
                           ),
                         ],
@@ -550,10 +510,10 @@ class _MasterScreenState extends State<MasterScreen> {
             },
           ),
         ),
-        bottomNavigationBar: BottomNavigationBarWidget(
-          gradientB: AppColors.bottomNavBarColorGradient,
-          initialIndex: 2,
-        ),
+        // bottomNavigationBar: BottomNavigationBarWidget(
+        //   gradientB: AppColors.bottomNavBarColorGradient,
+        //   initialIndex: 2,
+        // ),
       ),
     );
   }

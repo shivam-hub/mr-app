@@ -30,8 +30,10 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey),
+              border: Border(
+                bottom: BorderSide(
+                    color: Color(0xFF7882A4)), // Change the underline color
+              ),
             ),
             child: DropdownButton<String>(
               underline: SizedBox(), // Hide the default underline
@@ -63,7 +65,8 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
                 borderRadius: BorderRadius.circular(15),
                 child: Chip(
                   label: Text(products[index]),
-                  backgroundColor: Colors.blueGrey,
+                  backgroundColor:
+                      Color(0xFF7882A4), // Change the chip background color
                   deleteIcon: Icon(Icons.cancel, color: Colors.white),
                   onDeleted: () {
                     setState(() {

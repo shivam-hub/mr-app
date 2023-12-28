@@ -9,24 +9,24 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final bool enableSearch;
   final bool readonly;
   final SingleValueDropDownController? controller;
-  
+
   final void Function(dynamic)? onChanged;
   final String? prefixText;
   final String? Function(String?)? validator;
   final GlobalKey<FormState>? formKey;
 
-  const DropdownTextFieldWidget(
-      {super.key,
-      this.formKey,
-      required this.placeholder,
-      required this.dropDownOption,
-      this.enableSearch = true,
-      this.onChanged,
-      this.controller,
-      this.readonly = false,
-      this.validator,
-      this.prefixText,
-      });
+  const DropdownTextFieldWidget({
+    super.key,
+    this.formKey,
+    required this.placeholder,
+    required this.dropDownOption,
+    this.enableSearch = true,
+    this.onChanged,
+    this.controller,
+    this.readonly = false,
+    this.validator,
+    this.prefixText,
+  });
 
   @override
   State<DropdownTextFieldWidget> createState() =>
@@ -41,34 +41,46 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 15,
-      borderRadius: BorderRadius.circular(15),
-      child: DropDownTextField(
-        dropDownList: widget.dropDownOption,
-        dropdownColor: const Color.fromARGB(255, 236, 232, 185),
-        enableSearch: widget.readonly ? widget.enableSearch : false,
-        readOnly: widget.readonly,
-        isEnabled: !widget.readonly,
-        controller: widget.controller,
-        validator: widget.validator,
-        onChanged: widget.onChanged,
-        textFieldDecoration: InputDecoration(
-          filled: true,
-          fillColor: const Color.fromARGB(255, 237, 235, 216),
-          labelText: widget.placeholder,
-          prefixText: widget.prefixText,
-          floatingLabelStyle: const TextStyle(color: Colors.brown),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-          ),
+    return DropDownTextField(
+      dropDownList: widget.dropDownOption,
+      dropdownColor: const Color.fromARGB(255, 236, 232, 185),
+      enableSearch: widget.readonly ? widget.enableSearch : false,
+      readOnly: widget.readonly,
+      isEnabled: !widget.readonly,
+      controller: widget.controller,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      textFieldDecoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.transparent, // Transparent to see the shadow
+        labelText: widget.placeholder,
+        prefixText: widget.prefixText,
+        floatingLabelStyle: const TextStyle(
+            color: Color.fromARGB(255, 83, 69, 116)), // Change label text color
+        enabledBorder: const UnderlineInputBorder(
+          borderSide:
+              BorderSide(color: Color(0xFF7882A4)), // Change underline color
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: Color(0xFF7882A4)), // Change focused underline color
         ),
       ),
+      // textFieldDecoration: InputDecoration(
+      //   filled: true,
+      //   fillColor: const Color.fromARGB(255, 237, 235, 216),
+      //   labelText: widget.placeholder,
+      //   prefixText: widget.prefixText,
+      //   floatingLabelStyle: const TextStyle(color: Colors.brown),
+      //   enabledBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(15),
+      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
+      //   ),
+      //   focusedBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(15),
+      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
+      //   ),
+      // ),
     );
   }
 }
