@@ -17,10 +17,12 @@ Future main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 2));
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,11 +51,9 @@ class MyApp extends StatelessWidget {
                       return HomeScreen(
                           user: UserModel.fromJson(json.decode(user)));
                     } else {
-                      // Handle the case where user details are null
                       return const Text('User details not found.');
                     }
                   } else {
-                    // You can return a loading indicator or some placeholder widget here
                     return const CircularProgressIndicator();
                   }
                 },

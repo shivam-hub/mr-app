@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProductSelectionWidget extends StatefulWidget {
+  const ProductSelectionWidget({super.key});
+
   @override
-  _ProductSelectionWidgetState createState() => _ProductSelectionWidgetState();
+  ProductSelectionWidgetState createState() => ProductSelectionWidgetState();
 }
 
-class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
+class ProductSelectionWidgetState extends State<ProductSelectionWidget> {
   List<String> products = [];
   List<String> allProducts = [
     'Product 1',

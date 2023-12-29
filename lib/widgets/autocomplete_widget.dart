@@ -14,6 +14,7 @@ class AutoCompleteWidget<T> extends StatefulWidget {
   final bool readOnly;
   final void Function(T)? onSelected;
   final void Function(String)? onEditingComplete;
+    final String? Function(String?)? validator;
 
   const AutoCompleteWidget(
       {super.key,
@@ -21,7 +22,7 @@ class AutoCompleteWidget<T> extends StatefulWidget {
       required this.placeholder,
       this.onSelected,
       this.onEditingComplete,
-      this.readOnly = false});
+      this.readOnly = false, this.validator});
 
   @override
   State<AutoCompleteWidget<T>> createState() => _AutoCompleteWidgetState<T>();
@@ -34,7 +35,7 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
 
   late final _Debounceable<Iterable<String>?, String> _debouncedSearch;
 
-  void _handleEnteredText(String enteredText) {
+  void handleEnteredText(String enteredText) {
     debugPrint('Entered Text: $enteredText');
 
     if (widget.onSelected != null) {
@@ -76,48 +77,31 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
             enabled: !widget.readOnly,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.transparent, // Transparent to see the shadow
+              fillColor: Colors.transparent,
               labelText: widget.placeholder,
               prefixText: widget.prefixText,
               floatingLabelStyle: const TextStyle(
                   color: Color.fromARGB(
-                      255, 83, 69, 116)), // Change label text color
+                      255, 83, 69, 116)), 
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(0xFF7882A4), // Change underline color
-                  style: BorderStyle.solid, // Keep the border style constant
+                  color: Color(0xFF7882A4),
+                  style: BorderStyle.solid,
                 ),
               ),
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(0xFF7882A4), // Change focused underline color
-                  style: BorderStyle.solid, // Keep the border style constant
+                  color: Color(0xFF7882A4),
+                  style: BorderStyle.solid, 
                 ),
               ),
             ),
-            
-            // decoration: InputDecoration(
-            //   filled: true,
-            //   fillColor: const Color.fromARGB(255, 237, 235, 216),
-            //   labelText: widget.placeholder,
-            //   prefixText: widget.prefixText,
-            //   floatingLabelStyle: const TextStyle(color: Colors.brown),
-            //   enabledBorder: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(15),
-            //     borderSide:
-            //         const BorderSide(color: AppColors.textFieldBorderColor),
-            //   ),
-            //   focusedBorder: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(15),
-            //     borderSide:
-            //         const BorderSide(color: AppColors.textFieldBorderColor),
-            //   ),
-            // ),
             controller: controller,
             focusNode: focusNode,
             onFieldSubmitted: (String value) {
               onFieldSubmitted();
             },
+            validator: widget.validator,
             onChanged: (value) {
               widget.onEditingComplete!(value);
             });
