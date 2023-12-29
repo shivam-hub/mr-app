@@ -26,7 +26,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-
+     GeolocatorUtil geolocatorUtil = GeolocatorUtil();
+geolocatorUtil.checkLocationServices();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    GeolocatorUtil.checkLocationServices(context);
+   
 
     return SafeArea(
       child: Scaffold(

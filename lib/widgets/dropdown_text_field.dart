@@ -43,7 +43,7 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
   Widget build(BuildContext context) {
     return DropDownTextField(
       dropDownList: widget.dropDownOption,
-      dropdownColor: const Color.fromARGB(255, 236, 232, 185),
+      dropdownColor: Color.fromARGB(255, 217, 218, 235),
       enableSearch: widget.readonly ? widget.enableSearch : false,
       readOnly: widget.readonly,
       isEnabled: !widget.readonly,
@@ -66,21 +66,6 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
               color: Color(0xFF7882A4)), // Change focused underline color
         ),
       ),
-      // textFieldDecoration: InputDecoration(
-      //   filled: true,
-      //   fillColor: const Color.fromARGB(255, 237, 235, 216),
-      //   labelText: widget.placeholder,
-      //   prefixText: widget.prefixText,
-      //   floatingLabelStyle: const TextStyle(color: Colors.brown),
-      //   enabledBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(15),
-      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-      //   ),
-      //   focusedBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(15),
-      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-      //   ),
-      // ),
     );
   }
 }

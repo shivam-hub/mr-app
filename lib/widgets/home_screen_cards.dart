@@ -112,7 +112,7 @@ class CardWidget extends StatelessWidget {
                               textStyle: const TextStyle(
                                 color: Color.fromARGB(255, 119, 113, 118),
                                 fontSize: 21.0,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             )),
                       ),

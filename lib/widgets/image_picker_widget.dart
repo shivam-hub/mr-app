@@ -1,105 +1,140 @@
-import "package:flutter/material.dart";
-import "package:image_picker/image_picker.dart";
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nurene_app/themes/app_colors.dart';
 
 class PickImage extends StatefulWidget {
-  const PickImage({super.key});
+  final Function(File?) onImageSelected;
+
+  const PickImage({Key? key, required this.onImageSelected}) : super(key: key);
 
   @override
   State<PickImage> createState() => _PickImageState();
 }
 
-String selectedImagePath = '';
-
 class _PickImageState extends State<PickImage> {
+  XFile? selectedImage;
+
+  Future<void> _selectImageFromCamera() async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 10);
+
+    setState(() {
+      selectedImage = file;
+    });
+
+    // Pass the selected image to the parent widget
+    widget.onImageSelected(File(file!.path));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {},
-      icon: const Icon(Icons.image),
-    );
-  }
-}
-
-Future selectImage(BuildContext context) {
-  return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), //this right here
-          child: SizedBox(
-            height: 150,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  const Text(
-                    'Select Image From !',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          selectedImagePath = await selectImageFromCamera();
-                          print('Image_Path:-');
-                          print(selectedImagePath);
-
-                          if (selectedImagePath != '') {
-                            Navigator.pop(context);
-                            // setState(() {});
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("No Image Captured !"),
-                            ));
-                          }
-                        },
-                        child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'asset/images/camera.jpg',
-                                    height: 60,
-                                    width: 60,
-                                  ),
-                                  const Text('Camera'),
-                                ],
-                              ),
-                            )),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+    return Container(
+      height: 200,
+      padding: const EdgeInsets.all(15),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xFF7882A4),
+              width: 2,
             ),
+            borderRadius: BorderRadius.circular(15),
+            color: const Color.fromARGB(255, 244, 243, 245),
           ),
-        );
-      });
-}
-
-selectImageFromGallery() async {
-  XFile? file = await ImagePicker()
-      .pickImage(source: ImageSource.gallery, imageQuality: 10);
-  if (file != null) {
-    return file.path;
-  } else {
-    return '';
-  }
-}
-
-//
-selectImageFromCamera() async {
-  XFile? file = await ImagePicker()
-      .pickImage(source: ImageSource.camera, imageQuality: 10);
-  if (file != null) {
-    return file.path;
-  } else {
-    return '';
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 35, 20, 20),
+                child: Column(
+                  children: [
+                    const Icon(
+                      Icons.camera_alt,
+                      size: 50,
+                      color: AppColors.textFieldBorderColor,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        _selectImageFromCamera();
+                      },
+                      child: Container(
+                        //padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 244, 243, 245),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Add Image',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textFieldBorderColor,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Tap to open your camera',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const VerticalDivider(
+                color: Colors.grey,
+                thickness: 2,
+                indent: 10,
+                endIndent: 10,
+              ),
+              selectedImage != null
+                  ? Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+                          child: Image.file(
+                            File(selectedImage!.path),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            icon: const Icon(Icons.cancel_rounded,
+                                color: Colors.grey),
+                            onPressed: () {
+                              setState(() {
+                                selectedImage = null;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.only(left: 35),
+                      child: Icon(
+                        Icons.image_outlined,
+                        size: 100,
+                        color: Colors.grey,
+                      ),
+                    ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
