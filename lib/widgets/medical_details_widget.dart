@@ -65,10 +65,10 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 244, 243, 245),
+          color: const Color.fromARGB(255, 244, 243, 245),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: Color(0xFF7882A4),
+            color: const Color(0xFF7882A4),
           ),
         ),
         child: Column(
