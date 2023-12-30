@@ -85,7 +85,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
           gradient: AppColors.appBarColorGradient,
           
         ),
-        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
+        endDrawer: MyDrawer(userName: ""),
         body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (context, state) {
             return Column(
@@ -218,10 +218,6 @@ class _HomeScreenState extends State<_HomeScreenContent> {
             );
           },
         )
-        // bottomNavigationBar: BottomNavigationBarWidget(
-        //   initialIndex: 1,
-        //   gradientB: AppColors.bottomNavBarColorGradient,
-        // ),
         );
   }
 }

@@ -10,7 +10,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? inputType;
   final FocusNode? focusNode;
-
+  final bool? isCapitalized;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
@@ -28,7 +28,10 @@ class TextFieldWidget extends StatelessWidget {
       this.validator,
       this.onChanged,
       this.maxLines,
-      this.minLines, this.focusNode, this.maxLength})
+      this.minLines,
+      this.focusNode,
+      this.maxLength,
+      this.isCapitalized})
       : super(key: key);
 
   @override
@@ -44,6 +47,9 @@ class TextFieldWidget extends StatelessWidget {
           controller: controller,
           obscureText: isPassword,
           keyboardType: inputType,
+          textCapitalization: isCapitalized ?? false
+              ? TextCapitalization.words
+              : TextCapitalization.none,
           focusNode: focusNode,
           minLines: minLines,
           maxLines: isPassword ? 1 : maxLines,

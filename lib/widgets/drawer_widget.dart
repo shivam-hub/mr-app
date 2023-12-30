@@ -202,6 +202,9 @@ class MyDrawer extends StatelessWidget {
   }
 
   String getInitials(String name) {
+    if (name.isEmpty) {
+      return name;
+    }
     List<String> nameSplit = name.split(" ");
     String initials = '';
     int numWords = nameSplit.length < 2 ? 1 : 2;

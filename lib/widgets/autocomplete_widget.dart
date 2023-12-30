@@ -76,6 +76,7 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
         return TextFormField(
             readOnly: widget.readOnly,
             enabled: !widget.readOnly,
+            textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.transparent,

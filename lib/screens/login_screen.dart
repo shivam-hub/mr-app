@@ -30,11 +30,11 @@ class _LoginScreenState extends State<LoginScreen>
     geolocatorUtil.checkLocationServices(context);
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: Offset(0.0, 1.0),
+      begin: const Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
 
     // Delay the sliding animation for a smooth effect
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       _animationController.forward();
     });
   }
@@ -70,9 +70,9 @@ class _LoginScreenState extends State<LoginScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 150),
-                      child: const LogoWidget(
+                    const Padding(
+                      padding: EdgeInsets.only(top: 150),
+                      child: LogoWidget(
                         height: 140,
                         width: 140,
                       ),
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 controller: passwordController,
                                 isPassword: true,
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 20),
                               BlocBuilder<LoginBloc, LoginState>(
                                 builder: (context, state) {
                                   if (state is LoginLoading) {
@@ -127,27 +127,46 @@ class _LoginScreenState extends State<LoginScreen>
                                     });
                                     return const SizedBox.shrink();
                                   } else {
-                                    return ButtonWidget(
-                                      onPressed: () {
-                                        geolocatorUtil
-                                            .checkLocationServices(context);
+                                    return Column(
+                                      children: [
+                                        state is LoginFailure
+                                            ? const Center(
+                                                child: Text(
+                                                  "Username or Password Entered is incorrect",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
+                                            : const SizedBox.shrink(),
+                                        const SizedBox(height: 20),
+                                        ButtonWidget(
+                                          onPressed: () {
+                                            geolocatorUtil
+                                                .checkLocationServices(context);
 
-                                        BlocProvider.of<LoginBloc>(context).add(
-                                          LoginButtonPressed(
-                                            username: usernameController.text,
-                                            password: passwordController.text,
+                                            BlocProvider.of<LoginBloc>(context)
+                                                .add(
+                                              LoginButtonPressed(
+                                                username:
+                                                    usernameController.text,
+                                                password:
+                                                    passwordController.text,
+                                              ),
+                                            );
+                                          },
+                                          label: 'Login',
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF7882A4),
+                                              Color.fromARGB(
+                                                  255, 159, 170, 205),
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
                                           ),
-                                        );
-                                      },
-                                      label: 'Login',
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Color(0xFF7882A4),
-                                          Color.fromARGB(255, 159, 170, 205),
-                                        ],
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                      ),
+                                        ),
+                                      ],
                                     );
                                   }
                                 },

@@ -55,6 +55,18 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
   }
 
   @override
+  void dispose() {
+    _doctorTypeController.dispose();
+    _addressController.dispose();
+    _cityController.dispose();
+    _pincodeController.dispose();
+    _regionController.dispose();
+    _stateController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final pref = locator<SharedPreferences>();
     return SafeArea(
@@ -71,7 +83,9 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
-        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
+        endDrawer: MyDrawer(
+          userName: "",
+        ),
         body: BlocProvider(
           create: (context) => PlanVisitBloc(locator<ApiService>()),
           child: BlocBuilder<PlanVisitBloc, PlanVisitState>(
