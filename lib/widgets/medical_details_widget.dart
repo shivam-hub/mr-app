@@ -77,6 +77,11 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
             Center(
               child: Text(
                 'Medical Store ${index + 1}',
+                style: const TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    letterSpacing: 1),
               ),
             ),
             const SizedBox(height: 8),
@@ -87,22 +92,22 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 filled: true,
-                fillColor: const Color.fromARGB(255, 224, 223, 208),
+                fillColor: Colors.transparent, // Transparent to see the shadow
                 labelText: 'Name',
-                floatingLabelStyle: const TextStyle(color: Colors.brown),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+
+                floatingLabelStyle: TextStyle(
+                    color: Color.fromARGB(
+                        255, 83, 69, 116)), // Change label text color
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color(0xFF7882A4)), // Change underline color
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color:
+                          Color(0xFF7882A4)), // Change focused underline color
                 ),
               ),
               onChanged: (value) {
@@ -120,22 +125,22 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 filled: true,
-                fillColor: const Color.fromARGB(255, 224, 223, 208),
+                fillColor: Colors.transparent, // Transparent to see the shadow
                 labelText: 'Location',
-                floatingLabelStyle: const TextStyle(color: Colors.brown),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+
+                floatingLabelStyle: TextStyle(
+                    color: Color.fromARGB(
+                        255, 83, 69, 116)), // Change label text color
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color(0xFF7882A4)), // Change underline color
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color:
+                          Color(0xFF7882A4)), // Change focused underline color
                 ),
               ),
               onChanged: (value) {
@@ -153,22 +158,22 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 filled: true,
-                fillColor: const Color.fromARGB(255, 224, 223, 208),
+                fillColor: Colors.transparent, // Transparent to see the shadow
                 labelText: 'GST Number',
-                floatingLabelStyle: const TextStyle(color: Colors.brown),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+
+                floatingLabelStyle: TextStyle(
+                    color: Color.fromARGB(
+                        255, 83, 69, 116)), // Change label text color
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color(0xFF7882A4)), // Change underline color
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 237, 235, 216),
-                  ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color:
+                          Color(0xFF7882A4)), // Change focused underline color
                 ),
               ),
               onChanged: (value) {

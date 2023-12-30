@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,6 +60,7 @@ class _MasterScreenState extends State<MasterScreen> {
   DoctorInfo doctorDetails = DoctorInfo();
   VisitModel visitModel = VisitModel();
   late List<ProductModel> products;
+  File? selectedImage;
 
   void showAlert() {
     QuickAlert.show(
@@ -366,87 +368,20 @@ class _MasterScreenState extends State<MasterScreen> {
                           title: const Text('Uploads',
                               style: TextStyle(fontSize: 30)),
                         ),
-                        Container(
-                          height: 200,
-                          padding: const EdgeInsets.all(15),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color(0xFF7882A4),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                                color: const Color.fromARGB(255, 237, 235, 216),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: const Color(0xFF7882A4),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: const Icon(
-                                      Icons.camera_alt,
-                                      size: 50,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  const VerticalDivider(
-                                    color: Color(0xFF7882A4),
-                                    thickness: 2,
-                                    indent: 10,
-                                    endIndent: 10,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      selectImage(context);
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                            255, 237, 235, 216),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Add Image',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            'Tap to open your camera',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+
+                        // Display selected images as attachments
+                        PickImage(
+                          onImageSelected: (file) {
+                            // Handle the selected image file
+                            // For example, you can use it to display the image below your container
+                            setState(() {
+                              selectedImage = file;
+                            });
+                          },
                         ),
+
+                        // Display the selected image
+
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -474,8 +409,9 @@ class _MasterScreenState extends State<MasterScreen> {
                                 child: ButtonWidget(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        GeolocatorUtil.checkLocationServices(
-                                            context);
+                                        GeolocatorUtil geolocatorUtil =
+                                            GeolocatorUtil();
+                                        geolocatorUtil.checkLocationServices();
                                         if (state is NewDoctorRecordState) {
                                           final AddressInfo addressInfo =
                                               AddressInfo();
