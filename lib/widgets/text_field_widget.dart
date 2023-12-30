@@ -9,9 +9,11 @@ class TextFieldWidget extends StatelessWidget {
   final bool readOnly;
   final String? Function(String?)? validator;
   final TextInputType? inputType;
+  final FocusNode? focusNode;
 
   final int? minLines;
   final int? maxLines;
+  final int? maxLength;
   final void Function(dynamic)? onChanged;
 
   const TextFieldWidget(
@@ -26,7 +28,7 @@ class TextFieldWidget extends StatelessWidget {
       this.validator,
       this.onChanged,
       this.maxLines,
-      this.minLines})
+      this.minLines, this.focusNode, this.maxLength})
       : super(key: key);
 
   @override
@@ -35,19 +37,16 @@ class TextFieldWidget extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         TextFormField(
+          maxLength: maxLength,
           readOnly: readOnly,
           enabled: !readOnly,
           validator: validator,
           controller: controller,
           obscureText: isPassword,
           keyboardType: inputType,
+          focusNode: focusNode,
           minLines: minLines,
           maxLines: isPassword ? 1 : maxLines,
-          // onChanged: (value) {
-          //   if (formKey != null && formKey!.currentState != null) {
-          //     formKey!.currentState!.validate();
-          //   }
-          // },
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.transparent, // Transparent to see the shadow

@@ -14,7 +14,7 @@ class AutoCompleteWidget<T> extends StatefulWidget {
   final bool readOnly;
   final void Function(T)? onSelected;
   final void Function(String)? onEditingComplete;
-    final String? Function(String?)? validator;
+  final String? Function(String?)? validator;
 
   const AutoCompleteWidget(
       {super.key,
@@ -22,7 +22,8 @@ class AutoCompleteWidget<T> extends StatefulWidget {
       required this.placeholder,
       this.onSelected,
       this.onEditingComplete,
-      this.readOnly = false, this.validator});
+      this.readOnly = false,
+      this.validator});
 
   @override
   State<AutoCompleteWidget<T>> createState() => _AutoCompleteWidgetState<T>();
@@ -80,9 +81,8 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
               fillColor: Colors.transparent,
               labelText: widget.placeholder,
               prefixText: widget.prefixText,
-              floatingLabelStyle: const TextStyle(
-                  color: Color.fromARGB(
-                      255, 83, 69, 116)), 
+              floatingLabelStyle:
+                  const TextStyle(color: Color.fromARGB(255, 83, 69, 116)),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(0xFF7882A4),
@@ -92,7 +92,7 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(0xFF7882A4),
-                  style: BorderStyle.solid, 
+                  style: BorderStyle.solid,
                 ),
               ),
             ),
@@ -103,7 +103,9 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
             },
             validator: widget.validator,
             onChanged: (value) {
-              widget.onEditingComplete!(value);
+              if (widget.onEditingComplete != null) {
+                widget.onEditingComplete!(value);
+              }
             });
       },
       optionsBuilder: (TextEditingValue textEditingValue) async {

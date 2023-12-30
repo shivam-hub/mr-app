@@ -13,11 +13,9 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final void Function(dynamic)? onChanged;
   final String? prefixText;
   final String? Function(String?)? validator;
-  final GlobalKey<FormState>? formKey;
 
   const DropdownTextFieldWidget({
     super.key,
-    this.formKey,
     required this.placeholder,
     required this.dropDownOption,
     this.enableSearch = true,

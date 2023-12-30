@@ -1,3 +1,5 @@
+import 'package:nurene_app/models/user_model.dart';
+
 abstract class MasterState {}
 
 class MasterInitialState extends MasterState {}
@@ -20,4 +22,9 @@ class NewDoctorRecordState extends MasterState {}
 
 class MasterFormResetState extends MasterState {}
 
-class MasterSuccessState extends MasterState {}
+class MasterSuccessState extends MasterState {
+  final bool isSuccess;
+  final UserModel userModel;
+
+  MasterSuccessState(this.isSuccess, this.userModel);
+}

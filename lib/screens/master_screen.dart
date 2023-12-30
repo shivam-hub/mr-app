@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/models/prodcut_model.dart';
+import 'package:nurene_app/models/visit_model.dart';
+import 'package:nurene_app/screens/home_screen.dart';
 import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
-import '../models/MedicalStoreModel.dart';
+import '../models/medical_store_model.dart';
 import '../services/api_services.dart';
 import '../utils/const.dart';
 import '../widgets/drawer_widget.dart';
@@ -26,8 +30,6 @@ import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
 
-GlobalKey<MedicalStoreDetailsWidgetState> medicalStoreDetailsWidgetKey =
-    GlobalKey<MedicalStoreDetailsWidgetState>();
 final _formKey = GlobalKey<FormState>();
 
 class MasterScreen extends StatefulWidget {
@@ -52,15 +54,22 @@ class _MasterScreenState extends State<MasterScreen> {
   final SingleValueDropDownController _stateController =
       SingleValueDropDownController();
 
-  String selectedImagePath = '';
+  final FocusNode doctorRegNumberFocusNode = FocusNode();
+  String doctorName = '';
+
+  late String selectedImagePath;
+  late List<MedicalStoreModel> medicalStoreDetails;
+  List<MedicalStoreModel> initialStores = [];
   DoctorInfo doctorDetails = DoctorInfo();
+  VisitModel visitModel = VisitModel();
+  late List<ProductModel> products;
   File? selectedImage;
 
   void showAlert() {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
-        animType: QuickAlertAnimType.rotate,
+        animType: QuickAlertAnimType.slideInDown,
         title: 'Submitted!',
         text: 'Your details has been updated successfully',
         confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
@@ -94,10 +103,24 @@ class _MasterScreenState extends State<MasterScreen> {
               } else if (state is MasterErrorState) {
                 return Text('Error: ${state.errorMessage}');
               } else if (state is MasterSuccessState) {
-                return const Text('Data saved successfully!');
+                if (state.isSuccess) {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showAlert();
+                  });
+                  Future.delayed(const Duration(seconds: 1), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(user: state.userModel),
+                      ),
+                    );
+                  });
+                }
+                return const SizedBox.shrink();
               } else {
                 if (state is DoctorSelectedState) {
                   final docInfo = DoctorInfo.fromJson(state.doctorDetails);
+                  initialStores = docInfo.associatedMedicals!;
                   _doctRegNumberController.text = docInfo.drId ?? '';
                   _addressLine1Controller.text =
                       docInfo.addressInfo?.addressline1 ?? '';
@@ -159,10 +182,7 @@ class _MasterScreenState extends State<MasterScreen> {
                               },
                               onEditingComplete: (String value) {
                                 debugPrint('Inside master screen $value');
-                                doctorDetails.name = value;
-                                if (_formKey.currentState != null) {
-                                  _formKey.currentState!.validate();
-                                }
+                                doctorName = value;
                                 BlocProvider.of<MasterBloc>(context)
                                     .add(NewDoctorRecordEvent(value));
                               },
@@ -176,6 +196,7 @@ class _MasterScreenState extends State<MasterScreen> {
                             label: "Doctor Registration No.",
                             controller: _doctRegNumberController,
                             readOnly: state is DoctorSelectedState,
+                            focusNode: doctorRegNumberFocusNode,
                             validator: (value) {
                               debugPrint(
                                   "Inside validator of reg no with value as $value");
@@ -195,18 +216,21 @@ class _MasterScreenState extends State<MasterScreen> {
                             placeholder: 'Doctor Type',
                             controller: _doctorTypeController,
                             dropDownOption: const [
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value")
+                              DropDownOption(
+                                  name: "Cardiologist", value: "value"),
+                              DropDownOption(
+                                  name: "Gastroenterologist", value: "value"),
+                              DropDownOption(
+                                  name: "Pediatrician", value: "value"),
+                              DropDownOption(
+                                  name: "Psychiatrist", value: "value"),
+                              DropDownOption(
+                                  name: "Dermatologist", value: "value"),
+                              DropDownOption(
+                                  name: "Neurologist", value: "value"),
+                              DropDownOption(name: "Dentist", value: "value")
                             ],
                             readonly: state is DoctorSelectedState,
-                            formKey: _formKey,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please select doctor type";
@@ -266,7 +290,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                   controller: _pincodeController,
                                   readOnly: state is DoctorSelectedState,
                                   inputType: TextInputType.number,
-                                  // formKey: _formKey,
+                                  maxLength: 6,
                                   validator: (value) {
                                     if (value == null ||
                                         value.isEmpty ||
@@ -316,8 +340,11 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: MedicalStoreDetailsWidget(
-                            GlobalKey<MedicalStoreDetailsWidgetState>(),
-                            _formKey,
+                            initialStores: initialStores,
+                            onChanged:
+                                (List<MedicalStoreModel> medicalStoreDetail) {
+                              medicalStoreDetails = medicalStoreDetail;
+                            },
                           ),
                         ),
                         ListTile(
@@ -327,9 +354,13 @@ class _MasterScreenState extends State<MasterScreen> {
                           title: const Text('Products',
                               style: TextStyle(fontSize: 30)),
                         ),
-                        const Padding(
-                            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: ProductSelectionWidget()),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            child: ProductSelectionWidget(
+                              onOptionSelected: (value) {
+                                products = value;
+                              },
+                            )),
                         const SizedBox(height: 2),
                         ListTile(
                           contentPadding: const EdgeInsets.all(20),
@@ -359,11 +390,15 @@ class _MasterScreenState extends State<MasterScreen> {
                         // Display selected images as attachments
                         PickImage(
                           onImageSelected: (file) {
-                            // Handle the selected image file
-                            // For example, you can use it to display the image below your container
                             setState(() {
                               selectedImage = file;
                             });
+                            if (selectedImage != null) {
+                              final imageBytes =
+                                  selectedImage!.readAsBytesSync();
+                              selectedImagePath = base64Encode(imageBytes);
+                              debugPrint(selectedImagePath);
+                            }
                           },
                         ),
 
@@ -398,7 +433,8 @@ class _MasterScreenState extends State<MasterScreen> {
                                       if (_formKey.currentState!.validate()) {
                                         GeolocatorUtil geolocatorUtil =
                                             GeolocatorUtil();
-                                        geolocatorUtil.checkLocationServices();
+                                        geolocatorUtil
+                                            .checkLocationServices(context);
                                         if (state is NewDoctorRecordState) {
                                           final AddressInfo addressInfo =
                                               AddressInfo();
@@ -418,14 +454,9 @@ class _MasterScreenState extends State<MasterScreen> {
                                           addressInfo.state = _stateController
                                               .dropDownValue?.name
                                               .toString();
-
+                                          doctorDetails.name = doctorName;
                                           doctorDetails.addressInfo =
                                               addressInfo;
-                                          List<MedicalStoreModel>
-                                              medicalStoreDetails =
-                                              medicalStoreDetailsWidgetKey
-                                                  .currentState!
-                                                  .getMedicalStoreDetails();
 
                                           doctorDetails.speciality =
                                               _doctorTypeController
@@ -433,16 +464,45 @@ class _MasterScreenState extends State<MasterScreen> {
                                                   .toString();
                                           doctorDetails.associatedMedicals =
                                               medicalStoreDetails;
+                                          visitModel.doctorInfo = doctorDetails;
+                                          visitModel.products = products;
+                                        } else if (state
+                                            is DoctorSelectedState) {
+                                          final medicals =
+                                              doctorDetails.associatedMedicals;
+                                          final newMedicals =
+                                              medicalStoreDetails
+                                                  .where((element) => !medicals!
+                                                      .any((existingMedical) =>
+                                                          existingMedical
+                                                              .name ==
+                                                          element.name))
+                                                  .toList();
+                                          doctorDetails.associatedMedicals!
+                                              .addAll(newMedicals);
+                                          visitModel.doctorInfo = doctorDetails;
                                         }
+                                        visitModel.feedback =
+                                            _feedBackController.text;
                                         BlocProvider.of<MasterBloc>(context)
                                             .add(
                                           SaveMasterDataEvent(
                                             filePath: '',
-                                            doctorDetails:
-                                                doctorDetails.toJson(),
+                                            visitModel: visitModel,
                                           ),
                                         );
-                                        showAlert();
+                                      } else {
+                                        debugPrint('inside else');
+                                        if (_doctRegNumberController
+                                            .text.isEmpty) {
+                                          debugPrint('inside if');
+                                          doctorRegNumberFocusNode
+                                              .requestFocus();
+                                        }
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Please fill all details')));
                                       }
                                     },
                                     width: 100,

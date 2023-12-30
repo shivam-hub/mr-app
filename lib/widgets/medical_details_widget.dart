@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/MedicalStoreModel.dart';
+import '../models/medical_store_model.dart';
 import '../themes/app_colors.dart';
 
 class MedicalStoreDetailsWidget extends StatefulWidget {
-  final GlobalKey<FormState>? formKey;
-  const MedicalStoreDetailsWidget(Key? key, this.formKey) : super(key: key);
+  final List<MedicalStoreModel>? initialStores;
+  final Function(List<MedicalStoreModel>)? onChanged;
+  const MedicalStoreDetailsWidget(
+      {super.key, this.onChanged, this.initialStores});
   @override
   MedicalStoreDetailsWidgetState createState() =>
       MedicalStoreDetailsWidgetState();
@@ -15,6 +17,14 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
 
   List<MedicalStoreModel> getMedicalStoreDetails() {
     return medicalStores;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialStores != null && widget.initialStores!.isNotEmpty) {
+      medicalStores = widget.initialStores!;
+    }
   }
 
   @override
@@ -111,12 +121,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].name = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),
@@ -147,12 +154,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].location = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),
@@ -183,12 +187,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].gstNumber = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),

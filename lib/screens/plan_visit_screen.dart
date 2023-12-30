@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/models/user_model.dart';
+import 'package:nurene_app/screens/home_screen.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
 import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
@@ -39,6 +44,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
   final TextEditingController _stateController = TextEditingController();
 
   late final Map<String, dynamic> doctorDetails;
+
   void showAlert() {
     QuickAlert.show(
         context: context,
@@ -50,6 +56,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pref = locator<SharedPreferences>();
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -71,6 +78,22 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               builder: (context, state) {
             if (state is PlanVisitLoadingState) {
               return const CircularProgressIndicator();
+            } else if (state is PlanVisitSuccessState) {
+              if (state.isSuccess) {
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  showAlert();
+                });
+                Future.delayed(const Duration(seconds: 1), () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(user: state.userModel),
+                    ),
+                  );
+                });
+              }
+
+              return const SizedBox.shrink();
             } else {
               if (state is DoctorSelectedState) {
                 _doctorTypeController.text = state.doctorDetails['speciality'];
@@ -160,10 +183,6 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              //     child: TextFieldWidget(
-                              //   label: 'State',
-                              //   controller: _stateController,
-                              // )
                               child: TextFieldWidget(
                                 label: 'State',
                                 controller: _stateController,
@@ -215,21 +234,21 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: ButtonWidget(
-                            onPressed: () {
-                              BlocProvider.of<PlanVisitBloc>(context).add(
-                                SavePlanVisitDataEvent(
-                                    doctorDetails: doctorDetails,
-                                    time: _selectedTime!.format(context),
-                                    date: _seledtedDate.toString()),
-                              );
-                              showAlert();
-                            },
-                            width: 100,
-                            height: 40,
-                            labelFontSize: 18,
-                            label: 'Save',
-                            gradient: AppColors.buttonGradient
-                          ),
+                              onPressed: () {
+                                BlocProvider.of<PlanVisitBloc>(context).add(
+                                  SavePlanVisitDataEvent(
+                                      doctorDetails: doctorDetails,
+                                      time: _selectedTime!.format(context),
+                                      date: _seledtedDate != null
+                                          ? _seledtedDate.toString()
+                                          : DateTime.now().toString()),
+                                );
+                              },
+                              width: 100,
+                              height: 40,
+                              labelFontSize: 18,
+                              label: 'Save',
+                              gradient: AppColors.buttonGradient),
                         ),
                       ),
                     ],
@@ -239,10 +258,6 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
             }
           }),
         ),
-        // bottomNavigationBar: BottomNavigationBarWidget(
-        //   initialIndex: 0,
-        //   gradientB: AppColors.bottomNavBarColorGradient,
-        // ),
       ),
     );
   }
