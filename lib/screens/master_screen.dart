@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/models/prodcut_model.dart';
 import 'package:nurene_app/models/visit_model.dart';
+import 'package:nurene_app/screens/home_screen.dart';
 import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
@@ -55,8 +57,9 @@ class _MasterScreenState extends State<MasterScreen> {
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
 
-  String selectedImagePath = '';
+  late String selectedImagePath;
   late List<MedicalStoreModel> medicalStoreDetails;
+  List<MedicalStoreModel> initialStores = [];
   DoctorInfo doctorDetails = DoctorInfo();
   VisitModel visitModel = VisitModel();
   late List<ProductModel> products;
@@ -100,10 +103,24 @@ class _MasterScreenState extends State<MasterScreen> {
               } else if (state is MasterErrorState) {
                 return Text('Error: ${state.errorMessage}');
               } else if (state is MasterSuccessState) {
-                return const Text('Data saved successfully!');
+                if (state.isSuccess) {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showAlert();
+                  });
+                  Future.delayed(const Duration(seconds: 1), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(user: state.userModel),
+                      ),
+                    );
+                  });
+                }
+                return const SizedBox.shrink();
               } else {
                 if (state is DoctorSelectedState) {
                   final docInfo = DoctorInfo.fromJson(state.doctorDetails);
+                  initialStores = docInfo.associatedMedicals!;
                   _doctRegNumberController.text = docInfo.drId ?? '';
                   _addressLine1Controller.text =
                       docInfo.addressInfo?.addressline1 ?? '';
@@ -273,7 +290,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                   controller: _pincodeController,
                                   readOnly: state is DoctorSelectedState,
                                   inputType: TextInputType.number,
-                                  // formKey: _formKey,
+                                  maxLength: 6,
                                   validator: (value) {
                                     if (value == null ||
                                         value.isEmpty ||
@@ -323,6 +340,7 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: MedicalStoreDetailsWidget(
+                            initialStores: initialStores,
                             onChanged:
                                 (List<MedicalStoreModel> medicalStoreDetail) {
                               medicalStoreDetails = medicalStoreDetail;
@@ -372,11 +390,15 @@ class _MasterScreenState extends State<MasterScreen> {
                         // Display selected images as attachments
                         PickImage(
                           onImageSelected: (file) {
-                            // Handle the selected image file
-                            // For example, you can use it to display the image below your container
                             setState(() {
                               selectedImage = file;
                             });
+                            if (selectedImage != null) {
+                              final imageBytes =
+                                  selectedImage!.readAsBytesSync();
+                              selectedImagePath = base64Encode(imageBytes);
+                              debugPrint(selectedImagePath);
+                            }
                           },
                         ),
 
@@ -411,7 +433,8 @@ class _MasterScreenState extends State<MasterScreen> {
                                       if (_formKey.currentState!.validate()) {
                                         GeolocatorUtil geolocatorUtil =
                                             GeolocatorUtil();
-                                        geolocatorUtil.checkLocationServices();
+                                        geolocatorUtil
+                                            .checkLocationServices(context);
                                         if (state is NewDoctorRecordState) {
                                           final AddressInfo addressInfo =
                                               AddressInfo();
@@ -442,10 +465,25 @@ class _MasterScreenState extends State<MasterScreen> {
                                           doctorDetails.associatedMedicals =
                                               medicalStoreDetails;
                                           visitModel.doctorInfo = doctorDetails;
-                                          visitModel.feedback =
-                                              _feedBackController.text;
                                           visitModel.products = products;
+                                        } else if (state
+                                            is DoctorSelectedState) {
+                                          final medicals =
+                                              doctorDetails.associatedMedicals;
+                                          final newMedicals =
+                                              medicalStoreDetails
+                                                  .where((element) => !medicals!
+                                                      .any((existingMedical) =>
+                                                          existingMedical
+                                                              .name ==
+                                                          element.name))
+                                                  .toList();
+                                          doctorDetails.associatedMedicals!
+                                              .addAll(newMedicals);
+                                          visitModel.doctorInfo = doctorDetails;
                                         }
+                                        visitModel.feedback =
+                                            _feedBackController.text;
                                         BlocProvider.of<MasterBloc>(context)
                                             .add(
                                           SaveMasterDataEvent(
@@ -453,7 +491,6 @@ class _MasterScreenState extends State<MasterScreen> {
                                             visitModel: visitModel,
                                           ),
                                         );
-                                        showAlert();
                                       } else {
                                         debugPrint('inside else');
                                         if (_doctRegNumberController

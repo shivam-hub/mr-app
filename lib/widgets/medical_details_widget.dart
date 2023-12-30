@@ -3,8 +3,10 @@ import '../models/medical_store_model.dart';
 import '../themes/app_colors.dart';
 
 class MedicalStoreDetailsWidget extends StatefulWidget {
+  final List<MedicalStoreModel>? initialStores;
   final Function(List<MedicalStoreModel>)? onChanged;
-  const MedicalStoreDetailsWidget({super.key, this.onChanged});
+  const MedicalStoreDetailsWidget(
+      {super.key, this.onChanged, this.initialStores});
   @override
   MedicalStoreDetailsWidgetState createState() =>
       MedicalStoreDetailsWidgetState();
@@ -15,6 +17,14 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
 
   List<MedicalStoreModel> getMedicalStoreDetails() {
     return medicalStores;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialStores != null && widget.initialStores!.isNotEmpty) {
+      medicalStores = widget.initialStores!;
+    }
   }
 
   @override

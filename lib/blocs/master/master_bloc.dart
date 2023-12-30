@@ -39,7 +39,7 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
         
         final isSaved =
             await apiService.saveMasterDetails(json.encode(visitModel.toJson()));
-        yield MasterSuccessState();
+        yield MasterSuccessState(isSaved , userDetails);
       } catch (e) {
         yield MasterErrorState('Error saving data: $e');
       }

@@ -22,12 +22,12 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController passwordController = TextEditingController();
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
+  GeolocatorUtil geolocatorUtil = GeolocatorUtil();
 
   @override
   void initState() {
     super.initState();
-     GeolocatorUtil geolocatorUtil = GeolocatorUtil();
-geolocatorUtil.checkLocationServices();
+    geolocatorUtil.checkLocationServices(context);
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
@@ -51,8 +51,6 @@ geolocatorUtil.checkLocationServices();
 
   @override
   Widget build(BuildContext context) {
-   
-
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -95,9 +93,7 @@ geolocatorUtil.checkLocationServices();
                       position: _slideAnimation,
                       child: Card(
                         shape: const RoundedRectangleBorder(
-                          borderRadius: 
-                          BorderRadius.all(Radius.circular(20))
-                          ,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         color: Colors.white,
                         child: Container(
@@ -133,6 +129,9 @@ geolocatorUtil.checkLocationServices();
                                   } else {
                                     return ButtonWidget(
                                       onPressed: () {
+                                        geolocatorUtil
+                                            .checkLocationServices(context);
+
                                         BlocProvider.of<LoginBloc>(context).add(
                                           LoginButtonPressed(
                                             username: usernameController.text,
