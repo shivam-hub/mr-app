@@ -1,6 +1,6 @@
 class Location {
   String? type;
-  List<int>? coordinates;
+  List<double>? coordinates;
 
   Location({this.type, this.coordinates});
 

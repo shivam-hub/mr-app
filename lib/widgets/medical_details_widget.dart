@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/MedicalStoreModel.dart';
+import '../models/medical_store_model.dart';
 import '../themes/app_colors.dart';
 
 class MedicalStoreDetailsWidget extends StatefulWidget {
-  final GlobalKey<FormState>? formKey;
-  const MedicalStoreDetailsWidget(Key? key, this.formKey) : super(key: key);
+  final Function(List<MedicalStoreModel>)? onChanged;
+  const MedicalStoreDetailsWidget({super.key, this.onChanged});
   @override
   MedicalStoreDetailsWidgetState createState() =>
       MedicalStoreDetailsWidgetState();
@@ -106,12 +106,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].name = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),
@@ -142,12 +139,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].location = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),
@@ -178,12 +172,9 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 ),
               ),
               onChanged: (value) {
-                if (widget.formKey != null &&
-                    widget.formKey!.currentState != null) {
-                  widget.formKey!.currentState!.validate();
-                }
                 setState(() {
                   medicalStores[index].gstNumber = value;
+                  widget.onChanged!(medicalStores);
                 });
               },
             ),

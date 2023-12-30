@@ -1,3 +1,5 @@
+import 'package:nurene_app/models/visit_model.dart';
+
 abstract class MasterEvent {}
 
 class DoctorSelectedEvent extends MasterEvent {
@@ -18,11 +20,10 @@ class MasterFormReset extends MasterEvent {
 
 class SaveMasterDataEvent extends MasterEvent {
   final String filePath;
-  final Map<String, dynamic> doctorDetails;
-  final bool isDoctorSelected;
+  final VisitModel visitModel;
 
-  SaveMasterDataEvent(
-      {required this.filePath,
-      required this.doctorDetails,
-      this.isDoctorSelected = true});
+  SaveMasterDataEvent({
+    required this.filePath,
+    required this.visitModel,
+  });
 }

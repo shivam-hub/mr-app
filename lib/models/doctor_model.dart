@@ -1,4 +1,4 @@
-import 'package:nurene_app/models/MedicalStoreModel.dart';
+import 'package:nurene_app/models/medical_store_model.dart';
 
 import 'address_info_model.dart';
 

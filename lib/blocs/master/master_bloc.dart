@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
+import 'package:nurene_app/models/location_model.dart';
+import 'package:nurene_app/models/user_model.dart';
+import 'package:nurene_app/services/locator.dart';
 import '../../models/doctor_model.dart';
 import '/models/visit_model.dart';
 import '/services/api_services.dart';
@@ -11,6 +14,8 @@ import 'master_state.dart';
 
 class MasterBloc extends Bloc<MasterEvent, MasterState> {
   final ApiService apiService;
+  final pref = locator<SharedPreferences>();
+
   MasterBloc(this.apiService) : super(MasterInitialState());
 
   @override
@@ -19,23 +24,21 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
       yield DoctorSelectedState(event.doctorDetails);
     } else if (event is SaveMasterDataEvent) {
       try {
-        final pref = await SharedPreferences.getInstance();
         final userDetailsStr = pref.getString('userDetails') ?? '';
-        final Map<String, dynamic> userDetails = json.decode(userDetailsStr);
-        final doctorDetails = DoctorInfo.fromJson(event.doctorDetails);
+        final userDetails = UserModel.fromJson(json.decode(userDetailsStr));
+        final visitModel = event.visitModel;
         final longitude = pref.getDouble('longitude') ?? 0;
         final latitude = pref.getDouble('latitude') ?? 0;
-        final location = <String, dynamic>{};
-        location['type'] = 'Point';
-        location['coordinates'] = <double>[longitude, latitude];
-        final payload = <String, dynamic>{};
-        payload['mrId'] = userDetails['userId'];
-        payload['location'] = location;
-        payload['doctorInfo'] = doctorDetails.toJson();
-        payload['mrInfo'] = userDetails;
-        final c = VisitModel.fromJson(payload);
+        final location = Location();
+
+        visitModel.mrId = userDetails.userId;
+        location.type = 'Point';
+        location.coordinates = <double>[longitude, latitude];
+        visitModel.location = location;
+        visitModel.mrInfo = userDetails;
+        
         final isSaved =
-            await apiService.saveMasterDetails(json.encode(payload));
+            await apiService.saveMasterDetails(json.encode(visitModel.toJson()));
         yield MasterSuccessState();
       } catch (e) {
         yield MasterErrorState('Error saving data: $e');

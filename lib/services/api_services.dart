@@ -76,6 +76,27 @@ class ApiService {
     }
   }
 
+  Future<List<dynamic>> getProducts() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/Products/allProducts'),
+        headers: <String, String>{'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        return res;
+      } else {
+        throw Exception('Unable to fetch products');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<bool> saveMasterDetails(String payload) async {
     try {
       final pref = await SharedPreferences.getInstance();
@@ -130,7 +151,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         return json.decode(response.body);
-      }else{
+      } else {
         throw Exception('Failed to fetch planned visit');
       }
     } catch (e) {

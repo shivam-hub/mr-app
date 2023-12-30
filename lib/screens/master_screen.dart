@@ -1,10 +1,12 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nurene_app/models/prodcut_model.dart';
+import 'package:nurene_app/models/visit_model.dart';
 import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
-import '../models/MedicalStoreModel.dart';
+import '../models/medical_store_model.dart';
 import '../services/api_services.dart';
 import '../utils/const.dart';
 import '../widgets/drawer_widget.dart';
@@ -25,8 +27,6 @@ import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
 
-GlobalKey<MedicalStoreDetailsWidgetState> medicalStoreDetailsWidgetKey =
-    GlobalKey<MedicalStoreDetailsWidgetState>();
 final _formKey = GlobalKey<FormState>();
 
 class MasterScreen extends StatefulWidget {
@@ -51,14 +51,20 @@ class _MasterScreenState extends State<MasterScreen> {
   final SingleValueDropDownController _stateController =
       SingleValueDropDownController();
 
+  final FocusNode doctorRegNumberFocusNode = FocusNode();
+  String doctorName = '';
+
   String selectedImagePath = '';
+  late List<MedicalStoreModel> medicalStoreDetails;
   DoctorInfo doctorDetails = DoctorInfo();
+  VisitModel visitModel = VisitModel();
+  late List<ProductModel> products;
 
   void showAlert() {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
-        animType: QuickAlertAnimType.rotate,
+        animType: QuickAlertAnimType.slideInDown,
         title: 'Submitted!',
         text: 'Your details has been updated successfully',
         confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
@@ -157,10 +163,7 @@ class _MasterScreenState extends State<MasterScreen> {
                               },
                               onEditingComplete: (String value) {
                                 debugPrint('Inside master screen $value');
-                                doctorDetails.name = value;
-                                if (_formKey.currentState != null) {
-                                  _formKey.currentState!.validate();
-                                }
+                                doctorName = value;
                                 BlocProvider.of<MasterBloc>(context)
                                     .add(NewDoctorRecordEvent(value));
                               },
@@ -174,6 +177,7 @@ class _MasterScreenState extends State<MasterScreen> {
                             label: "Doctor Registration No.",
                             controller: _doctRegNumberController,
                             readOnly: state is DoctorSelectedState,
+                            focusNode: doctorRegNumberFocusNode,
                             validator: (value) {
                               debugPrint(
                                   "Inside validator of reg no with value as $value");
@@ -193,18 +197,21 @@ class _MasterScreenState extends State<MasterScreen> {
                             placeholder: 'Doctor Type',
                             controller: _doctorTypeController,
                             dropDownOption: const [
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value"),
-                              DropDownOption(name: "name", value: "value")
+                              DropDownOption(
+                                  name: "Cardiologist", value: "value"),
+                              DropDownOption(
+                                  name: "Gastroenterologist", value: "value"),
+                              DropDownOption(
+                                  name: "Pediatrician", value: "value"),
+                              DropDownOption(
+                                  name: "Psychiatrist", value: "value"),
+                              DropDownOption(
+                                  name: "Dermatologist", value: "value"),
+                              DropDownOption(
+                                  name: "Neurologist", value: "value"),
+                              DropDownOption(name: "Dentist", value: "value")
                             ],
                             readonly: state is DoctorSelectedState,
-                            formKey: _formKey,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please select doctor type";
@@ -314,8 +321,10 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: MedicalStoreDetailsWidget(
-                            GlobalKey<MedicalStoreDetailsWidgetState>(),
-                            _formKey,
+                            onChanged:
+                                (List<MedicalStoreModel> medicalStoreDetail) {
+                              medicalStoreDetails = medicalStoreDetail;
+                            },
                           ),
                         ),
                         ListTile(
@@ -325,9 +334,13 @@ class _MasterScreenState extends State<MasterScreen> {
                           title: const Text('Products',
                               style: TextStyle(fontSize: 30)),
                         ),
-                        const Padding(
-                            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: ProductSelectionWidget()),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            child: ProductSelectionWidget(
+                              onOptionSelected: (value) {
+                                products = value;
+                              },
+                            )),
                         const SizedBox(height: 2),
                         ListTile(
                           contentPadding: const EdgeInsets.all(20),
@@ -482,14 +495,9 @@ class _MasterScreenState extends State<MasterScreen> {
                                           addressInfo.state = _stateController
                                               .dropDownValue?.name
                                               .toString();
-
+                                          doctorDetails.name = doctorName;
                                           doctorDetails.addressInfo =
                                               addressInfo;
-                                          List<MedicalStoreModel>
-                                              medicalStoreDetails =
-                                              medicalStoreDetailsWidgetKey
-                                                  .currentState!
-                                                  .getMedicalStoreDetails();
 
                                           doctorDetails.speciality =
                                               _doctorTypeController
@@ -497,16 +505,31 @@ class _MasterScreenState extends State<MasterScreen> {
                                                   .toString();
                                           doctorDetails.associatedMedicals =
                                               medicalStoreDetails;
+                                          visitModel.doctorInfo = doctorDetails;
+                                          visitModel.feedback =
+                                              _feedBackController.text;
+                                          visitModel.products = products;
                                         }
                                         BlocProvider.of<MasterBloc>(context)
                                             .add(
                                           SaveMasterDataEvent(
                                             filePath: '',
-                                            doctorDetails:
-                                                doctorDetails.toJson(),
+                                            visitModel: visitModel,
                                           ),
                                         );
                                         showAlert();
+                                      } else {
+                                        debugPrint('inside else');
+                                        if (_doctRegNumberController
+                                            .text.isEmpty) {
+                                          debugPrint('inside if');
+                                          doctorRegNumberFocusNode
+                                              .requestFocus();
+                                        }
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Please fill all details')));
                                       }
                                     },
                                     width: 100,

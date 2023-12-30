@@ -13,11 +13,9 @@ class DropdownTextFieldWidget extends StatefulWidget {
   final void Function(dynamic)? onChanged;
   final String? prefixText;
   final String? Function(String?)? validator;
-  final GlobalKey<FormState>? formKey;
 
   const DropdownTextFieldWidget({
     super.key,
-    this.formKey,
     required this.placeholder,
     required this.dropDownOption,
     this.enableSearch = true,
@@ -66,21 +64,6 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
               color: Color(0xFF7882A4)), // Change focused underline color
         ),
       ),
-      // textFieldDecoration: InputDecoration(
-      //   filled: true,
-      //   fillColor: const Color.fromARGB(255, 237, 235, 216),
-      //   labelText: widget.placeholder,
-      //   prefixText: widget.prefixText,
-      //   floatingLabelStyle: const TextStyle(color: Colors.brown),
-      //   enabledBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(15),
-      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-      //   ),
-      //   focusedBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(15),
-      //     borderSide: const BorderSide(color: AppColors.textFieldBorderColor),
-      //   ),
-      // ),
     );
   }
 }
