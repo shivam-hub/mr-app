@@ -80,7 +80,7 @@ class CardWidget extends StatelessWidget {
     final bool isMissed = _isVisitMissed();
 
     return GestureDetector(
-      onTap: () => _showOptions(context),
+      onTap: () {}, //=> _showOptions(context),
       child: Column(
         children: [
           Card(

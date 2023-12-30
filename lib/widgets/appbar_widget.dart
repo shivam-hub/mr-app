@@ -22,7 +22,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: logo ?? prefixIcon,
-
       title: Text(
         appBarTitle,
         style: GoogleFonts.lato(
@@ -39,5 +38,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80);
+  Size get preferredSize => const Size.fromHeight(60);
 }

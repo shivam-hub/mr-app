@@ -19,7 +19,21 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
   final pref = locator<SharedPreferences>();
   @override
   Widget build(BuildContext context) {
-    return MultiSelectDropDown.network(
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFF7882A4), // Change underline color
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
+      child: MultiSelectDropDown.network(
+        chipConfig:
+            ChipConfig(backgroundColor: Color.fromARGB(255, 217, 218, 235)),
+        borderColor: Colors.white,
+        optionsBackgroundColor: Color.fromARGB(255, 217, 218, 235),
+        selectedOptionBackgroundColor: Color.fromARGB(255, 217, 218, 235),
         onOptionSelected: (options) {
           List<ProductModel> p = [];
           for (var element in options) {
@@ -28,9 +42,10 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
           widget.onOptionSelected!(p);
         },
         networkConfig: NetworkConfig(
-            url: '$baseUrl/api/Products/allProducts',
-            headers: {'Authorization': 'Bearer ${pref.getString('token')}'},
-            method: RequestMethod.get),
+          url: '$baseUrl/api/Products/allProducts',
+          headers: {'Authorization': 'Bearer ${pref.getString('token')}'},
+          method: RequestMethod.get,
+        ),
         responseParser: (response) {
           final list = (response as List<dynamic>).map((e) {
             final item = ProductModel.fromJson(e);
@@ -40,11 +55,14 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
         },
         responseErrorBuilder: (context, body) {
           return const Padding(
-              padding: EdgeInsets.all(8),
-              child: Text('Error fetching options'));
+            padding: EdgeInsets.all(8),
+            child: Text('Error fetching options'),
+          );
         },
         hint: 'Select Products',
         selectionType: SelectionType.multi,
-        searchEnabled: true);
+        searchEnabled: true,
+      ),
+    );
   }
 }

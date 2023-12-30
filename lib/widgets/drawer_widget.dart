@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/locator.dart';
 import '../screens/master_screen.dart';
 
 class MyDrawer extends StatelessWidget {
-  final String userName;
+  MyDrawer();
 
-  MyDrawer({required this.userName});
   @override
   Widget build(BuildContext context) {
+    final pref = locator<SharedPreferences>();
+    String userName = pref.getString('userName') ?? '';
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -116,7 +118,7 @@ class MyDrawer extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'Dummy text for About section. Replace this with actual content.',
+                          'Nurene Lifesciences pvt ltd.',
                         ),
                       ),
                     ),

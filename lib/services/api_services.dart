@@ -45,6 +45,8 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final result = response.body;
+        final user = json.decode(result);
+        await pref.setString('userName', user['name'].toString());
         await pref.setString('userDetails', result);
         return json.decode(result);
       } else {
