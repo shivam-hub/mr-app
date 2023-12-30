@@ -85,7 +85,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
           gradient: AppColors.appBarColorGradient,
           
         ),
-        endDrawer: MyDrawer(userName: ""),
+        endDrawer: MyDrawer(),
         body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (context, state) {
             return Column(

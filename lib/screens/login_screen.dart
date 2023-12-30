@@ -30,11 +30,11 @@ class _LoginScreenState extends State<LoginScreen>
     geolocatorUtil.checkLocationServices(context);
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 500),
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 1.0),
+      begin: Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
 
     // Delay the sliding animation for a smooth effect
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       _animationController.forward();
     });
   }
@@ -53,133 +53,119 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF7882A4), Colors.pinkAccent],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF7882A4), Colors.pinkAccent],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 150),
-                      child: LogoWidget(
-                        height: 140,
-                        width: 140,
-                      ),
+          ),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 150),
+                    child: const LogoWidget(
+                      height: 140,
+                      width: 140,
                     ),
-                    const SizedBox(height: 60),
-                    Text(
-                      "Welcome! Please login to continue",
-                      style: GoogleFonts.cormorantGaramond(
-                        textStyle: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    SlideTransition(
-                      position: _slideAnimation,
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
+                  ),
+                  const SizedBox(height: 60),
+                  Text(
+                    "Welcome! Please login to continue",
+                    style: GoogleFonts.cormorantGaramond(
+                      textStyle: const TextStyle(
+                        fontSize: 24,
                         color: Colors.white,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
-                          child: Column(
-                            children: [
-                              TextFieldWidget(
-                                label: 'Username',
-                                controller: usernameController,
-                              ),
-                              const SizedBox(height: 30),
-                              TextFieldWidget(
-                                label: 'Password',
-                                controller: passwordController,
-                                isPassword: true,
-                              ),
-                              const SizedBox(height: 20),
-                              BlocBuilder<LoginBloc, LoginState>(
-                                builder: (context, state) {
-                                  if (state is LoginLoading) {
-                                    return const CircularProgressIndicator();
-                                  } else if (state is LoginSuccess) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomeScreen(user: state.user),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          color: Colors.white,
+                          child: Container(
+                            height: 350, // Adjust the height as needed
+                            padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+                            child: Column(
+                              children: [
+                                TextFieldWidget(
+                                  label: 'Username',
+                                  controller: usernameController,
+                                ),
+                                const SizedBox(height: 20),
+                                TextFieldWidget(
+                                  label: 'Password',
+                                  controller: passwordController,
+                                  isPassword: true,
+                                ),
+                                const SizedBox(height: 30),
+                                BlocBuilder<LoginBloc, LoginState>(
+                                  builder: (context, state) {
+                                    if (state is LoginLoading) {
+                                      return const CircularProgressIndicator();
+                                    } else if (state is LoginSuccess) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                HomeScreen(user: state.user),
+                                          ),
+                                        );
+                                      });
+                                      return const SizedBox.shrink();
+                                    } else {
+                                      return ButtonWidget(
+                                        onPressed: () {
+                                          geolocatorUtil
+                                              .checkLocationServices(context);
+
+                                          BlocProvider.of<LoginBloc>(context)
+                                              .add(
+                                            LoginButtonPressed(
+                                              username: usernameController.text,
+                                              password: passwordController.text,
+                                            ),
+                                          );
+                                        },
+                                        label: 'Login',
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            Color(0xFF7882A4),
+                                            Color.fromARGB(255, 159, 170, 205),
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
                                         ),
                                       );
-                                    });
-                                    return const SizedBox.shrink();
-                                  } else {
-                                    return Column(
-                                      children: [
-                                        state is LoginFailure
-                                            ? const Center(
-                                                child: Text(
-                                                  "Username or Password Entered is incorrect",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                        const SizedBox(height: 20),
-                                        ButtonWidget(
-                                          onPressed: () {
-                                            geolocatorUtil
-                                                .checkLocationServices(context);
-
-                                            BlocProvider.of<LoginBloc>(context)
-                                                .add(
-                                              LoginButtonPressed(
-                                                username:
-                                                    usernameController.text,
-                                                password:
-                                                    passwordController.text,
-                                              ),
-                                            );
-                                          },
-                                          label: 'Login',
-                                          gradient: const LinearGradient(
-                                            colors: [
-                                              Color(0xFF7882A4),
-                                              Color.fromARGB(
-                                                  255, 159, 170, 205),
-                                            ],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

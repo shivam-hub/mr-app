@@ -5,7 +5,8 @@ import 'package:nurene_app/themes/app_colors.dart';
 class DatePickerWidget extends StatefulWidget {
   final Function(DateTime selectedDate) onDateSelected;
 
-  const DatePickerWidget({super.key, required this.onDateSelected});
+  const DatePickerWidget({Key? key, required this.onDateSelected})
+      : super(key: key);
 
   @override
   _DatePickerWidgetState createState() => _DatePickerWidgetState();
@@ -18,21 +19,20 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      firstDate:
+          DateTime.now(), // Updated to disable dates before the current date
       lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary:
-                  AppColors.textFieldBorderColor, // header background color
-              onPrimary:
-                  Color.fromARGB(255, 255, 255, 255), // header text color
-              onSurface: Color.fromARGB(255, 150, 121, 133), // body text color
+              primary: AppColors.textFieldBorderColor,
+              onPrimary: Color.fromARGB(255, 255, 255, 255),
+              onSurface: Color.fromARGB(255, 150, 121, 133),
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Colors.red, // button text color
+                primary: Colors.red,
               ),
             ),
           ),

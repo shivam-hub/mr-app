@@ -83,9 +83,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
-        endDrawer: MyDrawer(
-          userName: "",
-        ),
+        endDrawer: MyDrawer(),
         body: BlocProvider(
           create: (context) => PlanVisitBloc(locator<ApiService>()),
           child: BlocBuilder<PlanVisitBloc, PlanVisitState>(
