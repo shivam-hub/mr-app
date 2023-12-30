@@ -93,7 +93,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   Navigator.pushReplacementNamed(context, '/home')),
           gradient: AppColors.appBarColorGradient,
         ),
-        endDrawer: MyDrawer(userName: 'Ruchi Rai'),
+        endDrawer: MyDrawer(),
         body: BlocProvider(
           create: (context) => MasterBloc(locator<ApiService>()),
           child: BlocBuilder<MasterBloc, MasterState>(

@@ -44,7 +44,7 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 217, 208, 208),
+                backgroundColor: Color.fromARGB(255, 190, 191, 214),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
