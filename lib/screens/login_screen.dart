@@ -130,28 +130,48 @@ class _LoginScreenState extends State<LoginScreen>
                                       });
                                       return const SizedBox.shrink();
                                     } else {
-                                      return ButtonWidget(
-                                        onPressed: () {
-                                          geolocatorUtil
-                                              .checkLocationServices(context);
+                                      return Column(
+                                        children: [
+                                          state is LoginFailure
+                                              ? const Center(
+                                                  child: Text(
+                                                    "Username or Password Entered is incorrect",
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink(),
+                                          const SizedBox(height: 20),
+                                          ButtonWidget(
+                                            onPressed: () {
+                                              geolocatorUtil
+                                                  .checkLocationServices(
+                                                      context);
 
-                                          BlocProvider.of<LoginBloc>(context)
-                                              .add(
-                                            LoginButtonPressed(
-                                              username: usernameController.text,
-                                              password: passwordController.text,
+                                              BlocProvider.of<LoginBloc>(
+                                                      context)
+                                                  .add(
+                                                LoginButtonPressed(
+                                                  username:
+                                                      usernameController.text,
+                                                  password:
+                                                      passwordController.text,
+                                                ),
+                                              );
+                                            },
+                                            label: 'Login',
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xFF7882A4),
+                                                Color.fromARGB(
+                                                    255, 159, 170, 205),
+                                              ],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
                                             ),
-                                          );
-                                        },
-                                        label: 'Login',
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Color(0xFF7882A4),
-                                            Color.fromARGB(255, 159, 170, 205),
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
+                                          ),
+                                        ],
                                       );
                                     }
                                   },

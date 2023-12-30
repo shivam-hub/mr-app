@@ -218,10 +218,6 @@ class _HomeScreenState extends State<_HomeScreenContent> {
             );
           },
         )
-        // bottomNavigationBar: BottomNavigationBarWidget(
-        //   initialIndex: 1,
-        //   gradientB: AppColors.bottomNavBarColorGradient,
-        // ),
         );
   }
 }
