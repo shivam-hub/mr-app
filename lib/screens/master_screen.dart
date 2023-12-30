@@ -250,6 +250,7 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
+                            isCapitalized: true,
                             label: 'Address Line 1',
                             controller: _addressLine1Controller,
                             readOnly: state is DoctorSelectedState,
@@ -260,6 +261,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
                             label: 'Address Line 2',
+                            isCapitalized: true,
                             controller: _addressLine2Controller,
                             readOnly: state is DoctorSelectedState,
                           ),
@@ -273,6 +275,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                 child: TextFieldWidget(
                                   label: 'City',
                                   controller: _cityController,
+                                  isCapitalized: true,
                                   readOnly: state is DoctorSelectedState,
                                   // formKey: _formKey,
                                   validator: (value) {
@@ -322,6 +325,7 @@ class _MasterScreenState extends State<MasterScreen> {
                               Expanded(
                                 child: TextFieldWidget(
                                   label: 'Region',
+                                  isCapitalized: true,
                                   controller: _regionController,
                                   readOnly: state is DoctorSelectedState,
                                 ),
@@ -527,5 +531,20 @@ class _MasterScreenState extends State<MasterScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _addressLine1Controller.dispose();
+    _addressLine2Controller.dispose();
+    _cityController.dispose();
+    _pincodeController.dispose();
+    _regionController.dispose();
+    _doctRegNumberController.dispose();
+    _feedBackController.dispose();
+    _doctorTypeController.dispose();
+    _stateController.dispose();
+
+    super.dispose();
   }
 }
