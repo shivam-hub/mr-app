@@ -7,8 +7,8 @@ import 'package:nurene_app/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/login/login_bloc.dart';
 import 'models/user_model.dart';
-import 'screens/home_screen.dart';
-import 'screens/login_screen.dart';
+import 'screens/home_screen/home_screen.dart';
+import 'screens/login_screen/login_screen.dart';
 import 'themes/app_colors.dart';
 import 'services/locator.dart';
 
