@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/models/user_model.dart';
-import 'package:nurene_app/screens/home_screen.dart';
+import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
 import 'package:quickalert/quickalert.dart';

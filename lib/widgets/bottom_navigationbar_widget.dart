@@ -6,7 +6,7 @@ import 'package:nurene_app/screens/master_screen.dart';
 import 'package:nurene_app/screens/plan_visit_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../screens/home_screen.dart';
+import '../screens/home_screen/home_screen.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   final Gradient? gradientB;

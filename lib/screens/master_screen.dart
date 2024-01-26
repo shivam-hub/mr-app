@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurene_app/models/prodcut_model.dart';
 import 'package:nurene_app/models/visit_model.dart';
-import 'package:nurene_app/screens/home_screen.dart';
+import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
