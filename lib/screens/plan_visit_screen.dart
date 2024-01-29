@@ -6,6 +6,7 @@ import 'package:nurene_app/models/user_model.dart';
 import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
+import 'package:nurene_app/utils/AltertUtil.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../blocs/plan_visit/plan_visit_bloc.dart';
@@ -32,6 +33,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
   TimeOfDay? _selectedTime;
 
   DateTime? _seledtedDate;
+  AltertUtil altertUtil = AltertUtil();
   final TextEditingController _doctorTypeController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
@@ -93,7 +95,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
             } else if (state is PlanVisitSuccessState) {
               if (state.isSuccess) {
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  showAlert();
+                  altertUtil.showSuccessAlert(context);
                 });
                 Future.delayed(const Duration(seconds: 1), () {
                   Navigator.push(
@@ -102,6 +104,10 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                       builder: (context) => HomeScreen(user: state.userModel),
                     ),
                   );
+                });
+              } else {
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  altertUtil.showErrorAlert(context);
                 });
               }
 

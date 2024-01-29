@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -9,6 +11,7 @@ import 'package:nurene_app/models/prodcut_model.dart';
 import 'package:nurene_app/models/visit_model.dart';
 import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/themes/app_styles.dart';
+import 'package:nurene_app/utils/AltertUtil.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
 import 'package:quickalert/quickalert.dart';
 import '../models/medical_store_model.dart';
@@ -59,6 +62,7 @@ class _MasterScreenState extends State<MasterScreen> {
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
   GeolocatorUtil geolocatorUtil = GeolocatorUtil();
+  AltertUtil altertUtil = AltertUtil();
 
   late String selectedImagePath;
   late List<MedicalStoreModel> medicalStoreDetails;
@@ -69,35 +73,35 @@ class _MasterScreenState extends State<MasterScreen> {
   File? selectedImage;
   late Position currentPosition;
 
-  void showSuccessAlert() {
-    QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        animType: QuickAlertAnimType.slideInDown,
-        title: 'Submitted!',
-        text: 'Your details has been updated successfully',
-        confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
-  }
+  // void showSuccessAlert() {
+  //   QuickAlert.show(
+  //       context: context,
+  //       type: QuickAlertType.success,
+  //       animType: QuickAlertAnimType.slideInDown,
+  //       title: 'Submitted!',
+  //       text: 'Your details has been updated successfully',
+  //       confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
+  // }
 
-  void showWarningAlert() {
-    QuickAlert.show(
-        context: context,
-        type: QuickAlertType.warning,
-        animType: QuickAlertAnimType.slideInDown,
-        title: 'Warning!',
-        text: "Your location is not within Clinic's range",
-        confirmBtnColor: const Color.fromARGB(255, 0, 184, 169));
-  }
+  // void showWarningAlert() {
+  //   QuickAlert.show(
+  //       context: context,
+  //       type: QuickAlertType.warning,
+  //       animType: QuickAlertAnimType.slideInDown,
+  //       title: 'Warning!',
+  //       text: "Your location is not within Clinic's range",
+  //       confirmBtnColor: const Color.fromARGB(255, 0, 184, 169));
+  // }
 
-  void showErrorAlert() {
-    QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        animType: QuickAlertAnimType.slideInDown,
-        title: 'Something went wrong',
-        text: "The Audit details were not saved successfully. Try Again!",
-        confirmBtnColor: const Color.fromARGB(255, 237, 248, 81));
-  }
+  // void showErrorAlert() {
+  //   QuickAlert.show(
+  //       context: context,
+  //       type: QuickAlertType.error,
+  //       animType: QuickAlertAnimType.slideInDown,
+  //       title: 'Something went wrong',
+  //       text: "The Audit details were not saved successfully. Try Again!",
+  //       confirmBtnColor: const Color.fromARGB(255, 237, 248, 81));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +133,7 @@ class _MasterScreenState extends State<MasterScreen> {
               } else if (state is MasterSuccessState) {
                 if (state.isSuccess) {
                   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    showSuccessAlert();
+                    altertUtil.showSuccessAlert(context);
                   });
                   Future.delayed(const Duration(seconds: 1), () {
                     Navigator.pushReplacement(
@@ -141,7 +145,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   });
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    showErrorAlert();
+                    altertUtil.showErrorAlert(context);
                   });
                 }
                 return const SizedBox.shrink();
@@ -526,9 +530,10 @@ class _MasterScreenState extends State<MasterScreen> {
                                               _feedBackController.text;
 
                                           if (!_validateLocation()) {
-                                            showWarningAlert();
+                                         
+                                            altertUtil.showWarningAlert(context);
                                           } else {
-                                            // ignore: use_build_context_synchronously
+                                            
                                             BlocProvider.of<MasterBloc>(context)
                                                 .add(
                                               SaveMasterDataEvent(
@@ -620,7 +625,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
     debugPrint("Haversine Distance calculated is $d meters");
 
-    // return d < 15.0;
-    return false;
+    return d < 15.0;
+    // return false;
   }
 }
