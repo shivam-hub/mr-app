@@ -2,7 +2,8 @@ import 'package:nurene_app/models/dropdown_value_model.dart';
 
 class Constants {
   // static const String baseurl = 'http://localhost:3000';
-  static const String baseurl = 'http://nureneapi-production.up.railway.app';
+  // static const String baseurl = 'https://nureneapi-production.up.railway.app';
+  static const String baseurl = 'https://3b27-182-237-163-67.ngrok-free.app';
 
   static const List<DropDownOption> states = [
     DropDownOption(name: 'Andhra Pradesh', value: 'Andhra Pradesh'),

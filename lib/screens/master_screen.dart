@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nurene_app/models/prodcut_model.dart';
 import 'package:nurene_app/models/visit_model.dart';
 import 'package:nurene_app/screens/home_screen/home_screen.dart';
@@ -30,7 +32,7 @@ import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
 import '../widgets/text_field_widget.dart';
 
-final _formKey = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -56,6 +58,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
+  GeolocatorUtil geolocatorUtil = GeolocatorUtil();
 
   late String selectedImagePath;
   late List<MedicalStoreModel> medicalStoreDetails;
@@ -64,8 +67,9 @@ class _MasterScreenState extends State<MasterScreen> {
   VisitModel visitModel = VisitModel();
   late List<ProductModel> products;
   File? selectedImage;
+  late Position currentPosition;
 
-  void showAlert() {
+  void showSuccessAlert() {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
@@ -73,6 +77,26 @@ class _MasterScreenState extends State<MasterScreen> {
         title: 'Submitted!',
         text: 'Your details has been updated successfully',
         confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
+  }
+
+  void showWarningAlert() {
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.warning,
+        animType: QuickAlertAnimType.slideInDown,
+        title: 'Warning!',
+        text: "Your location is not within Clinic's range",
+        confirmBtnColor: const Color.fromARGB(255, 0, 184, 169));
+  }
+
+  void showErrorAlert() {
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        animType: QuickAlertAnimType.slideInDown,
+        title: 'Something went wrong',
+        text: "The Audit details were not saved successfully. Try Again!",
+        confirmBtnColor: const Color.fromARGB(255, 237, 248, 81));
   }
 
   @override
@@ -105,15 +129,19 @@ class _MasterScreenState extends State<MasterScreen> {
               } else if (state is MasterSuccessState) {
                 if (state.isSuccess) {
                   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    showAlert();
+                    showSuccessAlert();
                   });
                   Future.delayed(const Duration(seconds: 1), () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(user: state.userModel),
                       ),
                     );
+                  });
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showErrorAlert();
                   });
                 }
                 return const SizedBox.shrink();
@@ -433,68 +461,85 @@ class _MasterScreenState extends State<MasterScreen> {
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: ButtonWidget(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
-                                        GeolocatorUtil geolocatorUtil =
-                                            GeolocatorUtil();
-                                        geolocatorUtil
-                                            .checkLocationServices(context);
-                                        if (state is NewDoctorRecordState) {
-                                          final AddressInfo addressInfo =
-                                              AddressInfo();
-                                          addressInfo.addressline1 =
-                                              _addressLine1Controller.text
-                                                  .toString();
-                                          addressInfo.addressline2 =
-                                              _addressLine1Controller.text
-                                                  .toString();
-                                          addressInfo.city =
-                                              _cityController.text.toString();
-                                          addressInfo.pincode =
-                                              _pincodeController.text
-                                                  .toString();
-                                          addressInfo.region =
-                                              _regionController.text.toString();
-                                          addressInfo.state = _stateController
-                                              .dropDownValue?.name
-                                              .toString();
-                                          doctorDetails.name = doctorName;
-                                          doctorDetails.addressInfo =
-                                              addressInfo;
+                                        try {
+                                          currentPosition = await geolocatorUtil
+                                              .checkLocationServices(context);
+                                          if (state is NewDoctorRecordState) {
+                                            final AddressInfo addressInfo =
+                                                AddressInfo();
+                                            addressInfo.addressline1 =
+                                                _addressLine1Controller.text
+                                                    .toString();
+                                            addressInfo.addressline2 =
+                                                _addressLine1Controller.text
+                                                    .toString();
+                                            addressInfo.city =
+                                                _cityController.text.toString();
+                                            addressInfo.pincode =
+                                                _pincodeController.text
+                                                    .toString();
+                                            addressInfo.region =
+                                                _regionController.text
+                                                    .toString();
+                                            addressInfo.state = _stateController
+                                                .dropDownValue?.name
+                                                .toString();
+                                            doctorDetails.name = doctorName;
+                                            doctorDetails.addressInfo =
+                                                addressInfo;
 
-                                          doctorDetails.speciality =
-                                              _doctorTypeController
-                                                  .dropDownValue?.name
-                                                  .toString();
-                                          doctorDetails.associatedMedicals =
-                                              medicalStoreDetails;
-                                          visitModel.doctorInfo = doctorDetails;
-                                          visitModel.products = products;
-                                        } else if (state
-                                            is DoctorSelectedState) {
-                                          final medicals =
-                                              doctorDetails.associatedMedicals;
-                                          final newMedicals =
-                                              medicalStoreDetails
-                                                  .where((element) => !medicals!
-                                                      .any((existingMedical) =>
-                                                          existingMedical
-                                                              .name ==
-                                                          element.name))
-                                                  .toList();
-                                          doctorDetails.associatedMedicals!
-                                              .addAll(newMedicals);
-                                          visitModel.doctorInfo = doctorDetails;
+                                            doctorDetails.speciality =
+                                                _doctorTypeController
+                                                    .dropDownValue?.name
+                                                    .toString();
+                                            doctorDetails.associatedMedicals =
+                                                medicalStoreDetails;
+                                            doctorDetails.locationCoordinates
+                                                ?.add(
+                                                    currentPosition.longitude);
+                                            doctorDetails.locationCoordinates
+                                                ?.add(currentPosition.latitude);
+                                            visitModel.doctorInfo =
+                                                doctorDetails;
+                                            visitModel.products = products;
+                                          } else if (state
+                                              is DoctorSelectedState) {
+                                            final medicals = doctorDetails
+                                                .associatedMedicals;
+                                            final newMedicals =
+                                                medicalStoreDetails
+                                                    .where((element) =>
+                                                        !medicals!.any(
+                                                            (existingMedical) =>
+                                                                existingMedical
+                                                                    .name ==
+                                                                element.name))
+                                                    .toList();
+                                            doctorDetails.associatedMedicals!
+                                                .addAll(newMedicals);
+                                            visitModel.doctorInfo =
+                                                doctorDetails;
+                                          }
+                                          visitModel.feedback =
+                                              _feedBackController.text;
+
+                                          if (!_validateLocation()) {
+                                            showWarningAlert();
+                                          } else {
+                                            // ignore: use_build_context_synchronously
+                                            BlocProvider.of<MasterBloc>(context)
+                                                .add(
+                                              SaveMasterDataEvent(
+                                                filePath: '',
+                                                visitModel: visitModel,
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          debugPrint("ERROR inside catch $e");
                                         }
-                                        visitModel.feedback =
-                                            _feedBackController.text;
-                                        BlocProvider.of<MasterBloc>(context)
-                                            .add(
-                                          SaveMasterDataEvent(
-                                            filePath: '',
-                                            visitModel: visitModel,
-                                          ),
-                                        );
                                       } else {
                                         debugPrint('inside else');
                                         if (_doctRegNumberController
@@ -546,5 +591,36 @@ class _MasterScreenState extends State<MasterScreen> {
     _stateController.dispose();
 
     super.dispose();
+  }
+
+  bool _validateLocation() {
+    // Used Haversine Distance formula
+    // https://medium.com/@abdurrehman-520/unlock-the-power-of-geofencing-in-flutter-with-haversine-formula-21b8203b1a5
+    double mrLongitude = currentPosition.longitude;
+    double mrLatitude = currentPosition.latitude;
+
+    double doctorLongitude = doctorDetails.locationCoordinates?.elementAt(0) ??
+        currentPosition.longitude;
+    double doctorLatitude = doctorDetails.locationCoordinates?.elementAt(1) ??
+        currentPosition.latitude;
+
+    var R = 6371e3; // metres
+    // var R = 1000;
+    var phi1 = (mrLatitude * pi) / 180; // φ, λ in radians
+    var phi2 = (doctorLatitude * pi) / 180;
+    var deltaPhi = ((doctorLatitude - mrLatitude) * pi) / 180;
+    var deltaLambda = ((doctorLongitude - mrLongitude) * pi) / 180;
+
+    var a = sin(deltaPhi / 2) * sin(deltaPhi / 2) +
+        cos(phi1) * cos(phi2) * sin(deltaLambda / 2) * sin(deltaLambda / 2);
+
+    var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    var d = R * c; // in metres
+
+    debugPrint("Haversine Distance calculated is $d meters");
+
+    // return d < 15.0;
+    return false;
   }
 }

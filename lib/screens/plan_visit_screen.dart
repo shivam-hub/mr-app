@@ -233,6 +233,10 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                               child: TimePickerWidget(
                                   onTimeSelected: (TimeOfDay selectedTime) {
                                 setState(() {
+                                  debugPrint(
+                                      "Time Selected is ${_selectedTime.toString()}");
+                                  debugPrint(
+                                      "Test ${TimeOfDay.fromDateTime(DateTime.now())}");
                                   _selectedTime = selectedTime;
                                 });
                               }),
@@ -250,7 +254,11 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                                 BlocProvider.of<PlanVisitBloc>(context).add(
                                   SavePlanVisitDataEvent(
                                       doctorDetails: doctorDetails,
-                                      time: _selectedTime!.format(context),
+                                      time: _selectedTime != null
+                                          ? _selectedTime!.format(context)
+                                          : TimeOfDay.fromDateTime(
+                                                  DateTime.now())
+                                              .format(context),
                                       date: _seledtedDate != null
                                           ? _seledtedDate.toString()
                                           : DateTime.now().toString()),

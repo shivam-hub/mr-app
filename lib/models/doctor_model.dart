@@ -10,6 +10,7 @@ class DoctorInfo {
   String? clinicName;
   String? doctorRegNumber;
   List<MedicalStoreModel>? associatedMedicals;
+  List<double>? locationCoordinates;
 
   DoctorInfo(
       {this.drId,
@@ -18,7 +19,8 @@ class DoctorInfo {
       this.speciality,
       this.clinicName,
       this.doctorRegNumber,
-      this.associatedMedicals});
+      this.associatedMedicals,
+      this.locationCoordinates});
 
   DoctorInfo.fromJson(Map<String, dynamic> json) {
     drId = json['drId'];
@@ -35,6 +37,7 @@ class DoctorInfo {
         associatedMedicals!.add(MedicalStoreModel.fromJson(v));
       });
     }
+    locationCoordinates = json['locationCoordinates']?.cast<double>();
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class DoctorInfo {
       data['associatedMedicals'] =
           associatedMedicals!.map((v) => v.toJson()).toList();
     }
+    data['locationCoordinates'] = locationCoordinates;
     return data;
   }
 }
