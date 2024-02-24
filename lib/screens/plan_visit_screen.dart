@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nurene_app/models/user_model.dart';
 import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/services/api_services.dart';
 import 'package:nurene_app/services/locator.dart';
@@ -13,7 +10,6 @@ import '../blocs/plan_visit/plan_visit_bloc.dart';
 import '../themes/app_colors.dart';
 import '../widgets/appbar_widget.dart';
 import '../widgets/autocomplete_widget.dart';
-import '../widgets/bottom_navigationbar_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/date_picker_widget.dart';
 import '../widgets/drawer_widget.dart';
@@ -94,24 +90,32 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               return const CircularProgressIndicator();
             } else if (state is PlanVisitSuccessState) {
               if (state.isSuccess) {
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  altertUtil.showSuccessAlert(context);
-                });
-                Future.delayed(const Duration(seconds: 1), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(user: state.userModel),
-                    ),
-                  );
-                });
+                return AlertDialog(
+                  title: const Text('Success'),
+                  content: const Text('Done'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(user: state.userModel))),
+                        child: const Text('Ok'))
+                  ],
+                );
               } else {
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  altertUtil.showErrorAlert(context);
-                });
+                return AlertDialog(
+                  title: const Text('Error'),
+                  content: const Text('Not done'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(user: state.userModel))),
+                        child: const Text('Ok'))
+                  ],
+                );
               }
-
-              return const SizedBox.shrink();
             } else {
               if (state is DoctorSelectedState) {
                 _doctorTypeController.text = state.doctorDetails['speciality'];

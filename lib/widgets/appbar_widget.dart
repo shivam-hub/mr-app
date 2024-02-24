@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nurene_app/themes/app_colors.dart';
-import 'package:nurene_app/widgets/drawer_widget.dart';
-
-import '../screens/master_screen.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String appBarTitle;

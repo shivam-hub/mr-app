@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -12,8 +10,8 @@ import 'package:nurene_app/models/visit_model.dart';
 import 'package:nurene_app/screens/home_screen/home_screen.dart';
 import 'package:nurene_app/themes/app_styles.dart';
 import 'package:nurene_app/utils/AltertUtil.dart';
+import 'package:nurene_app/utils/ModelBuilder.dart';
 import 'package:nurene_app/widgets/product_selection_widget.dart';
-import 'package:quickalert/quickalert.dart';
 import '../models/medical_store_model.dart';
 import '../services/api_services.dart';
 import '../utils/const.dart';
@@ -33,6 +31,7 @@ import '../widgets/appbar_widget.dart';
 import '../widgets/autocomplete_widget.dart';
 import '../widgets/dropdown_text_field.dart';
 import '../widgets/medical_details_widget.dart';
+import '../widgets/text_dialog_widget.dart';
 import '../widgets/text_field_widget.dart';
 
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -58,50 +57,19 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final SingleValueDropDownController _stateController =
       SingleValueDropDownController();
-
+  final ScrollController _scrollController = ScrollController();
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
   GeolocatorUtil geolocatorUtil = GeolocatorUtil();
   AltertUtil altertUtil = AltertUtil();
-
-  late String selectedImagePath;
-  late List<MedicalStoreModel> medicalStoreDetails;
+  List<MedicalStoreModel> medicalStoreDetails = [];
   List<MedicalStoreModel> initialStores = [];
   DoctorInfo doctorDetails = DoctorInfo();
   VisitModel visitModel = VisitModel();
   late List<ProductModel> products;
   File? selectedImage;
+  String filePath = '';
   late Position currentPosition;
-
-  // void showSuccessAlert() {
-  //   QuickAlert.show(
-  //       context: context,
-  //       type: QuickAlertType.success,
-  //       animType: QuickAlertAnimType.slideInDown,
-  //       title: 'Submitted!',
-  //       text: 'Your details has been updated successfully',
-  //       confirmBtnColor: const Color.fromARGB(255, 189, 187, 187));
-  // }
-
-  // void showWarningAlert() {
-  //   QuickAlert.show(
-  //       context: context,
-  //       type: QuickAlertType.warning,
-  //       animType: QuickAlertAnimType.slideInDown,
-  //       title: 'Warning!',
-  //       text: "Your location is not within Clinic's range",
-  //       confirmBtnColor: const Color.fromARGB(255, 0, 184, 169));
-  // }
-
-  // void showErrorAlert() {
-  //   QuickAlert.show(
-  //       context: context,
-  //       type: QuickAlertType.error,
-  //       animType: QuickAlertAnimType.slideInDown,
-  //       title: 'Something went wrong',
-  //       text: "The Audit details were not saved successfully. Try Again!",
-  //       confirmBtnColor: const Color.fromARGB(255, 237, 248, 81));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,23 +100,32 @@ class _MasterScreenState extends State<MasterScreen> {
                 return Text('Error: ${state.errorMessage}');
               } else if (state is MasterSuccessState) {
                 if (state.isSuccess) {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    altertUtil.showSuccessAlert(context);
-                  });
-                  Future.delayed(const Duration(seconds: 1), () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(user: state.userModel),
-                      ),
-                    );
-                  });
+                  return AlertDialog(
+                    title: const Text('Success'),
+                    content: const Text('Done'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomeScreen(user: state.userModel))),
+                          child: const Text('Ok'))
+                    ],
+                  );
                 } else {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    altertUtil.showErrorAlert(context);
-                  });
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('Not done'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomeScreen(user: state.userModel))),
+                          child: const Text('Ok'))
+                    ],
+                  );
                 }
-                return const SizedBox.shrink();
               } else {
                 if (state is DoctorSelectedState) {
                   final docInfo = DoctorInfo.fromJson(state.doctorDetails);
@@ -164,19 +141,11 @@ class _MasterScreenState extends State<MasterScreen> {
                   _stateController.dropDownValue = DropDownValueModel(
                       name: docInfo.addressInfo?.state ?? '',
                       value: docInfo.addressInfo?.state ?? '');
-                  _doctorTypeController.dropDownValue = DropDownValueModel(
-                      name: docInfo.speciality ?? '',
-                      value: docInfo.speciality ?? '');
-                } else if (state is MasterFormResetState) {
-                  _doctRegNumberController.clear();
-                  _doctorTypeController.clearDropDown();
-                  _addressLine1Controller.clear();
-                  _addressLine2Controller.clear();
-                  _cityController.clear();
-                  _pincodeController.clear();
-                  _stateController.clearDropDown();
-                  _regionController.clear();
-                  _feedBackController.clear();
+                  if (docInfo.speciality!.isNotEmpty) {
+                    _doctorTypeController.dropDownValue = DropDownValueModel(
+                        name: docInfo.speciality ?? '',
+                        value: docInfo.speciality ?? '');
+                  }
                 }
                 return Form(
                   key: _formKey,
@@ -245,7 +214,7 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: DropdownTextFieldWidget(
-                            placeholder: 'Doctor Type',
+                            placeholder: 'Speciality',
                             controller: _doctorTypeController,
                             dropDownOption: const [
                               DropDownOption(
@@ -262,7 +231,10 @@ class _MasterScreenState extends State<MasterScreen> {
                                   name: "Neurologist", value: "value"),
                               DropDownOption(name: "Dentist", value: "value")
                             ],
-                            readonly: state is DoctorSelectedState,
+                            readonly: state is DoctorSelectedState &&
+                                state.doctorDetails['speciality']
+                                    .toString()
+                                    .isNotEmpty,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please select doctor type";
@@ -282,21 +254,33 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
-                            isCapitalized: true,
-                            label: 'Address Line 1',
-                            controller: _addressLine1Controller,
-                            readOnly: state is DoctorSelectedState,
-                          ),
+                              isCapitalized: true,
+                              label: 'Address Line 1',
+                              controller: _addressLine1Controller,
+                              readOnly: state is DoctorSelectedState,
+                              onChanged: (_) {
+                                _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }),
                         ),
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
-                            label: 'Address Line 2',
-                            isCapitalized: true,
-                            controller: _addressLine2Controller,
-                            readOnly: state is DoctorSelectedState,
-                          ),
+                              label: 'Address Line 2',
+                              isCapitalized: true,
+                              controller: _addressLine2Controller,
+                              readOnly: state is DoctorSelectedState,
+                              onChanged: (_) {
+                                _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }),
                         ),
                         const SizedBox(height: 20),
                         Padding(
@@ -305,37 +289,53 @@ class _MasterScreenState extends State<MasterScreen> {
                             children: [
                               Expanded(
                                 child: TextFieldWidget(
-                                  label: 'City',
-                                  controller: _cityController,
-                                  isCapitalized: true,
-                                  readOnly: state is DoctorSelectedState,
-                                  // formKey: _formKey,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter City";
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                    label: 'City',
+                                    controller: _cityController,
+                                    isCapitalized: true,
+                                    readOnly: state is DoctorSelectedState,
+                                    // formKey: _formKey,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Please enter City";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (_) {
+                                      _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    }),
                               ),
                               const SizedBox(width: 15),
                               Expanded(
                                 child: TextFieldWidget(
-                                  label: 'Pincode',
-                                  controller: _pincodeController,
-                                  readOnly: state is DoctorSelectedState,
-                                  inputType: TextInputType.number,
-                                  maxLength: 6,
-                                  validator: (value) {
-                                    if (value == null ||
-                                        value.isEmpty ||
-                                        !value.contains(RegExp(r'^[0-9]+$')) ||
-                                        value.length != 6) {
-                                      return "Please enter valid Pincode";
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                    label: 'Pincode',
+                                    controller: _pincodeController,
+                                    readOnly: state is DoctorSelectedState,
+                                    inputType: TextInputType.number,
+                                    validator: (value) {
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          !value
+                                              .contains(RegExp(r'^[0-9]+$')) ||
+                                          value.length != 6) {
+                                        return "Please enter valid Pincode";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (_) {
+                                      _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    }),
                               ),
                             ],
                           ),
@@ -356,11 +356,19 @@ class _MasterScreenState extends State<MasterScreen> {
                               const SizedBox(width: 15),
                               Expanded(
                                 child: TextFieldWidget(
-                                  label: 'Region',
-                                  isCapitalized: true,
-                                  controller: _regionController,
-                                  readOnly: state is DoctorSelectedState,
-                                ),
+                                    label: 'Region',
+                                    isCapitalized: true,
+                                    controller: _regionController,
+                                    readOnly: state is DoctorSelectedState,
+                                    onChanged: (_) {
+                                      _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    }),
                               ),
                             ],
                           ),
@@ -373,16 +381,40 @@ class _MasterScreenState extends State<MasterScreen> {
                               style: TextStyle(fontSize: 30)),
                         ),
                         const SizedBox(height: 2),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: MedicalStoreDetailsWidget(
-                            initialStores: initialStores,
-                            onChanged:
-                                (List<MedicalStoreModel> medicalStoreDetail) {
-                              medicalStoreDetails = medicalStoreDetail;
-                            },
-                          ),
-                        ),
+                        state is DoctorSelectedState &&
+                                state.doctorDetails['associatedMedicals']
+                                    is List &&
+                                state.doctorDetails['associatedMedicals']
+                                    .isNotEmpty
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                child: _medicalRecords(
+                                    state.doctorDetails["associatedMedicals"],
+                                    (updatedMedicals) {
+                                  setState(() {
+                                    state.doctorDetails["associatedMedicals"] =
+                                        updatedMedicals;
+
+                                    medicalStoreDetails = updatedMedicals
+                                        .map((e) =>
+                                            MedicalStoreModel.fromJson(e))
+                                        .toList();
+                                    doctorDetails.associatedMedicals =
+                                        medicalStoreDetails;
+                                  });
+                                }))
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                child: MedicalStoreDetailsWidget(
+                                  initialStores: initialStores,
+                                  onChanged: (List<MedicalStoreModel>
+                                      medicalStoreDetail) {
+                                    medicalStoreDetails = medicalStoreDetail;
+                                  },
+                                ),
+                              ),
                         ListTile(
                           contentPadding: const EdgeInsets.all(20),
                           textColor: const Color.fromARGB(255, 65, 81, 90),
@@ -409,11 +441,17 @@ class _MasterScreenState extends State<MasterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
-                            minLines: 1,
-                            maxLines: 5,
-                            label: 'Feedback',
-                            controller: _feedBackController,
-                          ),
+                              minLines: 1,
+                              maxLines: 5,
+                              label: 'Feedback',
+                              controller: _feedBackController,
+                              onChanged: (_) {
+                                _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }),
                         ),
                         ListTile(
                           contentPadding: const EdgeInsets.all(20),
@@ -422,44 +460,19 @@ class _MasterScreenState extends State<MasterScreen> {
                           title: const Text('Uploads',
                               style: TextStyle(fontSize: 30)),
                         ),
-
                         // Display selected images as attachments
                         PickImage(
                           onImageSelected: (file) {
                             setState(() {
                               selectedImage = file;
                             });
-                            if (selectedImage != null) {
-                              final imageBytes =
-                                  selectedImage!.readAsBytesSync();
-                              selectedImagePath = base64Encode(imageBytes);
-                              debugPrint(selectedImagePath);
-                            }
                           },
                         ),
-
                         // Display the selected image
-
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: ButtonWidget(
-                                    onPressed: () {
-                                      BlocProvider.of<MasterBloc>(context)
-                                          .add(MasterFormReset());
-                                    },
-                                    width: 100,
-                                    height: 40,
-                                    labelFontSize: 18,
-                                    label: 'Reset',
-                                    gradient: AppColors.buttonGradient),
-                              ),
-                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
                               child: Align(
@@ -525,21 +538,27 @@ class _MasterScreenState extends State<MasterScreen> {
                                                 .addAll(newMedicals);
                                             visitModel.doctorInfo =
                                                 doctorDetails;
+                                            doctorDetails.speciality =
+                                                _doctorTypeController
+                                                    .dropDownValue?.name
+                                                    .toString();
                                           }
                                           visitModel.feedback =
                                               _feedBackController.text;
 
+                                          if (selectedImage!.path != '') {
+                                            filePath = selectedImage!.path;
+                                          }
+
                                           if (!_validateLocation()) {
-                                         
-                                            altertUtil.showWarningAlert(context);
+                                            altertUtil
+                                                .showWarningAlert(context);
                                           } else {
-                                            
                                             BlocProvider.of<MasterBloc>(context)
                                                 .add(
                                               SaveMasterDataEvent(
-                                                filePath: '',
-                                                visitModel: visitModel,
-                                              ),
+                                                  visitModel: visitModel,
+                                                  filePath: filePath),
                                             );
                                           }
                                         } catch (e) {
@@ -604,10 +623,12 @@ class _MasterScreenState extends State<MasterScreen> {
     double mrLongitude = currentPosition.longitude;
     double mrLatitude = currentPosition.latitude;
 
-    double doctorLongitude = doctorDetails.locationCoordinates?.elementAt(0) ??
-        currentPosition.longitude;
-    double doctorLatitude = doctorDetails.locationCoordinates?.elementAt(1) ??
-        currentPosition.latitude;
+    double doctorLongitude = 73.130581;
+    // doctorDetails.locationCoordinates?.elementAt(0) ??
+    // currentPosition.longitude;
+    double doctorLatitude = 73.130581;
+    // doctorDetails.locationCoordinates?.elementAt(1) ??
+    // currentPosition.latitude;
 
     var R = 6371e3; // metres
     // var R = 1000;
@@ -627,5 +648,72 @@ class _MasterScreenState extends State<MasterScreen> {
 
     return d < 15.0;
     // return false;
+  }
+
+  Widget _medicalRecords(
+      List<dynamic> meds, Function(List<dynamic>) updateMedicalsCallback) {
+    List<MedicalStoreModel> medicals = meds.map((med) {
+      return MedicalStoreModel.fromJson(med);
+    }).toList();
+    const headers = ["Name", "Location", "GST Number"];
+
+    List<DataColumn> getHeaders(List<String> headers) {
+      return headers.map((header) {
+        return DataColumn(
+          label: Text(header, textAlign: TextAlign.center),
+        );
+      }).toList();
+    }
+
+    Future<void> editName(MedicalStoreModel medical) async {
+      final name = await showTextDialog(context,
+          title: 'Edit Name', value: medical.name ?? '');
+      setState(() {
+        medicals = medicals.map((m) {
+          if (m == medical) {
+            debugPrint("inside if with name => $name");
+            MedicalStoreModel t = m.copyWith(name: name);
+            return t;
+          }
+          return m;
+        }).toList();
+
+        final updatedMedical = medicals.map((e) {
+          return e.toJson();
+        }).toList();
+
+        updateMedicalsCallback(updatedMedical);
+      });
+    }
+
+    List<DataRow> getRows(List<MedicalStoreModel> medicals) {
+      return medicals.map((medical) {
+        final cells = [
+          medical.name ?? '-',
+          medical.location ?? '-',
+          medical.gstNumber ?? '-'
+        ];
+
+        return DataRow(
+            cells: ModelBuilder.modelBuilder(cells, (index, cell) {
+          return DataCell(Text(cell), onTap: () async {
+            switch (index) {
+              case 0:
+                await editName(medical);
+                break;
+              default:
+            }
+          });
+        }));
+      }).toList();
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        columns: getHeaders(headers),
+        rows: getRows(medicals),
+      ),
+    );
   }
 }

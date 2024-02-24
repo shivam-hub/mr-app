@@ -121,6 +121,34 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>?> uploadImage(String filePath) async {
+    if (filePath == '') return null;
+
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+
+      var req = http.MultipartRequest(
+          'POST', Uri.parse('$baseUrl/api/Uploads/Image'));
+      req.headers['Authorization'] = 'Bearer $token';
+
+      var image = await http.MultipartFile.fromPath('file', filePath);
+      req.files.add(image);
+
+      final response = await req.send();
+
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.bytesToString();
+        final res = json.decode(responseData);
+        return res;
+      } else {
+        throw Exception('Unable to upload image');
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<bool> scheduleVisit(String payload) async {
     try {
       final pref = await SharedPreferences.getInstance();

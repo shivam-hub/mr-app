@@ -61,7 +61,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
       extendBody: true,
       extendBodyBehindAppBar: false,
       appBar: const AppBarWidget(
-        logo: LogoWidget(
+        logo:  LogoWidget(
           height: 8,
           width: 8,
         ),

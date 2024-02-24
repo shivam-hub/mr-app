@@ -19,11 +19,11 @@ class MasterFormReset extends MasterEvent {
 }
 
 class SaveMasterDataEvent extends MasterEvent {
-  final String filePath;
   final VisitModel visitModel;
+  final String? filePath;
 
-  SaveMasterDataEvent({
-    required this.filePath,
+  SaveMasterDataEvent( {
     required this.visitModel,
+    this.filePath,
   });
 }

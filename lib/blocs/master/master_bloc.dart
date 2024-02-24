@@ -36,10 +36,31 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
         location.coordinates = <double>[longitude, latitude];
         visitModel.location = location;
         visitModel.mrInfo = userDetails;
-        
-        final isSaved =
-            await apiService.saveMasterDetails(json.encode(visitModel.toJson()));
-        yield MasterSuccessState(isSaved , userDetails);
+
+        if (event.filePath != '') {
+          var filePath = event.filePath;
+          final res = await apiService.uploadImage(filePath!);
+
+          final savedFilePath = res?['filePath'].toString();
+          final savedFileName = res?['fileName'].toString();
+
+          final attachment = Attachment();
+          List<Attachment> attachments = [];
+
+          if (savedFileName != null &&
+              savedFileName.isNotEmpty &&
+              savedFilePath != null &&
+              savedFilePath.isNotEmpty) {
+            attachment.fileId = savedFilePath;
+            attachment.fileName = savedFileName;
+            attachments.add(attachment);
+            visitModel.attachments = attachments;
+          }
+        }
+
+        final isSaved = await apiService
+            .saveMasterDetails(json.encode(visitModel.toJson()));
+        yield MasterSuccessState(isSaved, userDetails);
       } catch (e) {
         yield MasterErrorState('Error saving data: $e');
       }
