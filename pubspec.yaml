@@ -90,7 +90,29 @@ flutter:
     - asset/images/image.jpg
     - asset/images/camera.jpg
     - asset/images/background.png
-    
+    - asset/products/product1.png
+    - asset/products/product2.png
+    - asset/products/product3.png
+    - asset/products/product4.png
+    - asset/products/product5.png
+    - asset/products/product6.png
+    - asset/products/product7.png
+    - asset/products/product8.png
+    - asset/products/product9.png
+    - asset/products/product10.png
+    - asset/products/product11.png
+    - asset/products/product12.png
+    - asset/products/product13.png
+    - asset/products/product14.png
+    - asset/products/product15.png
+    - asset/products/product16.png
+    - asset/products/product17.png
+    - asset/products/product18.png
+    - asset/products/product19.png
+    - asset/products/product20.png
+    - asset/products/product21.png
+    - asset/products/product22.png
+    - asset/products/product23.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

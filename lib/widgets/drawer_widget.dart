@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/locator.dart';
 import '../screens/master_screen/master_screen.dart';
+import '../screens/products_screen/products_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -96,6 +97,29 @@ class MyDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => MasterScreen(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.medication,
+              color: AppColors.appThemeDarkShade2,
+              size: 28,
+            ),
+            title: Text(
+              'Products',
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductScreen(),
                 ),
               );
             },

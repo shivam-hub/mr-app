@@ -1,5 +1,6 @@
 import 'package:Nurene/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '../utils/const.dart';
 
@@ -20,8 +21,8 @@ class DropDownWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: AppColors.appThemeDarkShade3,
-              style: BorderStyle.solid,
+              color: AppColors.appThemeDarkShade1, // Set underline border color
+              width: 1.0, // Set the width of the underline border
             ),
           ),
         ),
@@ -29,11 +30,15 @@ class DropDownWidget extends StatelessWidget {
           onOptionSelected: (selectedOptions) {
             debugPrint(selectedOptions.toString());
           },
-          options: Constants.states1,
+          options: options,
           optionsBackgroundColor: Colors.white,
-          borderColor: Colors.transparent,
+          borderColor: Colors.transparent, // Set border color to transparent
           selectedOptionBackgroundColor: AppColors.appThemeLightShade3,
-          hint: 'State',
+          hint: label,
+          hintStyle: GoogleFonts.montserrat(
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+          ),
           selectionType: SelectionType.single,
           searchEnabled: true,
           showChipInSingleSelectMode: false,

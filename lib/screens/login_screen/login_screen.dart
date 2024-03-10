@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen>
       builder: (context, state) {
         if (state is LoginLoading) {
           return const CircularProgressIndicator(
-                color: AppColors.appThemeLightShade1,
+            color: AppColors.appThemeLightShade1,
           );
         } else if (state is LoginSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

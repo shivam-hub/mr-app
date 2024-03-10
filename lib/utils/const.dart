@@ -8,6 +8,17 @@ class Constants {
   // static const String baseurl = 'https://nurene-api-production.up.railway.app';
   // static const String baseurl = 'https://1663-103-195-76-196.ngrok-free.app';
 
+  
+  static const List<ValueItem> doctorType = [
+  ValueItem(label: 'Cardiologist', value: 'Cardiologist'),
+  ValueItem(label: 'Gastroenterologist', value: 'Gastroenterologist'),
+  ValueItem(label: 'Pediatrician', value: 'Pediatrician'),
+  ValueItem(label: 'Psychiatrist', value: 'Psychiatrist'),
+  ValueItem(label: 'Dermatologist', value: 'Dermatologist'),
+  ValueItem(label: 'Neurologist', value: 'Neurologist'),
+  ValueItem(label: 'Dentist', value: 'Dentist'),
+];
+
   static const List<DropDownOption> states = [
     DropDownOption(name: 'Andhra Pradesh', value: 'Andhra Pradesh'),
     DropDownOption(name: 'Arunachal Pradesh', value: 'Arunachal Pradesh'),
@@ -38,7 +49,6 @@ class Constants {
     DropDownOption(name: 'Uttarakhand', value: 'Uttarakhand'),
     DropDownOption(name: 'West Bengal', value: 'West Bengal'),
   ];
-
 
   static const List<ValueItem> states1 = [
     ValueItem(label: 'Andhra Pradesh', value: 'Andhra Pradesh'),

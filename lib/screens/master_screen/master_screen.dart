@@ -77,6 +77,7 @@ class _MasterScreenState extends State<MasterScreenContent> {
       SingleValueDropDownController();
 
   final MultiSelectController _stateController1 = MultiSelectController();
+  final MultiSelectController _doctorTypeController1 = MultiSelectController();
 
   final ScrollController _scrollController = ScrollController();
   final FocusNode doctorRegNumberFocusNode = FocusNode();
@@ -275,34 +276,39 @@ class _MasterScreenState extends State<MasterScreenContent> {
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: DropdownTextFieldWidget(
-                            placeholder: 'Speciality',
-                            controller: _doctorTypeController,
-                            dropDownOption: const [
-                              DropDownOption(
-                                  name: "Cardiologist", value: "value"),
-                              DropDownOption(
-                                  name: "Gastroenterologist", value: "value"),
-                              DropDownOption(
-                                  name: "Pediatrician", value: "value"),
-                              DropDownOption(
-                                  name: "Psychiatrist", value: "value"),
-                              DropDownOption(
-                                  name: "Dermatologist", value: "value"),
-                              DropDownOption(
-                                  name: "Neurologist", value: "value"),
-                              DropDownOption(name: "Dentist", value: "value")
-                            ],
-                            readonly: state is DoctorSelectedState &&
-                                state.doctorDetails['speciality']
-                                    .toString()
-                                    .isNotEmpty,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please select doctor type";
-                              }
-                              return null;
-                            },
+                          child: DropDownWidget(
+                            controller: _doctorTypeController1,
+                            label: 'Speciality',
+                            options: Constants.doctorType,
+
+                            // child: DropdownTextFieldWidget(
+                            //   placeholder: 'Speciality',
+                            //   controller: _doctorTypeController,
+                            //   dropDownOption: const [
+                            //     DropDownOption(
+                            //         name: "Cardiologist", value: "value"),
+                            //     DropDownOption(
+                            //         name: "Gastroenterologist", value: "value"),
+                            //     DropDownOption(
+                            //         name: "Pediatrician", value: "value"),
+                            //     DropDownOption(
+                            //         name: "Psychiatrist", value: "value"),
+                            //     DropDownOption(
+                            //         name: "Dermatologist", value: "value"),
+                            //     DropDownOption(
+                            //         name: "Neurologist", value: "value"),
+                            //     DropDownOption(name: "Dentist", value: "value")
+                            //   ],
+                            // readonly: state is DoctorSelectedState &&
+                            //     state.doctorDetails['speciality']
+                            //         .toString()
+                            //         .isNotEmpty,
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return "Please select doctor type";
+                            //   }
+                            //   return null;
+                            // },
                           ),
                         ),
                         ListTile(
@@ -412,7 +418,8 @@ class _MasterScreenState extends State<MasterScreenContent> {
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: Row(
                             children: [
-                              Expanded(child: DropDownWidget(
+                              Expanded(
+                                  child: DropDownWidget(
                                 controller: _stateController1,
                                 label: 'State',
                                 options: Constants.states1,
