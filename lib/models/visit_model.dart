@@ -1,4 +1,4 @@
-import 'package:nurene_app/models/prodcut_model.dart';
+import '/models/prodcut_model.dart';
 
 import 'doctor_model.dart';
 import 'location_model.dart';
@@ -13,6 +13,7 @@ class VisitModel {
   UserModel? mrInfo;
   String? feedback;
   List<ProductModel>? products;
+  String? scheduleId;
 
   VisitModel(
       {this.mrId,
@@ -22,12 +23,14 @@ class VisitModel {
       this.doctorInfo,
       this.mrInfo,
       this.feedback,
+      this.scheduleId,
       this.products});
 
   VisitModel.fromJson(Map<String, dynamic> json) {
     mrId = json['mrId'];
     visitedOn = json['visitedOn'];
     feedback = json['feedback'];
+    scheduleId = json['scheduleId'];
     if (json['attachments'] != null) {
       attachments = <Attachment>[];
       json['attachments'].forEach((v) {
@@ -53,6 +56,7 @@ class VisitModel {
     data['mrId'] = mrId;
     data['visitedOn'] = visitedOn;
     data['feedback'] = feedback;
+    data['scheduleId'] = scheduleId;
     if (products != null) {
       data['products'] = products!.map((e) => e.toJson()).toList();
     }

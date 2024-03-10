@@ -41,7 +41,7 @@ class ApiService {
       final token = pref.getString('token') ?? '';
 
       final response = await http.get(
-        Uri.parse('$baseUrl/api/auth/user'),
+        Uri.parse('$baseUrl/api/Auth/user'),
         headers: <String, String>{'Authorization': 'Bearer $token'},
       );
 
@@ -182,9 +182,33 @@ class ApiService {
           });
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final resp = json.decode(response.body);
+        return resp;
       } else {
         throw Exception('Failed to fetch planned visit');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getDoctorById(String drId) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final token = pref.getString('token') ?? '';
+
+      final response = await http.get(
+          Uri.parse('$baseUrl/api/Doctor/getDoctorById/$drId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          });
+
+      if (response.statusCode == 200) {
+        final resp = json.decode(response.body);
+        return resp;
+      } else {
+        throw Exception('Failed to fetch doctor');
       }
     } catch (e) {
       rethrow;

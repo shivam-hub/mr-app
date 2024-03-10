@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:nurene_app/models/user_model.dart';
-import 'package:nurene_app/screens/master_screen.dart';
-import 'package:nurene_app/screens/plan_visit_screen.dart';
+import '/models/user_model.dart';
+import '/screens/master_screen/master_screen.dart';
+import '/screens/plan_visit_screen/plan_visit_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/home_screen/home_screen.dart';
@@ -12,7 +11,7 @@ class BottomNavigationBarWidget extends StatefulWidget {
   final Gradient? gradientB;
   final int initialIndex;
 
-  BottomNavigationBarWidget({
+  const BottomNavigationBarWidget({
     Key? key,
     this.gradientB,
     required this.initialIndex,
@@ -102,7 +101,6 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
             builder: (context) => const PlanVisitScreen(),
           ),
         ).then((_) {
-          // Update _selectedIndex when navigating back from PlanVisitScreen
           setState(() {
             _selectedIndex = 1;
           });
@@ -123,11 +121,9 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                       return HomeScreen(
                           user: UserModel.fromJson(json.decode(user)));
                     } else {
-                      // Handle the case where user details are null
                       return const Text('User details not found.');
                     }
                   } else {
-                    // You can return a loading indicator or some placeholder widget here
                     return const CircularProgressIndicator();
                   }
                 },
@@ -135,7 +131,6 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
             },
           ),
         ).then((_) {
-          // Update _selectedIndex when navigating back from MasterScreen
           setState(() {
             _selectedIndex = 1;
           });
@@ -146,10 +141,9 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MasterScreen(),
+            builder: (context) => MasterScreen(),
           ),
         ).then((_) {
-          // Update _selectedIndex when navigating back from MasterScreen
           setState(() {
             _selectedIndex = 1;
           });

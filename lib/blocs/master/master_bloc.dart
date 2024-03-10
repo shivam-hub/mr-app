@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:nurene_app/models/location_model.dart';
-import 'package:nurene_app/models/user_model.dart';
-import 'package:nurene_app/services/locator.dart';
-import '../../models/doctor_model.dart';
+import '/models/location_model.dart';
+import '/models/user_model.dart';
+import '/services/locator.dart';
 import '/models/visit_model.dart';
 import '/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,8 +20,23 @@ class MasterBloc extends Bloc<MasterEvent, MasterState> {
   @override
   Stream<MasterState> mapEventToState(MasterEvent event) async* {
     if (event is DoctorSelectedEvent) {
-      yield DoctorSelectedState(event.doctorDetails);
+      yield DoctorSelectedState(doctorDetails: event.doctorDetails);
+    } else if (event is MasterInitialEvent) {
+      yield MasterInitialState();
+    } else if (event is PlanRecordEvent) {
+      yield MasterLoadingState();
+      try {
+        final drId = event.doctorId;
+        final schId = event.scheduleId;
+        if (drId == '') throw Error();
+        final doctorDetails = await apiService.getDoctorById(drId);
+        yield DoctorSelectedState(
+            doctorDetails: doctorDetails, scheduleId: schId);
+      } catch (e) {
+        rethrow;
+      }
     } else if (event is SaveMasterDataEvent) {
+      yield MasterLoadingState();
       try {
         final userDetailsStr = pref.getString('userDetails') ?? '';
         final userDetails = UserModel.fromJson(json.decode(userDetailsStr));

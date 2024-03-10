@@ -1,6 +1,7 @@
+import 'package:Nurene/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/medical_store_model.dart';
-import '../themes/app_colors.dart';
 
 class MedicalStoreDetailsWidget extends StatefulWidget {
   final List<MedicalStoreModel>? initialStores;
@@ -44,17 +45,18 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 190, 191, 214),
+                backgroundColor: AppColors.appThemeLightShade1,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  'Add Store',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text('Add Store',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),
+                    )),
               ),
             ),
           ),
@@ -67,57 +69,87 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
   Widget buildMedicalStoreDetails(int index) {
     return GestureDetector(
       onTap: () {
-        // You can implement custom behavior here when tapped.
-        // For now, let's remove the medical store on tap.
-        setState(() {});
+        setState(() {
+          // medicalStores.removeAt(index);
+          widget.onChanged!(medicalStores);
+        });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 244, 243, 245),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: const Color(0xFF7882A4),
+            color: AppColors.appThemeDarkShade2,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                'Medical Store ${index + 1}',
-                style: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    letterSpacing: 1),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      'Medical Store ${index + 1}',
+                      style: GoogleFonts.montserrat(
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.delete_rounded,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          medicalStores.removeAt(index);
+                          widget.onChanged!(medicalStores);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             TextFormField(
+              style: GoogleFonts.montserrat(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Please enter Medical Name";
                 }
                 return null;
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.transparent, // Transparent to see the shadow
+                labelStyle: GoogleFonts.montserrat(),
+                fillColor: Colors.transparent,
                 labelText: 'Name',
-
-                floatingLabelStyle: TextStyle(
-                    color: Color.fromARGB(
-                        255, 83, 69, 116)), // Change label text color
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color(0xFF7882A4)), // Change underline color
+                floatingLabelStyle: GoogleFonts.montserrat(
+                  color: AppColors.appThemeDarkShade1,
                 ),
-                focusedBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color:
-                          Color(0xFF7882A4)), // Change focused underline color
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
                 ),
               ),
               onChanged: (value) {
@@ -135,22 +167,25 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
                 }
                 return null;
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                labelStyle: GoogleFonts.montserrat(),
                 filled: true,
-                fillColor: Colors.transparent, // Transparent to see the shadow
+                fillColor: Colors.transparent,
                 labelText: 'Location',
-
-                floatingLabelStyle: TextStyle(
-                    color: Color.fromARGB(
-                        255, 83, 69, 116)), // Change label text color
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color(0xFF7882A4)), // Change underline color
+                floatingLabelStyle: GoogleFonts.montserrat(
+                  color: AppColors.appThemeDarkShade1,
                 ),
-                focusedBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color:
-                          Color(0xFF7882A4)), // Change focused underline color
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
                 ),
               ),
               onChanged: (value) {
@@ -162,28 +197,25 @@ class MedicalStoreDetailsWidgetState extends State<MedicalStoreDetailsWidget> {
             ),
             const SizedBox(height: 15),
             TextFormField(
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter GST Number";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                labelStyle: GoogleFonts.montserrat(),
                 filled: true,
-                fillColor: Colors.transparent, // Transparent to see the shadow
+                fillColor: Colors.transparent,
                 labelText: 'GST Number',
-
-                floatingLabelStyle: TextStyle(
-                    color: Color.fromARGB(
-                        255, 83, 69, 116)), // Change label text color
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color(0xFF7882A4)), // Change underline color
+                floatingLabelStyle: GoogleFonts.montserrat(
+                  color: AppColors.appThemeDarkShade1,
                 ),
-                focusedBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color:
-                          Color(0xFF7882A4)), // Change focused underline color
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.appThemeDarkShade1,
+                    style: BorderStyle.solid,
+                  ),
                 ),
               ),
               onChanged: (value) {

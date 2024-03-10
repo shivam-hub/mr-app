@@ -1,6 +1,7 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:nurene_app/models/dropdown_value_model.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '/models/dropdown_value_model.dart';
 import '../themes/app_colors.dart';
 
 class DropdownTextFieldWidget extends StatefulWidget {
@@ -40,9 +41,12 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return DropDownTextField(
+      textStyle: GoogleFonts.montserrat(),
       dropDownList: widget.dropDownOption,
-      dropdownColor: Color.fromARGB(255, 217, 218, 235),
+      dropdownColor: Colors.white,
       enableSearch: widget.readonly ? widget.enableSearch : false,
+      searchAutofocus: true,
+      dropdownRadius: 0,
       readOnly: widget.readonly,
       isEnabled: !widget.readonly,
       controller: widget.controller,
@@ -50,18 +54,24 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
       onChanged: widget.onChanged,
       textFieldDecoration: InputDecoration(
         filled: true,
-        fillColor: Colors.transparent, // Transparent to see the shadow
+        fillColor: Colors.transparent,
         labelText: widget.placeholder,
+        labelStyle: GoogleFonts.montserrat(),
         prefixText: widget.prefixText,
-        floatingLabelStyle: const TextStyle(
-            color: Color.fromARGB(255, 83, 69, 116)), // Change label text color
+        floatingLabelStyle: GoogleFonts.montserrat(
+          color: AppColors.appThemeDarkShade1,
+        ),
         enabledBorder: const UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: Color(0xFF7882A4)), // Change underline color
+          borderSide: BorderSide(
+            color: AppColors.appThemeDarkShade1,
+            style: BorderStyle.solid,
+          ),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-              color: Color(0xFF7882A4)), // Change focused underline color
+            color: AppColors.appThemeDarkShade1,
+            style: BorderStyle.solid,
+          ),
         ),
       ),
     );

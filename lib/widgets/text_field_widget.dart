@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../themes/app_colors.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -18,7 +19,6 @@ class TextFieldWidget extends StatelessWidget {
 
   const TextFieldWidget(
       {Key? key,
-      // this.formKey,
       required this.label,
       required this.controller,
       this.isPassword = false,
@@ -40,6 +40,7 @@ class TextFieldWidget extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         TextFormField(
+          style: GoogleFonts.montserrat(),
           maxLength: maxLength,
           readOnly: readOnly,
           enabled: !readOnly,
@@ -54,23 +55,24 @@ class TextFieldWidget extends StatelessWidget {
           minLines: minLines,
           maxLines: isPassword ? 1 : maxLines,
           decoration: InputDecoration(
+            labelStyle: GoogleFonts.montserrat(),
             filled: true,
-            fillColor: Colors.transparent, // Transparent to see the shadow
+            fillColor: Colors.transparent,
             labelText: label,
             prefixText: prefixText,
-            floatingLabelStyle: const TextStyle(
-              color: Color.fromARGB(255, 83, 69, 116),
-            ), // Change label text color
+            floatingLabelStyle: GoogleFonts.montserrat(
+              color: AppColors.appThemeDarkShade1,
+            ),
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFF7882A4), // Change underline color
-                style: BorderStyle.solid, // Keep the border style constant
+                color: AppColors.appThemeDarkShade1,
+                style: BorderStyle.solid,
               ),
             ),
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFF7882A4), // Change focused underline color
-                style: BorderStyle.solid, // Keep the border style constant
+                color: AppColors.appThemeDarkShade1,
+                style: BorderStyle.solid,
               ),
             ),
           ),

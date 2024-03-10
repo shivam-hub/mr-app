@@ -22,9 +22,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         appBarTitle,
         style: GoogleFonts.lato(
           textStyle: const TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255),
-              fontSize: 28,
-              fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
         ),
       ),
       flexibleSpace: Container(

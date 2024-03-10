@@ -1,15 +1,17 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:Nurene/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nurene_app/screens/home_screen/home_screen.dart';
+import '/screens/home_screen/home_screen.dart';
 import '../../widgets/button_widget.dart';
 import '../../blocs/login/login_event.dart';
 import '../../blocs/login/login_state.dart';
 import '../../blocs/login/login_bloc.dart';
 import '../../widgets/logo_widget.dart';
 import '../../utils/GeolocatorUtil.dart';
+import '../../themes/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -72,13 +74,7 @@ class _LoginScreenState extends State<LoginScreen>
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF7882A4), Colors.pinkAccent],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+      decoration: const BoxDecoration(gradient: AppColors.gradient),
       child: Stack(
         children: [
           _buildColumn(),
@@ -93,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildLogoWidget(),
-        const SizedBox(height: 60),
+        const SizedBox(height: 50),
         _buildWelcomeText(),
         const SizedBox(height: 20),
         Expanded(
@@ -122,9 +118,9 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildWelcomeText() {
     return Text(
       "Welcome! Please login to continue",
-      style: GoogleFonts.cormorantGaramond(
+      style: GoogleFonts.albertSans(
         textStyle: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           color: Colors.white,
         ),
       ),
@@ -133,19 +129,22 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildCard() {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+      child: Card(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        color: Colors.white,
+        child: _buildCardContent(),
       ),
-      color: Colors.white,
-      child: _buildCardContent(),
     );
   }
 
   Widget _buildCardContent() {
     return Container(
-      height: 350,
-      padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+      height: 370,
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 35),
       child: Column(
         children: [
           _buildTextField('Username', usernameController),
@@ -162,12 +161,10 @@ class _LoginScreenState extends State<LoginScreen>
       {bool isPassword = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: TextFormField(
+      child: TextFieldWidget(
         controller: controller,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          labelText: label,
-        ),
+        isPassword: isPassword,
+        label: label,
         onChanged: (_) {
           _scrollController.animateTo(
             _scrollController.position.maxScrollExtent,
@@ -183,7 +180,9 @@ class _LoginScreenState extends State<LoginScreen>
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         if (state is LoginLoading) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(
+                color: AppColors.appThemeLightShade1,
+          );
         } else if (state is LoginSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pushReplacement(
@@ -197,39 +196,34 @@ class _LoginScreenState extends State<LoginScreen>
           return Column(
             children: [
               if (state is LoginFailure)
-                const Center(
-                  child: Text(
-                    "Username or Password Entered is incorrect",
-                    style: TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              const SizedBox(height: 20),
+                // const Center(
+                //   child: Text(
+                //     "Username or Password Entered is incorrect",
+                //     style: TextStyle(color: Colors.red),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
+                // ScaffoldMessenger.of(context)
+                //                             .showSnackBar(const SnackBar(
+                //                                 content: Text(
+                //                                     'Please fill all details')));
+                const SizedBox(height: 20),
               ButtonWidget(
-                onPressed: () async {
-                  try {
-                    await geolocatorUtil.checkLocationServices(context);
-                    // ignore: use_build_context_synchronously
-                    BlocProvider.of<LoginBloc>(context).add(
-                      LoginButtonPressed(
-                        username: usernameController.text,
-                        password: passwordController.text,
-                      ),
-                    );
-                  } catch (e) {
-                    debugPrint("error $e");
-                  }
-                },
-                label: 'Login',
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF7882A4),
-                    Color.fromARGB(255, 159, 170, 205),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
+                  onPressed: () async {
+                    try {
+                      await geolocatorUtil.checkLocationServices(context);
+                      // ignore: use_build_context_synchronously
+                      BlocProvider.of<LoginBloc>(context).add(
+                        LoginButtonPressed(
+                          username: usernameController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                    } catch (e) {
+                      debugPrint("error $e");
+                    }
+                  },
+                  label: 'Login'),
             ],
           );
         }

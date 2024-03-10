@@ -1,4 +1,5 @@
-import 'package:nurene_app/models/visit_model.dart';
+
+import '../../models/visit_model.dart';
 
 abstract class MasterEvent {}
 
@@ -18,11 +19,20 @@ class MasterFormReset extends MasterEvent {
   MasterFormReset();
 }
 
+class MasterInitialEvent extends MasterEvent {}
+
+class PlanRecordEvent extends MasterEvent {
+  final String doctorId;
+  final String scheduleId;
+
+  PlanRecordEvent(this.doctorId, this.scheduleId);
+}
+
 class SaveMasterDataEvent extends MasterEvent {
   final VisitModel visitModel;
   final String? filePath;
 
-  SaveMasterDataEvent( {
+  SaveMasterDataEvent({
     required this.visitModel,
     this.filePath,
   });

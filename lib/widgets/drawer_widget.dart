@@ -1,11 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:Nurene/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/locator.dart';
-import '../screens/master_screen.dart';
+import '../screens/master_screen/master_screen.dart';
 
 class MyDrawer extends StatelessWidget {
-  MyDrawer();
+  const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +22,10 @@ class MyDrawer extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 114, 92, 127),
-                  Color.fromARGB(255, 218, 202, 228),
-                  // Colors.white30
+                  AppColors.appThemeDarkShade3,
+                  AppColors.appThemeDarkShade4,
+                  AppColors.appThemeLightShade1,
+                  AppColors.appThemeLightShade3
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -30,12 +34,12 @@ class MyDrawer extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 245, 235, 244),
+                  backgroundColor: Colors.white,
                   radius: 35.0,
                   child: Text(
                     getInitials(userName),
-                    style: const TextStyle(
-                      color: Color(0xFF7882A4),
+                    style: GoogleFonts.montserrat(
+                      color: AppColors.appThemeDarkShade1,
                       fontWeight: FontWeight.bold,
                       fontSize: 22.0,
                     ),
@@ -44,7 +48,7 @@ class MyDrawer extends StatelessWidget {
                 const SizedBox(width: 16.0),
                 Text(
                   userName,
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
                       color: Color.fromARGB(255, 245, 229, 251),
                       fontSize: 25.0,
@@ -58,13 +62,15 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.home_outlined,
-              color: Color(0xFF7882A4),
+              color: AppColors.appThemeDarkShade2,
               size: 28,
             ),
-            title: const Text(
+            title: Text(
               'Home',
-              style: TextStyle(
-                  fontSize: 17, color: Color.fromARGB(255, 127, 132, 150)),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -74,20 +80,22 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.dashboard,
-              color: Color(0xFF7882A4),
+              color: AppColors.appThemeDarkShade2,
               size: 28,
             ),
-            title: const Text(
+            title: Text(
               'Master Screen',
-              style: TextStyle(
-                  fontSize: 17, color: Color.fromARGB(255, 127, 132, 150)),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MasterScreen(),
+                  builder: (context) => MasterScreen(),
                 ),
               );
             },
@@ -95,13 +103,15 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.info,
-              color: Color(0xFF7882A4),
+              color: AppColors.appThemeDarkShade2,
               size: 28,
             ),
-            title: const Text(
+            title: Text(
               'About',
-              style: TextStyle(
-                  fontSize: 17, color: Color.fromARGB(255, 127, 132, 150)),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onTap: () {
               showDialog(
@@ -142,54 +152,65 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.logout,
-              color: Color(0xFF7882A4),
+              color: AppColors.appThemeDarkShade2,
               size: 28,
             ),
-            title: const Text(
+            title: Text(
               'Log Out',
-              style: TextStyle(
-                  fontSize: 17, color: Color.fromARGB(255, 127, 132, 150)),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    title: Text(
                       'Log Out',
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: Color.fromARGB(255, 134, 120, 164),
-                        fontWeight: FontWeight.w700,
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                            fontSize: 17, color: Colors.grey.shade600),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    content: const Text(
+                    content: Text(
                       'Are you sure you want to log out?',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(255, 127, 132, 150)),
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(color: Colors.grey.shade600),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text(
+                        child: Text(
                           'Cancel',
-                          style: TextStyle(
-                            color: Colors.redAccent,
+                          style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(color: Colors.redAccent),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       TextButton(
                         onPressed: () {
+                          final pref = locator<SharedPreferences>();
+                          pref.clear();
                           Navigator.pop(context);
                           Navigator.pushReplacementNamed(context, '/login');
                         },
-                        child: const Text(
+                        child: Text(
                           'Log Out',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 134, 120, 164)),
+                          style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(
+                                color: AppColors.appThemeDarkShade2),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],

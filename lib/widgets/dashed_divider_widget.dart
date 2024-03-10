@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DashedDivider extends StatelessWidget {
+  const DashedDivider({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

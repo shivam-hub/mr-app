@@ -1,8 +1,9 @@
+import 'package:Nurene/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:nurene_app/models/prodcut_model.dart';
-import 'package:nurene_app/services/api_services.dart';
-import 'package:nurene_app/services/locator.dart';
+import '/models/prodcut_model.dart';
+import '/services/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/const.dart';
 
@@ -23,17 +24,20 @@ class _ProductSelectionWidgetState extends State<ProductSelectionWidget> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Color(0xFF7882A4), // Change underline color
+            color: AppColors.appThemeDarkShade3,
             style: BorderStyle.solid,
           ),
         ),
       ),
       child: MultiSelectDropDown.network(
-        chipConfig:
-            ChipConfig(backgroundColor: Color.fromARGB(255, 217, 218, 235)),
-        borderColor: Colors.white,
-        optionsBackgroundColor: Color.fromARGB(255, 217, 218, 235),
-        selectedOptionBackgroundColor: Color.fromARGB(255, 217, 218, 235),
+        chipConfig: ChipConfig(
+            backgroundColor: Colors.white,
+            labelColor: Colors.black,
+            wrapType: WrapType.scroll,
+            labelStyle: GoogleFonts.montserrat()),
+        borderColor: Colors.transparent,
+        optionsBackgroundColor: Colors.white,
+        selectedOptionBackgroundColor: AppColors.appThemeLightShade3,
         onOptionSelected: (options) {
           List<ProductModel> p = [];
           for (var element in options) {

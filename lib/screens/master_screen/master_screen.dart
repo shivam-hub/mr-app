@@ -1,49 +1,67 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 import 'dart:io';
 import 'dart:math';
+import 'package:Nurene/widgets/dropdown_widget.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:nurene_app/models/prodcut_model.dart';
-import 'package:nurene_app/models/visit_model.dart';
-import 'package:nurene_app/screens/home_screen/home_screen.dart';
-import 'package:nurene_app/themes/app_styles.dart';
-import 'package:nurene_app/utils/AltertUtil.dart';
-import 'package:nurene_app/utils/ModelBuilder.dart';
-import 'package:nurene_app/widgets/product_selection_widget.dart';
-import '../models/medical_store_model.dart';
-import '../services/api_services.dart';
-import '../utils/const.dart';
-import '../widgets/drawer_widget.dart';
-import '../widgets/image_picker_widget.dart';
-import '../widgets/button_widget.dart';
-import '../blocs/master/master_bloc.dart';
-import '../blocs/master/master_event.dart';
-import '../blocs/master/master_state.dart';
-import '../models/address_info_model.dart';
-import '../models/doctor_model.dart';
-import '../models/dropdown_value_model.dart';
-import '../services/locator.dart';
-import '../themes/app_colors.dart';
-import '../utils/GeolocatorUtil.dart';
-import '../widgets/appbar_widget.dart';
-import '../widgets/autocomplete_widget.dart';
-import '../widgets/dropdown_text_field.dart';
-import '../widgets/medical_details_widget.dart';
-import '../widgets/text_dialog_widget.dart';
-import '../widgets/text_field_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
+import '/models/prodcut_model.dart';
+import '/models/visit_model.dart';
+import '/screens/home_screen/home_screen.dart';
+import '/utils/AltertUtil.dart';
+import '/utils/ModelBuilder.dart';
+import '/widgets/product_selection_widget.dart';
+import '../../models/medical_store_model.dart';
+import '../../services/api_services.dart';
+import '../../utils/const.dart';
+import '../../widgets/drawer_widget.dart';
+import '../../widgets/button_widget.dart';
+import '../../blocs/master/master_bloc.dart';
+import '../../blocs/master/master_event.dart';
+import '../../blocs/master/master_state.dart';
+import '../../models/address_info_model.dart';
+import '../../models/doctor_model.dart';
+import '../../models/dropdown_value_model.dart';
+import '../../services/locator.dart';
+import '../../themes/app_colors.dart';
+import '../../utils/GeolocatorUtil.dart';
+import '../../widgets/appbar_widget.dart';
+import '../../widgets/autocomplete_widget.dart';
+import '../../widgets/dropdown_text_field.dart';
+import '../../widgets/medical_details_widget.dart';
+import '../../widgets/text_dialog_widget.dart';
+import '../../widgets/text_field_widget.dart';
 
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class MasterScreen extends StatefulWidget {
-  const MasterScreen({super.key});
+class MasterScreen extends StatelessWidget {
+  String? drId;
+  String? scheduleId;
+
+  MasterScreen({this.drId = '', this.scheduleId = '', super.key});
 
   @override
-  State<MasterScreen> createState() => _MasterScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) => MasterBloc(locator<ApiService>()),
+        child: MasterScreenContent(drId: drId, scheduleId: scheduleId));
+  }
 }
 
-class _MasterScreenState extends State<MasterScreen> {
+class MasterScreenContent extends StatefulWidget {
+  String? drId;
+  String? scheduleId;
+
+  MasterScreenContent({this.drId = '', this.scheduleId = '', super.key});
+
+  @override
+  State<MasterScreenContent> createState() => _MasterScreenState();
+}
+
+class _MasterScreenState extends State<MasterScreenContent> {
   final TextEditingController _addressLine1Controller = TextEditingController();
   final TextEditingController _addressLine2Controller = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
@@ -57,6 +75,9 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final SingleValueDropDownController _stateController =
       SingleValueDropDownController();
+
+  final MultiSelectController _stateController1 = MultiSelectController();
+
   final ScrollController _scrollController = ScrollController();
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
@@ -70,10 +91,19 @@ class _MasterScreenState extends State<MasterScreen> {
   File? selectedImage;
   String filePath = '';
   late Position currentPosition;
+  TextEditingValue? test;
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<MasterBloc>(context).add(MasterInitialEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    String? DrId = widget.drId;
+    String? ScheduleId = widget.scheduleId;
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -84,18 +114,21 @@ class _MasterScreenState extends State<MasterScreen> {
           appBarTitle: "Master",
           prefixIcon: IconButton(
               icon: const Icon(Icons.arrow_back_outlined,
-                  color: Colors.brown, size: 25),
+                  color: Colors.black, size: 25),
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/home')),
           gradient: AppColors.appBarColorGradient,
         ),
-        endDrawer: MyDrawer(),
+        endDrawer: const MyDrawer(),
         body: BlocProvider(
           create: (context) => MasterBloc(locator<ApiService>()),
           child: BlocBuilder<MasterBloc, MasterState>(
             builder: (context, state) {
               if (state is MasterLoadingState) {
-                return const CircularProgressIndicator();
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: AppColors.appThemeLightShade1,
+                ));
               } else if (state is MasterErrorState) {
                 return Text('Error: ${state.errorMessage}');
               } else if (state is MasterSuccessState) {
@@ -129,6 +162,8 @@ class _MasterScreenState extends State<MasterScreen> {
               } else {
                 if (state is DoctorSelectedState) {
                   final docInfo = DoctorInfo.fromJson(state.doctorDetails);
+                  doctorDetails = docInfo;
+                  doctorName = docInfo.name ?? "";
                   initialStores = docInfo.associatedMedicals!;
                   _doctRegNumberController.text = docInfo.drId ?? '';
                   _addressLine1Controller.text =
@@ -138,6 +173,15 @@ class _MasterScreenState extends State<MasterScreen> {
                   _cityController.text = docInfo.addressInfo?.city ?? '';
                   _pincodeController.text = docInfo.addressInfo?.pincode ?? '';
                   _regionController.text = docInfo.addressInfo?.region ?? '';
+                  if (docInfo.addressInfo?.state != null &&
+                      docInfo.addressInfo!.state!.isNotEmpty) {
+                    final List<ValueItem> stateSelected = [
+                      ValueItem(
+                          label: docInfo.addressInfo?.state ?? '',
+                          value: docInfo.addressInfo?.state ?? '')
+                    ];
+                    _stateController1.setSelectedOptions(stateSelected);
+                  }
                   _stateController.dropDownValue = DropDownValueModel(
                       name: docInfo.addressInfo?.state ?? '',
                       value: docInfo.addressInfo?.state ?? '');
@@ -145,6 +189,14 @@ class _MasterScreenState extends State<MasterScreen> {
                     _doctorTypeController.dropDownValue = DropDownValueModel(
                         name: docInfo.speciality ?? '',
                         value: docInfo.speciality ?? '');
+                  }
+                } else if (state is MasterInitialState) {
+                  if (DrId != null &&
+                      DrId != '' &&
+                      ScheduleId != null &&
+                      ScheduleId != '') {
+                    BlocProvider.of<MasterBloc>(context)
+                        .add(PlanRecordEvent(DrId, ScheduleId));
                   }
                 }
                 return Form(
@@ -157,10 +209,12 @@ class _MasterScreenState extends State<MasterScreen> {
                         ),
                         ListTile(
                           titleAlignment: ListTileTitleAlignment.top,
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Basic Details',
-                              style: TextStyle(fontSize: 30)),
+                          title: Text('Basic Details',
+                              style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      color: AppColors.appThemeDarkShade2),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20)),
                         ),
                         const SizedBox(height: 5),
                         Padding(
@@ -181,7 +235,14 @@ class _MasterScreenState extends State<MasterScreen> {
                                 }
                                 return null;
                               },
+                              initialValue:
+                                  state is DoctorSelectedState && DrId != ''
+                                      ? doctorName
+                                      : '',
                               onEditingComplete: (String value) {
+                                if (state is DoctorSelectedState) {
+                                  value = doctorName;
+                                }
                                 debugPrint('Inside master screen $value');
                                 doctorName = value;
                                 BlocProvider.of<MasterBloc>(context)
@@ -196,7 +257,8 @@ class _MasterScreenState extends State<MasterScreen> {
                             // formKey: _formKey,
                             label: "Doctor Registration No.",
                             controller: _doctRegNumberController,
-                            readOnly: state is DoctorSelectedState,
+                            readOnly: state is DoctorSelectedState &&
+                                _doctRegNumberController.text.isNotEmpty,
                             focusNode: doctorRegNumberFocusNode,
                             validator: (value) {
                               debugPrint(
@@ -244,20 +306,23 @@ class _MasterScreenState extends State<MasterScreen> {
                           ),
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.all(20),
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Address',
-                              style: TextStyle(fontSize: 30)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                          title: Text('Address',
+                              style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      color: AppColors.appThemeDarkShade2),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20)),
                         ),
-                        const SizedBox(height: 2),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextFieldWidget(
                               isCapitalized: true,
                               label: 'Address Line 1',
                               controller: _addressLine1Controller,
-                              readOnly: state is DoctorSelectedState,
+                              readOnly: state is DoctorSelectedState &&
+                                  _addressLine1Controller.text.isNotEmpty,
                               onChanged: (_) {
                                 _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
@@ -273,7 +338,8 @@ class _MasterScreenState extends State<MasterScreen> {
                               label: 'Address Line 2',
                               isCapitalized: true,
                               controller: _addressLine2Controller,
-                              readOnly: state is DoctorSelectedState,
+                              readOnly: state is DoctorSelectedState &&
+                                  _addressLine2Controller.text.isNotEmpty,
                               onChanged: (_) {
                                 _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
@@ -315,7 +381,8 @@ class _MasterScreenState extends State<MasterScreen> {
                                 child: TextFieldWidget(
                                     label: 'Pincode',
                                     controller: _pincodeController,
-                                    readOnly: state is DoctorSelectedState,
+                                    readOnly: state is DoctorSelectedState &&
+                                        _pincodeController.text.isNotEmpty,
                                     inputType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null ||
@@ -345,21 +412,29 @@ class _MasterScreenState extends State<MasterScreen> {
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: Row(
                             children: [
-                              Expanded(
-                                child: DropdownTextFieldWidget(
-                                  placeholder: 'State',
-                                  controller: _stateController,
-                                  dropDownOption: Constants.states,
-                                  readonly: state is DoctorSelectedState,
-                                ),
-                              ),
+                              Expanded(child: DropDownWidget(
+                                controller: _stateController1,
+                                label: 'State',
+                                options: Constants.states1,
+                              )
+                                  // DropdownTextFieldWidget(
+                                  //   placeholder: 'State',
+                                  //   controller: _stateController,
+                                  //   dropDownOption: Constants.states,
+                                  //   readonly: state is DoctorSelectedState &&
+                                  //       _stateController.dropDownValue!.value
+                                  //           .toString()
+                                  //           .isNotEmpty,
+                                  // ),
+                                  ),
                               const SizedBox(width: 15),
                               Expanded(
                                 child: TextFieldWidget(
                                     label: 'Region',
                                     isCapitalized: true,
                                     controller: _regionController,
-                                    readOnly: state is DoctorSelectedState,
+                                    readOnly: state is DoctorSelectedState &&
+                                        _regionController.text.isNotEmpty,
                                     onChanged: (_) {
                                       _scrollController.animateTo(
                                         _scrollController
@@ -374,13 +449,16 @@ class _MasterScreenState extends State<MasterScreen> {
                           ),
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.all(20),
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Associated Medical',
-                              style: TextStyle(fontSize: 30)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                          title: Text('Associated Medical',
+                              style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      color: AppColors.appThemeDarkShade2),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20)),
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 5),
                         state is DoctorSelectedState &&
                                 state.doctorDetails['associatedMedicals']
                                     is List &&
@@ -416,11 +494,14 @@ class _MasterScreenState extends State<MasterScreen> {
                                 ),
                               ),
                         ListTile(
-                          contentPadding: const EdgeInsets.all(20),
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Products',
-                              style: TextStyle(fontSize: 30)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                          title: Text('Products',
+                              style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      color: AppColors.appThemeDarkShade2),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20)),
                         ),
                         Padding(
                             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -431,11 +512,14 @@ class _MasterScreenState extends State<MasterScreen> {
                             )),
                         const SizedBox(height: 2),
                         ListTile(
-                          contentPadding: const EdgeInsets.all(20),
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Feedback',
-                              style: TextStyle(fontSize: 30)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                          title: Text('Feedback',
+                              style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      color: AppColors.appThemeDarkShade2),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20)),
                         ),
                         const SizedBox(width: 15),
                         Padding(
@@ -453,23 +537,21 @@ class _MasterScreenState extends State<MasterScreen> {
                                 );
                               }),
                         ),
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(20),
-                          textColor: const Color.fromARGB(255, 65, 81, 90),
-                          titleTextStyle: lisTitleStyle,
-                          title: const Text('Uploads',
-                              style: TextStyle(fontSize: 30)),
-                        ),
-                        // Display selected images as attachments
-                        PickImage(
-                          onImageSelected: (file) {
-                            setState(() {
-                              selectedImage = file;
-                            });
-                          },
-                        ),
-                        // Display the selected image
-                        const SizedBox(height: 20),
+                        // ListTile(
+                        //   contentPadding: const EdgeInsets.all(20),
+                        //   textColor: const Color.fromARGB(255, 65, 81, 90),
+                        //   titleTextStyle: lisTitleStyle,
+                        //   title: const Text('Uploads',
+                        //       style: TextStyle(fontSize: 30)),
+                        // ),
+                        // PickImage(
+                        //   onImageSelected: (file) {
+                        //     setState(() {
+                        //       selectedImage = file;
+                        //     });
+                        //   },
+                        // ),
+                        const SizedBox(height: 30), //prev value was 20
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -536,17 +618,19 @@ class _MasterScreenState extends State<MasterScreen> {
                                                     .toList();
                                             doctorDetails.associatedMedicals!
                                                 .addAll(newMedicals);
-                                            visitModel.doctorInfo =
-                                                doctorDetails;
                                             doctorDetails.speciality =
                                                 _doctorTypeController
                                                     .dropDownValue?.name
                                                     .toString();
+                                            visitModel.doctorInfo =
+                                                doctorDetails;
+                                            visitModel.scheduleId = ScheduleId;
                                           }
                                           visitModel.feedback =
                                               _feedBackController.text;
 
-                                          if (selectedImage!.path != '') {
+                                          if (selectedImage != null &&
+                                              selectedImage!.path != '') {
                                             filePath = selectedImage!.path;
                                           }
 
@@ -581,8 +665,7 @@ class _MasterScreenState extends State<MasterScreen> {
                                     width: 100,
                                     height: 40,
                                     labelFontSize: 18,
-                                    label: 'Save',
-                                    gradient: AppColors.buttonGradient),
+                                    label: 'Save'),
                               ),
                             ),
                           ],
@@ -623,12 +706,10 @@ class _MasterScreenState extends State<MasterScreen> {
     double mrLongitude = currentPosition.longitude;
     double mrLatitude = currentPosition.latitude;
 
-    double doctorLongitude = 73.130581;
-    // doctorDetails.locationCoordinates?.elementAt(0) ??
-    // currentPosition.longitude;
-    double doctorLatitude = 73.130581;
-    // doctorDetails.locationCoordinates?.elementAt(1) ??
-    // currentPosition.latitude;
+    double doctorLongitude = doctorDetails.locationCoordinates?.elementAt(0) ??
+        currentPosition.longitude;
+    double doctorLatitude = doctorDetails.locationCoordinates?.elementAt(1) ??
+        currentPosition.latitude;
 
     var R = 6371e3; // metres
     // var R = 1000;
@@ -686,6 +767,48 @@ class _MasterScreenState extends State<MasterScreen> {
       });
     }
 
+    Future<void> editLocation(MedicalStoreModel medical) async {
+      final location = await showTextDialog(context,
+          title: 'Edit Location', value: medical.location ?? '');
+      setState(() {
+        medicals = medicals.map((m) {
+          if (m == medical) {
+            debugPrint("inside if with location => $location");
+            MedicalStoreModel t = m.copyWith(location: location);
+            return t;
+          }
+          return m;
+        }).toList();
+
+        final updatedMedical = medicals.map((e) {
+          return e.toJson();
+        }).toList();
+
+        updateMedicalsCallback(updatedMedical);
+      });
+    }
+
+    Future<void> editGst(MedicalStoreModel medical) async {
+      final gst = await showTextDialog(context,
+          title: 'Edit GST', value: medical.gstNumber ?? '');
+      setState(() {
+        medicals = medicals.map((m) {
+          if (m == medical) {
+            debugPrint("inside if with gst => $gst");
+            MedicalStoreModel t = m.copyWith(gstNumber: gst);
+            return t;
+          }
+          return m;
+        }).toList();
+
+        final updatedMedical = medicals.map((e) {
+          return e.toJson();
+        }).toList();
+
+        updateMedicalsCallback(updatedMedical);
+      });
+    }
+
     List<DataRow> getRows(List<MedicalStoreModel> medicals) {
       return medicals.map((medical) {
         final cells = [
@@ -700,6 +823,10 @@ class _MasterScreenState extends State<MasterScreen> {
             switch (index) {
               case 0:
                 await editName(medical);
+              case 1:
+                await editLocation(medical);
+              case 2:
+                await editGst(medical);
                 break;
               default:
             }
@@ -710,9 +837,13 @@ class _MasterScreenState extends State<MasterScreen> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columns: getHeaders(headers),
-        rows: getRows(medicals),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: DataTable(
+          columns: getHeaders(headers),
+          rows: getRows(medicals),
+          columnSpacing: 100,
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:nurene_app/models/user_model.dart';
+import '/models/user_model.dart';
 
 abstract class PlanVisitState {}
 

@@ -18,34 +18,40 @@ class AppColors {
   static const Color appBarColor4 = Color(0xFFFBF5B7);
   static const Color appBarColor5 = Color(0xFFAA771C);
 
-  static const Color bottomNavBarColor1 = Color(0xffbf953f);
-  static const Color bottomNavBarColor2 = Color(0xfffcf6ba);
-  static const Color bottomNavBarColor3 = Color(0xffb38728);
-  static const Color bottomNavBarColor4 = Color(0xffaa771c);
-  //background-image: linear-gradient(45deg, #7882A4, #E4AEC5);
+  // new changes
+
+  static const Color appThemeDarkShade1 = Color.fromARGB(255, 0, 75, 35);
+  static const Color appThemeDarkShade2 = Color.fromARGB(255, 0, 100, 0);
+  static const Color appThemeDarkShade3 = Color.fromARGB(255, 0, 114, 0);
+  static const Color appThemeDarkShade4 = Color.fromARGB(255, 0, 128, 0);
+  static const Color appThemeLightShade1 = Color.fromARGB(255, 56, 176, 0);
+  static const Color appThemeLightShade2 = Color.fromARGB(255, 112, 224, 0);
+  static const Color appThemeLightShade3 = Color.fromARGB(255, 158, 240, 26);
+  static const Color appThemeLightShade4 = Color.fromARGB(255, 204, 255, 51);
+
   static const Gradient appBarColorGradient = LinearGradient(
-    colors: [
-      // Color(0xFF370665),
-      // Color(0xFFC56183),
-      Color(0xFF7882A4),
-      Color(0xFFE4AEC5),
-    ],
+    colors: [appThemeDarkShade4, appThemeLightShade1, appThemeLightShade2],
     begin: AlignmentDirectional.topStart,
     end: AlignmentDirectional.topEnd,
   );
 
-  // static const Gradient appBarColorGradient = LinearGradient(colors: [
-  //   appBarColor1,
-  //   appBarColor2,
-  //   appBarColor3,
-  //   appBarColor4,
-  //   appBarColor5
-  // ], begin: AlignmentDirectional.topStart, end: AlignmentDirectional.topEnd);
-
   static const Gradient buttonGradient = LinearGradient(
     colors: [
-      Color(0xFF7882A4),
-      Color.fromARGB(255, 159, 170, 205),
+      appThemeDarkShade3,
+      appThemeDarkShade4,
+      appThemeLightShade1,
+      appThemeLightShade2
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient gradient = LinearGradient(
+    colors: [
+      appThemeDarkShade1,
+      appThemeDarkShade3,
+      appThemeLightShade1,
+      appThemeLightShade3,
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

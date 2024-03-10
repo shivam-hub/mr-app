@@ -1,9 +1,12 @@
-import 'package:nurene_app/models/dropdown_value_model.dart';
+import 'package:multi_dropdown/models/value_item.dart';
+
+import '/models/dropdown_value_model.dart';
 
 class Constants {
-  // static const String baseurl = 'http://localhost:3000';
-  // static const String baseurl = 'https://nureneapi-production.up.railway.app';
-  static const String baseurl = 'https://af8c-2402-e280-3dc7-1a5-3464-7bf0-b3fd-c481.ngrok-free.app';
+  // static const String baseurl = 'https://localhost:4000';
+  static const String baseurl = 'https://nureneapi-production.up.railway.app';
+  // static const String baseurl = 'https://nurene-api-production.up.railway.app';
+  // static const String baseurl = 'https://1663-103-195-76-196.ngrok-free.app';
 
   static const List<DropDownOption> states = [
     DropDownOption(name: 'Andhra Pradesh', value: 'Andhra Pradesh'),
@@ -34,5 +37,37 @@ class Constants {
     DropDownOption(name: 'Uttar Pradesh', value: 'Uttar Pradesh'),
     DropDownOption(name: 'Uttarakhand', value: 'Uttarakhand'),
     DropDownOption(name: 'West Bengal', value: 'West Bengal'),
+  ];
+
+
+  static const List<ValueItem> states1 = [
+    ValueItem(label: 'Andhra Pradesh', value: 'Andhra Pradesh'),
+    ValueItem(label: 'Arunachal Pradesh', value: 'Arunachal Pradesh'),
+    ValueItem(label: 'Assam', value: 'Assam'),
+    ValueItem(label: 'Bihar', value: 'Bihar'),
+    ValueItem(label: 'Chhattisgarh', value: 'Chhattisgarh'),
+    ValueItem(label: 'Goa', value: 'Goa'),
+    ValueItem(label: 'Gujarat', value: 'Gujarat'),
+    ValueItem(label: 'Haryana', value: 'Haryana'),
+    ValueItem(label: 'Himachal Pradesh', value: 'Himachal Pradesh'),
+    ValueItem(label: 'Jharkhand', value: 'Jharkhand'),
+    ValueItem(label: 'Karnataka', value: 'Karnataka'),
+    ValueItem(label: 'Kerala', value: 'Kerala'),
+    ValueItem(label: 'Madhya Pradesh', value: 'Madhya Pradesh'),
+    ValueItem(label: 'Maharashtra', value: 'Maharashtra'),
+    ValueItem(label: 'Manipur', value: 'Manipur'),
+    ValueItem(label: 'Meghalaya', value: 'Meghalaya'),
+    ValueItem(label: 'Mizoram', value: 'Mizoram'),
+    ValueItem(label: 'Nagaland', value: 'Nagaland'),
+    ValueItem(label: 'Odisha', value: 'Odisha'),
+    ValueItem(label: 'Punjab', value: 'Punjab'),
+    ValueItem(label: 'Rajasthan', value: 'Rajasthan'),
+    ValueItem(label: 'Sikkim', value: 'Sikkim'),
+    ValueItem(label: 'Tamil Nadu', value: 'Tamil Nadu'),
+    ValueItem(label: 'Telangana', value: 'Telangana'),
+    ValueItem(label: 'Tripura', value: 'Tripura'),
+    ValueItem(label: 'Uttar Pradesh', value: 'Uttar Pradesh'),
+    ValueItem(label: 'Uttarakhand', value: 'Uttarakhand'),
+    ValueItem(label: 'West Bengal', value: 'West Bengal'),
   ];
 }

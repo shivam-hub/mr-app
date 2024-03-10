@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nurene_app/screens/home_screen/home_screen.dart';
-import 'package:nurene_app/services/api_services.dart';
-import 'package:nurene_app/services/locator.dart';
-import 'package:nurene_app/utils/AltertUtil.dart';
+import '/screens/home_screen/home_screen.dart';
+import '/services/api_services.dart';
+import '/services/locator.dart';
+import '/utils/AltertUtil.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../blocs/plan_visit/plan_visit_bloc.dart';
-import '../themes/app_colors.dart';
-import '../widgets/appbar_widget.dart';
-import '../widgets/autocomplete_widget.dart';
-import '../widgets/button_widget.dart';
-import '../widgets/date_picker_widget.dart';
-import '../widgets/drawer_widget.dart';
-import '../widgets/text_field_widget.dart';
-import '../blocs/plan_visit/plan_visit_event.dart';
-import '../blocs/plan_visit/plan_visit_state.dart';
-import '../widgets/time_picker_widget.dart';
+import '../../blocs/plan_visit/plan_visit_bloc.dart';
+import '../../themes/app_colors.dart';
+import '../../widgets/appbar_widget.dart';
+import '../../widgets/autocomplete_widget.dart';
+import '../../widgets/button_widget.dart';
+import '../../widgets/date_picker_widget.dart';
+import '../../widgets/drawer_widget.dart';
+import '../../widgets/text_field_widget.dart';
+import '../../blocs/plan_visit/plan_visit_event.dart';
+import '../../blocs/plan_visit/plan_visit_state.dart';
+import '../../widgets/time_picker_widget.dart';
 
 class PlanVisitScreen extends StatefulWidget {
   const PlanVisitScreen({super.key});
@@ -81,7 +81,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
               onPressed: () => Navigator.of(context).pop()),
           gradient: AppColors.appBarColorGradient,
         ),
-        endDrawer: MyDrawer(),
+        endDrawer: const MyDrawer(),
         body: BlocProvider(
           create: (context) => PlanVisitBloc(locator<ApiService>()),
           child: BlocBuilder<PlanVisitBloc, PlanVisitState>(
@@ -277,8 +277,7 @@ class _PlanVisitScreenState extends State<PlanVisitScreen> {
                               width: 100,
                               height: 40,
                               labelFontSize: 18,
-                              label: 'Save',
-                              gradient: AppColors.buttonGradient),
+                              label: 'Save'),
                         ),
                       ),
                     ],

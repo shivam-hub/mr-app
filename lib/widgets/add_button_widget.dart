@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nurene_app/themes/app_colors.dart';
+import '/themes/app_colors.dart';
 
 class AddButtonWidget extends StatelessWidget {
   final Function()? onTap;

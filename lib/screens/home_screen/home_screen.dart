@@ -14,13 +14,11 @@ import '../../services/locator.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_styles.dart';
 import '../../utils/Priority.dart';
-import '../../widgets/add_button_widget.dart';
 import '../../widgets/appbar_widget.dart';
 import '../../widgets/dashed_divider_widget.dart';
 import '../../widgets/drawer_widget.dart';
 import '../../widgets/home_screen_cards.dart';
 import '../../widgets/logo_widget.dart';
-import '../plan_visit_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserModel user;
@@ -61,36 +59,36 @@ class _HomeScreenState extends State<_HomeScreenContent> {
       extendBody: true,
       extendBodyBehindAppBar: false,
       appBar: const AppBarWidget(
-        logo:  LogoWidget(
+        logo: LogoWidget(
           height: 8,
           width: 8,
         ),
         appBarTitle: "Nurene",
         gradient: AppColors.appBarColorGradient,
       ),
-      endDrawer: MyDrawer(),
+      endDrawer: const MyDrawer(),
       body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
         builder: (context, state) {
           return Column(
             children: [
               _buildDateHeader(),
               _buildDatePicker(),
-              DashedDivider(),
+              const DashedDivider(),
               _buildScheduleList(state),
             ],
           );
         },
       ),
-      floatingActionButton: AddButtonWidget(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const PlanVisitScreen(),
-            ),
-          );
-        },
-      ),
+      // floatingActionButton: AddButtonWidget(
+      //   onTap: () async {
+      //     await Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => const PlanVisitScreen(),
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
 
@@ -130,7 +128,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
         height: 95,
         width: 80,
         initialSelectedDate: DateTime.now(),
-        selectionColor: const Color(0xFF7882A4),
+        selectionColor: AppColors.appThemeLightShade1,
         selectedTextColor: Colors.white,
         dateTextStyle: GoogleFonts.lato(
           textStyle: const TextStyle(
@@ -167,7 +165,9 @@ class _HomeScreenState extends State<_HomeScreenContent> {
 
   Widget _buildScheduleList(HomeScreenState state) {
     if (state is HomeScreenLoadingState) {
-      return const CircularProgressIndicator();
+      return const CircularProgressIndicator(
+            color: AppColors.appThemeLightShade1,
+      );
     } else if (state is DataFetchedState) {
       return Expanded(
         child: ListView.builder(
@@ -196,17 +196,18 @@ class _HomeScreenState extends State<_HomeScreenContent> {
             return Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: CardWidget(
-                time: scheduleModel.plannedVisitTime ?? "",
-                doctorName: scheduleModel.doctorInfo?.name ?? "",
-                clinicName: scheduleModel.doctorInfo?.clinicName ?? "",
-                priority: _getPriority(scheduleModel.priority ?? ""),
-              ),
+                  doctorName: scheduleModel.doctorInfo?.name ?? "",
+                  clinicName: scheduleModel.doctorInfo?.clinicName ?? "",
+                  priority: _getPriority(scheduleModel.priority ?? ""),
+                  scheduleVisitId: scheduleModel.scheduleId ?? '',
+                  isVisited: scheduleModel.isVisited ?? false,
+                  doctorId: scheduleModel.doctorInfo?.drId ?? ''),
             );
           },
         ),
       );
     }
-    return const SizedBox(); // Handle other states if needed
+    return const SizedBox();
   }
 
   Priority _getPriority(String priority) {

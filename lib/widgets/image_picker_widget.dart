@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nurene_app/themes/app_colors.dart';
+import '/themes/app_colors.dart';
 
 class PickImage extends StatefulWidget {
   final Function(File?) onImageSelected;

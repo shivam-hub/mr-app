@@ -1,5 +1,5 @@
 flutter_native_splash:
- background_image: "asset/images/background.jpg"
+ background_image: "asset/images/background.png"
  image: "asset/images/nurene_logo.png"
  android: true
  ios: true

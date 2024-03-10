@@ -1,22 +1,26 @@
+import 'package:Nurene/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:nurene_app/themes/app_colors.dart';
+import '/screens/master_screen/master_screen.dart';
 import '../utils/Priority.dart';
 import 'dashed_divider_widget.dart';
 
 class CardWidget extends StatelessWidget {
-  final String time;
   final String doctorName;
   final String clinicName;
+  final String scheduleVisitId;
+  final String doctorId;
   final Priority priority;
+  final bool isVisited;
 
   const CardWidget({
     Key? key,
-    required this.time,
     required this.doctorName,
     required this.clinicName,
     this.priority = Priority.low,
+    required this.scheduleVisitId,
+    required this.doctorId,
+    required this.isVisited,
   }) : super(key: key);
 
   Color _getPriorityColor() {
@@ -30,72 +34,36 @@ class CardWidget extends StatelessWidget {
     }
   }
 
-  bool _isVisitMissed() {
-    // Parse the scheduled time
-    final scheduledTime = DateTime.parse(time).toLocal();
-
-    // Compare with the current time
-    return DateTime.now().isAfter(scheduledTime);
-  }
-
-  void _showOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.check),
-              title: const Text('Visit'),
-              onTap: () {
-                Navigator.pop(context);
-                // Implement the visit logic
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Edit'),
-              onTap: () {
-                Navigator.pop(context);
-                // Implement the edit logic
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () {
-                Navigator.pop(context);
-                // Implement the delete logic
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
+  // bool _isVisitMissed() {
+  //   final scheduledTime = DateTime.parse(time).toLocal();
+  //   return DateTime.now().isAfter(scheduledTime);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final bool isMissed = _isVisitMissed();
-
+    // final bool isMissed = _isVisitMissed();
+    final String status = isVisited ? "Visited" : "Not Visited";
     return GestureDetector(
-      onTap: () {}, //=> _showOptions(context),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MasterScreen(drId: doctorId, scheduleId: scheduleVisitId),
+          ),
+        );
+      },
       child: Column(
         children: [
           Card(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            elevation: isMissed ? 0.0 : 5.0,
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            elevation: isVisited ? 0.0 : 5.0,
             margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            color: isMissed
-                ? Colors.grey
-                : const Color.fromARGB(255, 239, 233,
-                    233), // const Color.fromARGB(255, 194, 172, 211),
+            color: isVisited ? Colors.grey : Colors.white,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Left Section - Time
                 Padding(
                   padding: const EdgeInsets.only(left: 6),
                   child: Row(
@@ -103,55 +71,41 @@ class CardWidget extends StatelessWidget {
                       const SizedBox(
                         width: 4,
                       ),
-                      RotatedBox(
-                        quarterTurns: 3,
-                        child: Text(
-                            DateFormat.jm()
-                                .format(DateTime.parse(time).toLocal()),
-                            style: GoogleFonts.rajdhani(
-                              textStyle: const TextStyle(
-                                color: Color.fromARGB(255, 119, 113, 118),
-                                fontSize: 21.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                      ),
                       const SizedBox(
                         width: 3,
                       ),
                       Container(
-                        height: 60,
+                        height: 80,
                         width: 5,
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: const Color(0xFF7882A4),
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: AppColors.appThemeDarkShade3,
                         ),
                       ),
-
-                      // Additional time-related information
                     ],
                   ),
                 ),
                 const SizedBox(width: 20.0),
-                // Middle Section - Doctor's Name and Clinic's Name
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Dr. $doctorName',
-                          style: GoogleFonts.lato(
+                      Text(
+                          !doctorName.toLowerCase().startsWith('dr')
+                              ? 'Dr. $doctorName'
+                              : doctorName,
+                          style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                               color: Colors.black54,
-                              fontSize: 21.0,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
                             ),
                           )),
                       const SizedBox(height: 5.0),
                       Row(
                         children: [
                           Text(
-                            //'Apollo Hospitals',
                             clinicName,
                             style: GoogleFonts.lato(
                               textStyle: const TextStyle(
@@ -161,28 +115,39 @@ class CardWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (isMissed)
-                            const Row(
-                              children: [
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Icon(
-                                  Icons.error_outline,
-                                  color: Colors.redAccent,
-                                  size: 16,
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  'you missed the visit',
-                                  style: TextStyle(
-                                      color: Colors.redAccent,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                              ],
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              status,
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.lato(
+                                  color: isVisited
+                                      ? Colors.green[400]
+                                      : Colors.red),
                             ),
+                          )
+                          // if (isMissed)
+                          //   const Row(
+                          //     children: [
+                          //       SizedBox(
+                          //         width: 8,
+                          //       ),
+                          //       Icon(
+                          //         Icons.error_outline,
+                          //         color: Colors.redAccent,
+                          //         size: 16,
+                          //       ),
+                          //       SizedBox(
+                          //         width: 2,
+                          //       ),
+                          //       Text(
+                          //         'you missed the visit',
+                          //         style: TextStyle(
+                          //             color: Colors.redAccent,
+                          //             fontStyle: FontStyle.italic),
+                          //       ),
+                          //     ],
+                          //   ),
                         ],
                       ),
                     ],
@@ -192,11 +157,10 @@ class CardWidget extends StatelessWidget {
                 Container(
                   height: 100,
                   width: 50,
-                  //padding: const EdgeInsets.symmetric(vertical: 8.0),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(15),
-                        bottomRight: Radius.circular(15)),
+                        topRight: Radius.circular(8),
+                        bottomRight: Radius.circular(8)),
                     color: _getPriorityColor(),
                   ),
                   child: RotatedBox(
@@ -204,9 +168,9 @@ class CardWidget extends StatelessWidget {
                     child: Center(
                       child:
                           Text(priority.toString().substring(8).toUpperCase(),
-                              style: GoogleFonts.cairo(
+                              style: GoogleFonts.montserrat(
                                 textStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  color: Colors.white,
                                   fontSize: 17.0,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -214,104 +178,10 @@ class CardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                // const Text
-                //   'Priority',
-                //   style: TextStyle(
-                //     fontSize: 16.0,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // )
-                // Right Section - Priority Icon or Image
-                // CircleAvatar(
-                //   backgroundColor: _getPriorityColor(),
-                //   child: Text(
-                //     priority.toString().substring(8).toUpperCase(),
-                //     style: const TextStyle(
-                //         fontSize: 12, fontWeight: FontWeight.bold),
-                //   ),
-                // ),
               ],
             ),
           ),
-          // Card(
-          //   shape:
-          //       RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          //   elevation: 5.0,
-          //   margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          //   color: Colors
-          //       .yellowAccent, // You can replace this with your lavender color
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: Row(
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       children: [
-          //         // Left Section - Time
-          //         RotatedBox(
-          //           quarterTurns: 3,
-          //           child: Text(
-          //             '12:00 pm',
-          //             style: const TextStyle(
-          //               color: Colors.black,
-          //               fontSize: 18.0,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           ),
-          //         ),
-          //         const SizedBox(width: 8.0),
-          //         // Divider
-          //         VerticalDivider(
-          //           color: Colors.grey,
-          //           width: 20,
-          //           thickness: 2,
-          //         ),
-          //         const SizedBox(width: 8.0),
-          //         // Middle Section - Doctor's Name and Clinic's Name
-          //         Expanded(
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Text(
-          //                 'Dr. Ruchi Rai',
-          //                 style: const TextStyle(
-          //                   fontSize: 18.0,
-          //                   fontWeight: FontWeight.bold,
-          //                 ),
-          //               ),
-          //               const SizedBox(height: 8.0),
-          //               Text(
-          //                 'Apollo Clinic',
-          //                 style: const TextStyle(fontSize: 16.0),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         const SizedBox(width: 8.0),
-          //         // Right Section - Priority Badge and Text
-          //         Container(
-          //           width: 0.1 *
-          //               MediaQuery.of(context)
-          //                   .size
-          //                   .width, // 20% of the screen width
-          //           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          //           color: Colors
-          //               .green, // You can replace this with your green color
-          //           child: RotatedBox(
-          //             quarterTurns: 1,
-          //             child: Text(
-          //               'Low Priority',
-          //               style: const TextStyle(
-          //                 color: Colors.white,
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-
-          DashedDivider()
+          const DashedDivider()
         ],
       ),
     );

@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:nurene_app/services/api_services.dart';
-import 'package:nurene_app/services/locator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../themes/app_colors.dart';
+import '/services/api_services.dart';
+import '/services/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import '../themes/app_colors.dart';
 
 const Duration debounceDuration = Duration(milliseconds: 500);
 
@@ -15,6 +16,7 @@ class AutoCompleteWidget<T> extends StatefulWidget {
   final void Function(T)? onSelected;
   final void Function(String)? onEditingComplete;
   final String? Function(String?)? validator;
+  final String? initialValue;
 
   const AutoCompleteWidget(
       {super.key,
@@ -23,6 +25,7 @@ class AutoCompleteWidget<T> extends StatefulWidget {
       this.onSelected,
       this.onEditingComplete,
       this.readOnly = false,
+      this.initialValue,
       this.validator});
 
   @override
@@ -71,28 +74,32 @@ class _AutoCompleteWidgetState<T> extends State<AutoCompleteWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return Autocomplete(
+      initialValue: TextEditingValue(text: widget.initialValue ?? ''),
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextFormField(
+            style: GoogleFonts.montserrat(),
             readOnly: widget.readOnly,
             enabled: !widget.readOnly,
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
+              labelStyle: GoogleFonts.montserrat(),
               filled: true,
               fillColor: Colors.transparent,
               labelText: widget.placeholder,
               prefixText: widget.prefixText,
-              floatingLabelStyle:
-                  const TextStyle(color: Color.fromARGB(255, 83, 69, 116)),
+              floatingLabelStyle: GoogleFonts.montserrat(
+                color: AppColors.appThemeDarkShade1,
+              ),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(0xFF7882A4),
+                  color: AppColors.appThemeDarkShade1,
                   style: BorderStyle.solid,
                 ),
               ),
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(0xFF7882A4),
+                  color: AppColors.appThemeDarkShade1,
                   style: BorderStyle.solid,
                 ),
               ),

@@ -1,4 +1,4 @@
-import 'package:nurene_app/models/user_model.dart';
+import '/models/user_model.dart';
 
 abstract class MasterState {}
 
@@ -6,8 +6,8 @@ class MasterInitialState extends MasterState {}
 
 class DoctorSelectedState extends MasterState {
   final Map<String, dynamic> doctorDetails;
-
-  DoctorSelectedState(this.doctorDetails);
+  String? scheduleId;
+  DoctorSelectedState({required this.doctorDetails, this.scheduleId = ''});
 }
 
 class MasterLoadingState extends MasterState {}
@@ -19,6 +19,12 @@ class MasterErrorState extends MasterState {
 }
 
 class NewDoctorRecordState extends MasterState {}
+
+class PlanRecordState extends MasterState {
+  final Map<String, dynamic> doctorDetails;
+  final String scheduleId;
+  PlanRecordState(this.doctorDetails, this.scheduleId);
+}
 
 class MasterFormResetState extends MasterState {}
 

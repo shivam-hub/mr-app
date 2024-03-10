@@ -1,7 +1,7 @@
 // lib/blocs/login/login_state.dart
 
 import 'package:equatable/equatable.dart';
-import 'package:nurene_app/models/user_model.dart';
+import '/models/user_model.dart';
 
 abstract class LoginState extends Equatable {
   const LoginState();

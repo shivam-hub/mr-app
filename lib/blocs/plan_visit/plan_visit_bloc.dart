@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:nurene_app/blocs/plan_visit/plan_visit_event.dart';
-import 'package:nurene_app/blocs/plan_visit/plan_visit_state.dart';
-import 'package:nurene_app/models/user_model.dart';
-import 'package:nurene_app/services/api_services.dart';
+import '/blocs/plan_visit/plan_visit_event.dart';
+import '/blocs/plan_visit/plan_visit_state.dart';
+import '/models/user_model.dart';
+import '/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/doctor_model.dart';
 
@@ -33,7 +33,8 @@ class PlanVisitBloc extends Bloc<PlanVisitEvent, PlanVisitState> {
 
         final isSaved = await apiService.scheduleVisit(json.encode(payload));
         final user = pref.getString('userDetails') ?? '';
-        yield PlanVisitSuccessState(isSaved, UserModel.fromJson(json.decode(user)));
+        yield PlanVisitSuccessState(
+            isSaved, UserModel.fromJson(json.decode(user)));
       } catch (e) {
         yield PlanVisitErrorState('Error saving data');
       }

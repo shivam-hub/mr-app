@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nurene_app/themes/app_colors.dart';
+import '/themes/app_colors.dart';
 
 class DatePickerWidget extends StatefulWidget {
   final Function(DateTime selectedDate) onDateSelected;
@@ -32,7 +32,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Colors.red,
+                foregroundColor: Colors.red,
               ),
             ),
           ),
