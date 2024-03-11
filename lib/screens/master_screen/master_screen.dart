@@ -1,13 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 import 'dart:io';
 import 'dart:math';
-import 'package:Nurene/widgets/dropdown_widget.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '/models/prodcut_model.dart';
 import '/models/visit_model.dart';
 import '/screens/home_screen/home_screen.dart';
@@ -75,10 +73,6 @@ class _MasterScreenState extends State<MasterScreenContent> {
 
   final SingleValueDropDownController _stateController =
       SingleValueDropDownController();
-
-  final MultiSelectController _stateController1 = MultiSelectController();
-  final MultiSelectController _doctorTypeController1 = MultiSelectController();
-
   final ScrollController _scrollController = ScrollController();
   final FocusNode doctorRegNumberFocusNode = FocusNode();
   String doctorName = '';
@@ -87,6 +81,7 @@ class _MasterScreenState extends State<MasterScreenContent> {
   List<MedicalStoreModel> medicalStoreDetails = [];
   List<MedicalStoreModel> initialStores = [];
   DoctorInfo doctorDetails = DoctorInfo();
+  DoctorInfo docInfo = DoctorInfo();
   VisitModel visitModel = VisitModel();
   late List<ProductModel> products;
   File? selectedImage;
@@ -135,15 +130,23 @@ class _MasterScreenState extends State<MasterScreenContent> {
               } else if (state is MasterSuccessState) {
                 if (state.isSuccess) {
                   return AlertDialog(
-                    title: const Text('Success'),
-                    content: const Text('Done'),
+                    title: Text('Success',
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600)),
+                    content: Text('Visit record saved successfully!',
+                        style: GoogleFonts.montserrat()),
+                    backgroundColor: const Color.fromARGB(255, 239, 250, 208),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0))),
                     actions: [
                       ElevatedButton(
                           onPressed: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) =>
                                       HomeScreen(user: state.userModel))),
-                          child: const Text('Ok'))
+                          child: Text("Ok",
+                              style: GoogleFonts.montserrat(
+                                  color: AppColors.appThemeDarkShade1)))
                     ],
                   );
                 } else {
@@ -162,30 +165,36 @@ class _MasterScreenState extends State<MasterScreenContent> {
                 }
               } else {
                 if (state is DoctorSelectedState) {
-                  final docInfo = DoctorInfo.fromJson(state.doctorDetails);
+                  docInfo = DoctorInfo.fromJson(state.doctorDetails);
                   doctorDetails = docInfo;
                   doctorName = docInfo.name ?? "";
                   initialStores = docInfo.associatedMedicals!;
-                  _doctRegNumberController.text = docInfo.drId ?? '';
+                  _doctRegNumberController.text =
+                      _doctRegNumberController.text.isEmpty
+                          ? docInfo.drId ?? ''
+                          : _doctRegNumberController.text;
                   _addressLine1Controller.text =
-                      docInfo.addressInfo?.addressline1 ?? '';
+                      _addressLine1Controller.text.isEmpty
+                          ? docInfo.addressInfo?.addressline1 ?? ''
+                          : _addressLine1Controller.text;
                   _addressLine2Controller.text =
-                      docInfo.addressInfo?.addressline2 ?? '';
-                  _cityController.text = docInfo.addressInfo?.city ?? '';
-                  _pincodeController.text = docInfo.addressInfo?.pincode ?? '';
-                  _regionController.text = docInfo.addressInfo?.region ?? '';
-                  if (docInfo.addressInfo?.state != null &&
-                      docInfo.addressInfo!.state!.isNotEmpty) {
-                    final List<ValueItem> stateSelected = [
-                      ValueItem(
-                          label: docInfo.addressInfo?.state ?? '',
-                          value: docInfo.addressInfo?.state ?? '')
-                    ];
-                    _stateController1.setSelectedOptions(stateSelected);
-                  }
-                  _stateController.dropDownValue = DropDownValueModel(
-                      name: docInfo.addressInfo?.state ?? '',
-                      value: docInfo.addressInfo?.state ?? '');
+                      _addressLine2Controller.text.isEmpty
+                          ? docInfo.addressInfo?.addressline2 ?? ''
+                          : _addressLine2Controller.text;
+                  _cityController.text = _cityController.text.isEmpty
+                      ? docInfo.addressInfo?.city ?? ''
+                      : _cityController.text;
+                  _pincodeController.text = _pincodeController.text.isEmpty
+                      ? docInfo.addressInfo?.pincode ?? ''
+                      : _pincodeController.text;
+                  _regionController.text = _regionController.text.isEmpty
+                      ? docInfo.addressInfo?.region ?? ''
+                      : _regionController.text;
+                  _stateController.dropDownValue =
+                      _stateController.dropDownValue ??
+                          DropDownValueModel(
+                              name: docInfo.addressInfo?.state ?? '',
+                              value: docInfo.addressInfo?.state ?? '');
                   if (docInfo.speciality!.isNotEmpty) {
                     _doctorTypeController.dropDownValue = DropDownValueModel(
                         name: docInfo.speciality ?? '',
@@ -276,39 +285,34 @@ class _MasterScreenState extends State<MasterScreenContent> {
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: DropDownWidget(
-                            controller: _doctorTypeController1,
-                            label: 'Speciality',
-                            options: Constants.doctorType,
-
-                            // child: DropdownTextFieldWidget(
-                            //   placeholder: 'Speciality',
-                            //   controller: _doctorTypeController,
-                            //   dropDownOption: const [
-                            //     DropDownOption(
-                            //         name: "Cardiologist", value: "value"),
-                            //     DropDownOption(
-                            //         name: "Gastroenterologist", value: "value"),
-                            //     DropDownOption(
-                            //         name: "Pediatrician", value: "value"),
-                            //     DropDownOption(
-                            //         name: "Psychiatrist", value: "value"),
-                            //     DropDownOption(
-                            //         name: "Dermatologist", value: "value"),
-                            //     DropDownOption(
-                            //         name: "Neurologist", value: "value"),
-                            //     DropDownOption(name: "Dentist", value: "value")
-                            //   ],
-                            // readonly: state is DoctorSelectedState &&
-                            //     state.doctorDetails['speciality']
-                            //         .toString()
-                            //         .isNotEmpty,
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return "Please select doctor type";
-                            //   }
-                            //   return null;
-                            // },
+                          child: DropdownTextFieldWidget(
+                            placeholder: 'Speciality',
+                            controller: _doctorTypeController,
+                            dropDownOption: const [
+                              DropDownOption(
+                                  name: "Cardiologist", value: "value"),
+                              DropDownOption(
+                                  name: "Gastroenterologist", value: "value"),
+                              DropDownOption(
+                                  name: "Pediatrician", value: "value"),
+                              DropDownOption(
+                                  name: "Psychiatrist", value: "value"),
+                              DropDownOption(
+                                  name: "Dermatologist", value: "value"),
+                              DropDownOption(
+                                  name: "Neurologist", value: "value"),
+                              DropDownOption(name: "Dentist", value: "value")
+                            ],
+                            readonly: state is DoctorSelectedState &&
+                                state.doctorDetails['speciality']
+                                    .toString()
+                                    .isNotEmpty,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please select doctor type";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         ListTile(
@@ -419,21 +423,16 @@ class _MasterScreenState extends State<MasterScreenContent> {
                           child: Row(
                             children: [
                               Expanded(
-                                  child: DropDownWidget(
-                                controller: _stateController1,
-                                label: 'State',
-                                options: Constants.states1,
-                              )
-                                  // DropdownTextFieldWidget(
-                                  //   placeholder: 'State',
-                                  //   controller: _stateController,
-                                  //   dropDownOption: Constants.states,
-                                  //   readonly: state is DoctorSelectedState &&
-                                  //       _stateController.dropDownValue!.value
-                                  //           .toString()
-                                  //           .isNotEmpty,
-                                  // ),
-                                  ),
+                                child: DropdownTextFieldWidget(
+                                  placeholder: 'State',
+                                  controller: _stateController,
+                                  dropDownOption: Constants.states,
+                                  readonly: state is DoctorSelectedState &&
+                                      _stateController.dropDownValue!.value
+                                          .toString()
+                                          .isNotEmpty,
+                                ),
+                              ),
                               const SizedBox(width: 15),
                               Expanded(
                                 child: TextFieldWidget(
@@ -572,43 +571,43 @@ class _MasterScreenState extends State<MasterScreenContent> {
                                         try {
                                           currentPosition = await geolocatorUtil
                                               .checkLocationServices(context);
+                                          final AddressInfo addressInfo =
+                                              AddressInfo();
+                                          addressInfo.addressline1 =
+                                              _addressLine1Controller.text
+                                                  .toString();
+                                          addressInfo.addressline2 =
+                                              _addressLine2Controller.text
+                                                  .toString();
+                                          addressInfo.city =
+                                              _cityController.text.toString();
+                                          addressInfo.pincode =
+                                              _pincodeController.text
+                                                  .toString();
+                                          addressInfo.region =
+                                              _regionController.text.toString();
+                                          addressInfo.state = _stateController
+                                              .dropDownValue?.name
+                                              .toString();
+                                          doctorDetails.addressInfo =
+                                              addressInfo;
+                                          doctorDetails.speciality =
+                                              _doctorTypeController
+                                                  .dropDownValue?.name
+                                                  .toString();
                                           if (state is NewDoctorRecordState) {
-                                            final AddressInfo addressInfo =
-                                                AddressInfo();
-                                            addressInfo.addressline1 =
-                                                _addressLine1Controller.text
-                                                    .toString();
-                                            addressInfo.addressline2 =
-                                                _addressLine1Controller.text
-                                                    .toString();
-                                            addressInfo.city =
-                                                _cityController.text.toString();
-                                            addressInfo.pincode =
-                                                _pincodeController.text
-                                                    .toString();
-                                            addressInfo.region =
-                                                _regionController.text
-                                                    .toString();
-                                            addressInfo.state = _stateController
-                                                .dropDownValue?.name
-                                                .toString();
                                             doctorDetails.name = doctorName;
-                                            doctorDetails.addressInfo =
-                                                addressInfo;
-
-                                            doctorDetails.speciality =
-                                                _doctorTypeController
-                                                    .dropDownValue?.name
-                                                    .toString();
                                             doctorDetails.associatedMedicals =
                                                 medicalStoreDetails;
                                             doctorDetails.locationCoordinates
+                                                ?.coordinates
                                                 ?.add(
                                                     currentPosition.longitude);
                                             doctorDetails.locationCoordinates
+                                                ?.coordinates
                                                 ?.add(currentPosition.latitude);
-                                            visitModel.doctorInfo =
-                                                doctorDetails;
+                                            // visitModel.doctorInfo =
+                                            //     doctorDetails;
                                             visitModel.products = products;
                                           } else if (state
                                               is DoctorSelectedState) {
@@ -623,16 +622,33 @@ class _MasterScreenState extends State<MasterScreenContent> {
                                                                     .name ==
                                                                 element.name))
                                                     .toList();
+                                            if (doctorDetails
+                                                        .locationCoordinates
+                                                        ?.coordinates
+                                                        ?.elementAt(0) ==
+                                                    0.0 ||
+                                                doctorDetails
+                                                        .locationCoordinates
+                                                        ?.coordinates
+                                                        ?.elementAt(1) ==
+                                                    0.0) {
+                                              doctorDetails.locationCoordinates
+                                                      ?.coordinates?[0] =
+                                                  currentPosition.longitude;
+                                              doctorDetails.locationCoordinates
+                                                      ?.coordinates?[1] =
+                                                  currentPosition.latitude;
+                                            }
                                             doctorDetails.associatedMedicals!
                                                 .addAll(newMedicals);
                                             doctorDetails.speciality =
                                                 _doctorTypeController
                                                     .dropDownValue?.name
                                                     .toString();
-                                            visitModel.doctorInfo =
-                                                doctorDetails;
+
                                             visitModel.scheduleId = ScheduleId;
                                           }
+                                          visitModel.doctorInfo = doctorDetails;
                                           visitModel.feedback =
                                               _feedBackController.text;
 
@@ -642,8 +658,43 @@ class _MasterScreenState extends State<MasterScreenContent> {
                                           }
 
                                           if (!_validateLocation()) {
-                                            altertUtil
-                                                .showWarningAlert(context);
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        "Location Warning",
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600)),
+                                                    backgroundColor:
+                                                        const Color.fromARGB(
+                                                            255, 239, 250, 208),
+                                                    shape: const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    8.0))),
+                                                    content: Text(
+                                                        "Your location is not within Clinic's range",
+                                                        style: GoogleFonts
+                                                            .montserrat()),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text("Ok",
+                                                              style: GoogleFonts
+                                                                  .montserrat(
+                                                                      color: AppColors
+                                                                          .appThemeDarkShade1)))
+                                                    ],
+                                                  );
+                                                });
                                           } else {
                                             BlocProvider.of<MasterBloc>(context)
                                                 .add(
@@ -703,7 +754,6 @@ class _MasterScreenState extends State<MasterScreenContent> {
     _feedBackController.dispose();
     _doctorTypeController.dispose();
     _stateController.dispose();
-
     super.dispose();
   }
 
@@ -713,10 +763,12 @@ class _MasterScreenState extends State<MasterScreenContent> {
     double mrLongitude = currentPosition.longitude;
     double mrLatitude = currentPosition.latitude;
 
-    double doctorLongitude = doctorDetails.locationCoordinates?.elementAt(0) ??
-        currentPosition.longitude;
-    double doctorLatitude = doctorDetails.locationCoordinates?.elementAt(1) ??
-        currentPosition.latitude;
+    double doctorLongitude =
+        doctorDetails.locationCoordinates?.coordinates?.elementAt(0) ??
+            currentPosition.longitude;
+    double doctorLatitude =
+        doctorDetails.locationCoordinates?.coordinates?.elementAt(1) ??
+            currentPosition.latitude;
 
     var R = 6371e3; // metres
     // var R = 1000;
@@ -748,7 +800,9 @@ class _MasterScreenState extends State<MasterScreenContent> {
     List<DataColumn> getHeaders(List<String> headers) {
       return headers.map((header) {
         return DataColumn(
-          label: Text(header, textAlign: TextAlign.center),
+          label: Text(header,
+              style: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center),
         );
       }).toList();
     }
@@ -826,14 +880,17 @@ class _MasterScreenState extends State<MasterScreenContent> {
 
         return DataRow(
             cells: ModelBuilder.modelBuilder(cells, (index, cell) {
-          return DataCell(Text(cell), onTap: () async {
+          return DataCell(Text(cell, style: GoogleFonts.montserrat()),
+              onTap: () async {
             switch (index) {
               case 0:
-                await editName(medical);
+                // await editName(medical);
+                break;
               case 1:
-                await editLocation(medical);
+                // await editLocation(medical);
+                break;
               case 2:
-                await editGst(medical);
+                // await editGst(medical);
                 break;
               default:
             }

@@ -16,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
   final int? maxLines;
   final int? maxLength;
   final void Function(dynamic)? onChanged;
+  final void Function()? onEditingComplete;
 
   const TextFieldWidget(
       {Key? key,
@@ -31,7 +32,7 @@ class TextFieldWidget extends StatelessWidget {
       this.minLines,
       this.focusNode,
       this.maxLength,
-      this.isCapitalized})
+      this.isCapitalized, this.onEditingComplete})
       : super(key: key);
 
   @override
@@ -47,6 +48,7 @@ class TextFieldWidget extends StatelessWidget {
           validator: validator,
           controller: controller,
           obscureText: isPassword,
+          onEditingComplete: onEditingComplete,
           keyboardType: inputType,
           textCapitalization: isCapitalized ?? false
               ? TextCapitalization.words

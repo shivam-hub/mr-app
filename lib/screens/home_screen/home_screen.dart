@@ -201,6 +201,7 @@ class _HomeScreenState extends State<_HomeScreenContent> {
                   priority: _getPriority(scheduleModel.priority ?? ""),
                   scheduleVisitId: scheduleModel.scheduleId ?? '',
                   isVisited: scheduleModel.isVisited ?? false,
+                  scheduleDate: scheduleModel.plannedVisitDate ?? '',
                   doctorId: scheduleModel.doctorInfo?.drId ?? ''),
             );
           },

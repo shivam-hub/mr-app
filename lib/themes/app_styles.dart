@@ -16,7 +16,7 @@ TextStyle get headingStyle {
       textStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: AppColors.newColorText));
+          color: AppColors.appThemeDarkShade3));
 }
 
 TextStyle get lisTitleStyle {

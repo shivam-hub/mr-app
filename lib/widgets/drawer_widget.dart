@@ -93,7 +93,7 @@ class MyDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MasterScreen(),
@@ -121,55 +121,6 @@ class MyDrawer extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ProductScreen(),
                 ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.info,
-              color: AppColors.appThemeDarkShade2,
-              size: 28,
-            ),
-            title: Text(
-              'About',
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(fontSize: 17, color: Colors.grey.shade600),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('About',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: Color.fromARGB(255, 134, 120, 164),
-                        )),
-                    content: const Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Nurene Lifesciences pvt ltd.',
-                        ),
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Close',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 134, 120, 164)),
-                        ),
-                      ),
-                    ],
-                  );
-                },
               );
             },
           ),

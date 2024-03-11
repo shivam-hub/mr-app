@@ -43,7 +43,7 @@ class _DropdownTextFieldWidgetState extends State<DropdownTextFieldWidget> {
     return DropDownTextField(
       textStyle: GoogleFonts.montserrat(),
       dropDownList: widget.dropDownOption,
-      dropdownColor: Colors.white,
+      dropdownColor: const Color.fromARGB(255, 237, 245, 214),
       enableSearch: widget.readonly ? widget.enableSearch : false,
       searchAutofocus: true,
       dropdownRadius: 0,

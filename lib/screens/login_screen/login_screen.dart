@@ -110,7 +110,8 @@ class _LoginScreenState extends State<LoginScreen>
       padding: EdgeInsets.only(top: 150),
       child: LogoWidget(
         height: 140,
-        width: 140,
+        width: 200,
+        isLoginScreen: true,
       ),
     );
   }
@@ -196,18 +197,14 @@ class _LoginScreenState extends State<LoginScreen>
           return Column(
             children: [
               if (state is LoginFailure)
-                // const Center(
-                //   child: Text(
-                //     "Username or Password Entered is incorrect",
-                //     style: TextStyle(color: Colors.red),
-                //     textAlign: TextAlign.center,
-                //   ),
-                // ),
-                // ScaffoldMessenger.of(context)
-                //                             .showSnackBar(const SnackBar(
-                //                                 content: Text(
-                //                                     'Please fill all details')));
-                const SizedBox(height: 20),
+                const Center(
+                  child: Text(
+                    "Username or Password Entered is incorrect",
+                    style: TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              const SizedBox(height: 20),
               ButtonWidget(
                   onPressed: () async {
                     try {

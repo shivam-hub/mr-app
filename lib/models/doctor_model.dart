@@ -1,3 +1,6 @@
+import 'package:Nurene/models/associated_mr_model.dart';
+import 'package:Nurene/models/location_model.dart';
+
 import '/models/medical_store_model.dart';
 
 import 'address_info_model.dart';
@@ -10,7 +13,8 @@ class DoctorInfo {
   String? clinicName;
   String? doctorRegNumber;
   List<MedicalStoreModel>? associatedMedicals;
-  List<double>? locationCoordinates;
+  Location? locationCoordinates;
+  AssociatedMR? associatedMR;
 
   DoctorInfo(
       {this.drId,
@@ -20,6 +24,7 @@ class DoctorInfo {
       this.clinicName,
       this.doctorRegNumber,
       this.associatedMedicals,
+      this.associatedMR,
       this.locationCoordinates});
 
   DoctorInfo.fromJson(Map<String, dynamic> json) {
@@ -31,13 +36,18 @@ class DoctorInfo {
         : null;
     speciality = json['speciality'];
     clinicName = json['clinicName'];
+    associatedMR = json['associatedMR'] != null
+        ? AssociatedMR.fromJson(json['associatedMR'])
+        : null;
     if (json['associatedMedicals'] != null) {
       associatedMedicals = <MedicalStoreModel>[];
       json['associatedMedicals'].forEach((v) {
         associatedMedicals!.add(MedicalStoreModel.fromJson(v));
       });
     }
-    locationCoordinates = json['locationCoordinates']?.cast<double>();
+    locationCoordinates = json['locationCoordinates'] != null
+        ? Location.fromJson(json['locationCoordinates'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +65,10 @@ class DoctorInfo {
           associatedMedicals!.map((v) => v.toJson()).toList();
     }
     data['locationCoordinates'] = locationCoordinates;
+    data['associtatedMR'] = associatedMR;
+    if (locationCoordinates != null) {
+      data['locationCoordinates'] = locationCoordinates!.toJson();
+    }
     return data;
   }
 }

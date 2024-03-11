@@ -4,20 +4,27 @@ import '/models/dropdown_value_model.dart';
 
 class Constants {
   // static const String baseurl = 'https://localhost:4000';
-  static const String baseurl = 'https://nureneapi-production.up.railway.app';
+  // static const String baseurl = 'https://nureneapi-production.up.railway.app';
   // static const String baseurl = 'https://nurene-api-production.up.railway.app';
-  // static const String baseurl = 'https://1663-103-195-76-196.ngrok-free.app';
+  static const String baseurl = 'https://62b0-182-237-163-84.ngrok-free.app';
 
-  
   static const List<ValueItem> doctorType = [
-  ValueItem(label: 'Cardiologist', value: 'Cardiologist'),
-  ValueItem(label: 'Gastroenterologist', value: 'Gastroenterologist'),
-  ValueItem(label: 'Pediatrician', value: 'Pediatrician'),
-  ValueItem(label: 'Psychiatrist', value: 'Psychiatrist'),
-  ValueItem(label: 'Dermatologist', value: 'Dermatologist'),
-  ValueItem(label: 'Neurologist', value: 'Neurologist'),
-  ValueItem(label: 'Dentist', value: 'Dentist'),
-];
+    ValueItem(label: 'Cardiologist', value: 'Cardiologist'),
+    ValueItem(label: 'Gastroenterologist', value: 'Gastroenterologist'),
+    ValueItem(label: 'Pediatrician', value: 'Pediatrician'),
+    ValueItem(label: 'Psychiatrist', value: 'Psychiatrist'),
+    ValueItem(label: 'Dermatologist', value: 'Dermatologist'),
+    ValueItem(label: 'Neurologist', value: 'Neurologist'),
+    ValueItem(label: 'Dentist', value: 'Dentist'),
+    ValueItem(label: 'GP', value: 'GP'),
+    ValueItem(label: 'MBBS', value: 'MBBS'),
+    ValueItem(label: 'MD', value: 'MD'),
+    ValueItem(label: 'BHMS', value: 'BHMS'),
+    ValueItem(label: 'BDS', value: 'BDS'),
+    ValueItem(label: 'ENT', value: 'ENT'),
+    ValueItem(label: 'BAMS', value: 'BAMS'),
+    ValueItem(label: 'BAMS', value: 'BAMS'),
+  ];
 
   static const List<DropDownOption> states = [
     DropDownOption(name: 'Andhra Pradesh', value: 'Andhra Pradesh'),

@@ -87,6 +87,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - asset/images/nurene_logo.png
+    - asset/images/nurene_full_logo.png
     - asset/images/image.jpg
     - asset/images/camera.jpg
     - asset/images/background.png

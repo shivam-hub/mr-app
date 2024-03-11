@@ -54,7 +54,7 @@ class _PickImageState extends State<PickImage> {
                     const Icon(
                       Icons.camera_alt,
                       size: 50,
-                      color: AppColors.textFieldBorderColor,
+                      color: AppColors.appThemeLightShade2,
                     ),
                     InkWell(
                       onTap: () async {
@@ -74,7 +74,7 @@ class _PickImageState extends State<PickImage> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textFieldBorderColor,
+                                color: AppColors.appThemeLightShade2,
                               ),
                             ),
                             SizedBox(height: 5),

@@ -26,7 +26,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppColors.textFieldBorderColor,
+              primary: AppColors.appThemeLightShade2,
               onPrimary: Color.fromARGB(255, 255, 255, 255),
               onSurface: Color.fromARGB(255, 150, 121, 133),
             ),
@@ -60,7 +60,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 255, 255, 255),
           border:
-              Border(bottom: BorderSide(color: AppColors.textFieldBorderColor)),
+              Border(bottom: BorderSide(color: AppColors.appThemeLightShade2)),
         ),
         padding: const EdgeInsets.fromLTRB(15, 0, 20, 0),
         child: Row(
@@ -77,7 +77,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               ),
             ),
             const Icon(Icons.calendar_today,
-                color: AppColors.textFieldBorderColor),
+                color: AppColors.appThemeLightShade2),
           ],
         ),
       ),

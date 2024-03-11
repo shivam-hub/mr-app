@@ -11,6 +11,7 @@ class CardWidget extends StatelessWidget {
   final String scheduleVisitId;
   final String doctorId;
   final Priority priority;
+  final String scheduleDate;
   final bool isVisited;
 
   const CardWidget({
@@ -21,6 +22,7 @@ class CardWidget extends StatelessWidget {
     required this.scheduleVisitId,
     required this.doctorId,
     required this.isVisited,
+    required this.scheduleDate,
   }) : super(key: key);
 
   Color _getPriorityColor() {
@@ -34,24 +36,73 @@ class CardWidget extends StatelessWidget {
     }
   }
 
-  // bool _isVisitMissed() {
-  //   final scheduledTime = DateTime.parse(time).toLocal();
-  //   return DateTime.now().isAfter(scheduledTime);
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final bool isMissed = _isVisitMissed();
     final String status = isVisited ? "Visited" : "Not Visited";
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                MasterScreen(drId: doctorId, scheduleId: scheduleVisitId),
-          ),
-        );
+        if (isVisited) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Action Invalid",
+                      style:
+                          GoogleFonts.montserrat(fontWeight: FontWeight.w600)),
+                  backgroundColor: const Color.fromARGB(255, 239, 250, 208),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  content: Text("You have already visited the doctor",
+                      style: GoogleFonts.montserrat()),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Ok",
+                            style: GoogleFonts.montserrat(
+                                color: AppColors.appThemeDarkShade1)))
+                  ],
+                );
+              });
+          return;
+        }
+
+        final currentDate = DateTime.now().toLocal();
+        final scheduledDate = DateTime.parse(scheduleDate).toLocal();
+
+        if (currentDate.year == scheduledDate.year &&
+            currentDate.month == scheduledDate.month &&
+            currentDate.day == scheduledDate.day) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  MasterScreen(drId: doctorId, scheduleId: scheduleVisitId),
+            ),
+          );
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Action Invalid",
+                      style:
+                          GoogleFonts.montserrat(fontWeight: FontWeight.w600)),
+                  backgroundColor: const Color.fromARGB(255, 239, 250, 208),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  content: Text(
+                      "You can visit the doctor only on the scheduled day",
+                      style: GoogleFonts.montserrat()),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Ok",
+                            style: GoogleFonts.montserrat(
+                                color: AppColors.appThemeDarkShade1)))
+                  ],
+                );
+              });
+        }
       },
       child: Column(
         children: [
@@ -60,7 +111,7 @@ class CardWidget extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             elevation: isVisited ? 0.0 : 5.0,
             margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            color: isVisited ? Colors.grey : Colors.white,
+            color: const Color.fromARGB(255, 239, 250, 208),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -126,28 +177,6 @@ class CardWidget extends StatelessWidget {
                                       : Colors.red),
                             ),
                           )
-                          // if (isMissed)
-                          //   const Row(
-                          //     children: [
-                          //       SizedBox(
-                          //         width: 8,
-                          //       ),
-                          //       Icon(
-                          //         Icons.error_outline,
-                          //         color: Colors.redAccent,
-                          //         size: 16,
-                          //       ),
-                          //       SizedBox(
-                          //         width: 2,
-                          //       ),
-                          //       Text(
-                          //         'you missed the visit',
-                          //         style: TextStyle(
-                          //             color: Colors.redAccent,
-                          //             fontStyle: FontStyle.italic),
-                          //       ),
-                          //     ],
-                          //   ),
                         ],
                       ),
                     ],

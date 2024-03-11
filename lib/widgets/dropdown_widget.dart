@@ -8,12 +8,14 @@ class DropDownWidget extends StatelessWidget {
   final MultiSelectController controller;
   final List<ValueItem> options;
   final String label;
+  final void Function(List<ValueItem<dynamic>>)? onOptionSelected;
 
   const DropDownWidget(
       {super.key,
       required this.controller,
       required this.options,
-      required this.label});
+      required this.label,
+      this.onOptionSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +23,19 @@ class DropDownWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: AppColors.appThemeDarkShade1, // Set underline border color
-              width: 1.0, // Set the width of the underline border
+              color: AppColors.appThemeDarkShade1,
+              width: 1.0,
             ),
           ),
         ),
         child: MultiSelectDropDown(
-          onOptionSelected: (selectedOptions) {
-            debugPrint(selectedOptions.toString());
-          },
+          onOptionSelected: onOptionSelected,
+          // (selectedOptions) {
+          //   debugPrint(selectedOptions.toString());
+          // },
           options: options,
           optionsBackgroundColor: Colors.white,
-          borderColor: Colors.transparent, // Set border color to transparent
+          borderColor: Colors.transparent,
           selectedOptionBackgroundColor: AppColors.appThemeLightShade3,
           hint: label,
           hintStyle: GoogleFonts.montserrat(

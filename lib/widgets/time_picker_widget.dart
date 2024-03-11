@@ -23,7 +23,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary:
-                  AppColors.textFieldBorderColor, // header background color
+                  AppColors.appThemeLightShade2, // header background color
               onPrimary: Colors.black, // header text color
               onSurface: Color.fromARGB(255, 150, 121, 133), // body text color
             ),
@@ -57,7 +57,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 255, 255, 255),
           border:
-              Border(bottom: BorderSide(color: AppColors.textFieldBorderColor)),
+              Border(bottom: BorderSide(color: AppColors.appThemeLightShade2)),
         ),
         padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
         child: Row(
@@ -72,7 +72,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                   ),
                 )),
             const Icon(Icons.access_time_rounded,
-                color: AppColors.textFieldBorderColor),
+                color: AppColors.appThemeLightShade2),
           ],
         ),
       ),

@@ -6,7 +6,8 @@ class Location {
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<int>();
+    final List<dynamic>? list = json['coordinates'];
+    coordinates = list?.map((e) => e.toDouble()).toList().cast<double>();
   }
 
   Map<String, dynamic> toJson() {
